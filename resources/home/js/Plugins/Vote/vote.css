@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+.vote-box {
+  .down {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  .up,
+  .down {
+    @apply btn-accent btn-soft btn-sm border-0;
+
+    &.btn-active {
+      &:hover {
+        background-color: rgba(66, 193, 241, 0.42);
+      }
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 0.125rem;
+      fill: currentColor;
+    }
+  }
+}

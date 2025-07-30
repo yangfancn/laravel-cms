@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'UsernamePasswordNotMatch' => '用户名和密码不匹配！',
+    'LoginSuccess' => '登录成功！',
+    'cropperInitFailed' => '初始化图片裁剪工具失败，更多信息请查看控制台。',
+    'formHasProcessing' => '该表单正在处理（例如：文件上传），请稍候！',
+    'overMaxItems:max' => '超过允许的最大项目数量：:max！',
+    'lessThanMinItems:min' => '低于允许的最小项目数量：:min！',
+    'confirm' => '确认',
+    'confirmDelete' => '您确定要删除这些内容吗？',
+    'createCategorySuccess' => '分类创建成功',
+    'updateCategorySuccess' => '分类更新成功',
+    'deleteCategorySuccess' => '分类删除成功',
+    'createPermissionSuccess' => '权限创建成功',
+    'updatePermissionSuccess' => '权限更新成功',
+    'deletePermissionSuccess' => '权限删除成功',
+    'createRoleSuccess' => '角色创建成功',
+    'updateRoleSuccess' => '角色更新成功',
+    'deleteRoleSuccess' => '角色删除成功',
+    'createUserSuccess' => '用户创建成功',
+    'updateUserSuccess' => '用户更新成功',
+    'deleteUserSuccess' => '用户删除成功',
+    'createPostSuccess' => '文章创建成功',
+    'updatePostSuccess' => '文章更新成功',
+    'deletePostSuccess' => '文章删除成功',
+    'updateSiteSuccess' => '站点更新成功',
+    'createTagSuccess' => '标签创建成功',
+    'updateTagSuccess' => '标签更新成功',
+    'deleteTagSuccess' => '标签删除成功',
+    'fileUploadSuccess' => '文件上传成功'
+];

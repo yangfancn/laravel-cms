@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark;
+}
+
+@plugin "@tailwindcss/typography";
+
+@source "../views";
+@source "../../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/";
+
+.container {
+  max-width: 1024px;
+}
+
+.drawer-side > .menu {
+  transform: translateX(-100%);
+}
+
+.drawer-toggle:checked ~ .drawer-side > .menu {
+  transform: translateX(0);
+}
+
+.drawer-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.drawer-toggle:checked ~ .drawer-side .drawer-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hover\:pl-4 {
+  transition: padding-left 0.2s ease-in-out;
+}

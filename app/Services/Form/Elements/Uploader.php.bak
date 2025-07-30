@@ -1,0 +1,111 @@
+<?php
+
+namespace App\Handlers\Form\Elements;
+
+use App\Handlers\Form\Elements\Traits\Multiple;
+use App\Handlers\Form\Elements\Traits\UploadFiles;
+use Illuminate\Support\Collection;
+/**
+* @todo 目前 quasar 版本下的 uploader 还没办法实现默认展示已上传文件 如果后续有更新再尝试
+*/
+class Uploader extends Element
+{
+    use Multiple, UploadFiles;
+
+    protected string $field = 'uploader';
+
+    protected bool $hideUploadBtn = true;
+
+    protected bool $noThumbnails = false;
+
+    protected string $color;
+
+    protected string $textColor;
+
+    protected bool $square = false;
+
+    protected bool $flat = true;
+
+    protected bool $bordered = true;
+
+    protected string $url;
+
+    protected string $fieldName = 'file';
+
+    protected array $headers = [];
+
+    protected bool $cropper = false;
+    protected array|null $aspectRatio = null;
+
+    public function hideUploadBtn(bool $hide = true): self
+    {
+        $this->hideUploadBtn = $hide;
+        return $this;
+    }
+
+    protected function noThumbnails(bool $hide = true): self
+    {
+        $this->noThumbnails = $hide;
+        return $this;
+    }
+
+    public function color(string $color): self
+    {
+        $this->color = $color;
+        return $this;
+    }
+
+    public function textColor(string $color): self
+    {
+        $this->textColor = $color;
+        return $this;
+    }
+
+    public function square(bool $square = true): self
+    {
+        $this->square = $square;
+        return $this;
+    }
+
+    public function flat(bool $flat = true): self
+    {
+        $this->flat = $flat;
+        return $this;
+    }
+
+    public function bordered(bool $bordered = true): self
+    {
+        $this->bordered = $bordered;
+        return $this;
+    }
+
+    public function uploadUrl(string $url): self
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    public function uploadName(string $name): self
+    {
+        $this->fieldName = $name;
+        return $this;
+    }
+
+    public function uploadHeaders(array $headers): self
+    {
+        $this->headers = $headers;
+        return $this;
+    }
+
+    public function cropper(bool $allowCropper = true): self
+    {
+        $this->cropper = $allowCropper;
+        return $this;
+    }
+
+    public function aspectRatio(int $ratioWidth, int $ratioHeight): self
+    {
+        $this->aspectRatio = [$ratioWidth, $ratioHeight];
+        return $this;
+    }
+}

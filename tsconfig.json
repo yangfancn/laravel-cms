@@ -1,0 +1,58 @@
+{
+//    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "include": [
+        "resources/**/*.ts",
+        "resources/**/*.d.ts",
+        "resources/**/*.vue"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        /* 目标为 ESNext，允许使用最新的 JavaScript 特性 */
+        "target": "ESNext",
+        /* 允许导入 JSON 模块 */
+        "resolveJsonModule": true,
+        /* 使用 ES 模块 */
+        "module": "ESNext",
+        /* 使用 Node.js 模块解析策略 */
+        "moduleResolution": "node",
+        /* 允许对没有默认导出的模块使用默认导入语法 */
+        "allowSyntheticDefaultImports": true,
+        /* 保留 JSX，交给 Vue 3 的编译器处理 */
+        "jsx": "preserve",
+        /* 启用所有严格类型检查选项 */
+        "strict": true,
+        /* 严格的 null 检查 */
+        "strictNullChecks": true,
+        /* 严格的函数类型检查 */
+        "strictFunctionTypes": true,
+        /* 严格的 bind/call/apply 检查 */
+        "strictBindCallApply": true,
+        /* 严格的类属性初始化检查 */
+        "strictPropertyInitialization": true,
+        /* 检查隐式的 any 类型 */
+        "noImplicitAny": true,
+        /* 检查隐式的 this */
+        "noImplicitThis": true,
+        /* 检查未声明类型的返回值 */
+        "noImplicitReturns": true,
+        /* 检查所有代码路径是否都有返回值 */
+        "noFallthroughCasesInSwitch": true,
+        /* 不允许隐式的 any 索引 */
+        "noImplicitOverride": true,
+        /* 启用默认的 ES 模块交互 */
+        "esModuleInterop": true,
+        /* 跳过检查 .d.ts 文件 */
+        "skipLibCheck": true,
+        /* 强制文件名的一致性 */
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {
+            "~lang/*": [
+                "./lang/*"
+            ],
+            "ziggy-js": ["./vendor/tightenco/ziggy"],
+            "@/*": ["resources/*"]
+        },
+        "types": ["vite/client"],
+    }
+}
