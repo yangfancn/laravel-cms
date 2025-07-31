@@ -14,9 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-/**
- * @mixin IdeHelperPost
- */
 class Post extends Model
 {
     use Commentable, HasFactory, Metable, Taggable, Votable, Countable;

@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
 
-/**
- * @mixin IdeHelperAdminMenu
- */
 class AdminMenu extends Model
 {
     use HasFactory, NodeTrait;

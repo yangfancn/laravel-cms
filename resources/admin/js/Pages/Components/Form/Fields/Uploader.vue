@@ -22,9 +22,9 @@
     >
     </file-pond>
   </q-field>
-  <q-dialog v-model="showDialog" :persistent="true">
+  <q-dialog v-model="showDialog" :persistent="true" transition-show="fade">
     <q-card class="cropper-box">
-      <img v-if="imgSrc" ref="cropperImg" :src="imgSrc" alt="cropper" />
+      <div ref="cropperImg" />
       <q-card-actions align="center" class="q-py-md">
         <q-btn color="primary" round icon="close" size=".75rem" @click="cancelCropper"></q-btn>
         <q-btn
@@ -32,9 +32,15 @@
           round
           icon="undo"
           size=".75rem"
-          @click="cropper!.rotate(-90)"
+          @click="cropper!.getCropperImage()!.$rotate(-90)"
         ></q-btn>
-        <q-btn color="primary" round icon="redo" size=".75rem" @click="cropper!.rotate(90)"></q-btn>
+        <q-btn
+          color="primary"
+          round
+          icon="redo"
+          size=".75rem"
+          @click="cropper!.getCropperImage()!.$rotate(90)"
+        ></q-btn>
         <q-btn color="primary" round icon="check" size=".75rem" @click="onCropped"></q-btn>
       </q-card-actions>
     </q-card>
@@ -135,7 +141,6 @@ const $q = useQuasar()
 const uploader = ref<typeof FilePond | null>(null)
 const cropperImg = ref<HTMLImageElement>()
 const showDialog = ref(false)
-const imgSrc = ref<string | null>(null)
 const cropper = ref<Cropper | null>(null)
 const processingFile = ref<{ current: File | null; queue: File[] }>({
   current: null,
@@ -205,19 +210,23 @@ const onRemoveFile = () => {
 }
 
 const onCropped = () => {
-  cropper.value!.getCroppedCanvas().toBlob((blob) => {
-    uploader.value!.addFile(blob, {
-      index: uploader.value?.getFiles().length
+  cropper
+    .value!.getCropperSelection()!
+    .$toCanvas()
+    .then((canvas) => {
+      canvas.toBlob((blob) => {
+        uploader.value!.addFile(blob, {
+          index: uploader.value?.getFiles().length
+        })
+        closeCropper()
+      }, processingFile.value.current!.type!)
     })
-    closeCropper()
-  }, processingFile.value.current!.type!)
 }
 
 const closeCropper = async () => {
   showDialog.value = false
-  imgSrc.value = null
 
-  cropper.value?.element.removeAttribute('src')
+  cropper.value?.element.removeAttribute("src")
 
   await processNextFile()
 }
@@ -241,15 +250,27 @@ const processNextFile = async () => {
 
   if (file) {
     try {
-      imgSrc.value = await fileToBase64(file)
       showDialog.value = true
 
       await nextTick()
 
-      cropper.value = new Cropper(cropperImg.value!, {
-        viewMode: 1,
-        aspectRatio: props.aspectRatio
-      })
+      const image = new Image()
+      image.src = await fileToBase64(file)
+
+      // cropper.value!.getCropperImage()!.$zoom(.1)
+      image.onload = () => {
+        cropper.value = new Cropper(image, {
+          container: cropperImg.value!
+        })
+
+        const cropperCanvas = cropper.value!.getCropperCanvas()!
+        cropperCanvas.style.height = cropperCanvas.clientWidth * (image.height / image.width) + "px"
+
+        if (props.aspectRatio) {
+          cropper.value!.getCropperSelection()!.aspectRatio = props.aspectRatio
+        }
+
+      }
     } catch (error) {
       $q.notify({
         message: trans("messages.cropperInitFailed"),
@@ -276,7 +297,12 @@ addAllowSubmitHandler(() => {
   max-width: 100%;
   position: relative;
   overflow: hidden;
-  padding-bottom: 60px;
+
+  :deep(cropper-canvas) {
+    width: 650px;
+    max-width: 100%;
+    max-height: 100%;
+  }
 
   .q-card__actions {
     position: absolute;

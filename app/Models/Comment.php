@@ -12,9 +12,6 @@ use Illuminate\Database\Query\Builder;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
 
-/**
- * @mixin IdeHelperComment
- */
 class Comment extends Model
 {
     use HasFactory, NodeTrait, Votable;

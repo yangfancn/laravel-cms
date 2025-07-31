@@ -10,9 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
-/**
- * @mixin IdeHelperUser
- */
 class User extends Authenticatable
 {
     use HasFactory, HasRoles, Notifiable;
@@ -51,12 +48,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function password(): Attribute
-    {
-        return new Attribute(
-            set: fn ($value) => Hash::make($value)
-        );
     }
 }

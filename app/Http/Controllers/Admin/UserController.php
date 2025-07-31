@@ -103,7 +103,7 @@ class UserController extends Controller
 
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->fill($request->all($user->getFillable()))->save();
+        $user->fill($request->only($user->getFillable()))->save();
         $user->roles()->sync($request->post('roles'));
 
         InertiaMessage::success(__('messages.updateUserSuccess'));

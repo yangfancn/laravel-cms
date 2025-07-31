@@ -5,9 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Role as PermissionRole;
 
-/**
- * @mixin IdeHelperRole
- */
 class Role extends PermissionRole
 {
     use HasFactory;
