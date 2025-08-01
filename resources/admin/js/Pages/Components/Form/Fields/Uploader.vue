@@ -22,35 +22,18 @@
     >
     </file-pond>
   </q-field>
-  <q-dialog v-model="showDialog" :persistent="true" transition-show="fade">
-    <q-card class="cropper-box">
-      <div ref="cropperImg" />
-      <q-card-actions align="center" class="q-py-md">
-        <q-btn color="primary" round icon="close" size=".75rem" @click="cancelCropper"></q-btn>
-        <q-btn
-          color="primary"
-          round
-          icon="undo"
-          size=".75rem"
-          @click="cropper!.getCropperImage()!.$rotate(-90)"
-        ></q-btn>
-        <q-btn
-          color="primary"
-          round
-          icon="redo"
-          size=".75rem"
-          @click="cropper!.getCropperImage()!.$rotate(90)"
-        ></q-btn>
-        <q-btn color="primary" round icon="check" size=".75rem" @click="onCropped"></q-btn>
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+  <cropper-dialog
+    v-if="cropper"
+    :img="cropperFile"
+    :aspect-ratio="aspectRatio"
+    @on-cacnel="onCropperCancel"
+    @on-cropperd="onCroppered"
+  />
 </template>
 
 <script lang="ts" setup>
 import VueFilePond from "vue-filepond"
 import { FilePondErrorDescription, FilePondFile, FilePondServerConfigProps } from "filepond"
-import Cropper from "cropperjs"
 import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
 import FIlePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
@@ -58,6 +41,7 @@ import { useQuasar } from "quasar"
 import { inject, nextTick, ref } from "vue"
 import axios from "axios"
 import { trans } from "laravel-vue-i18n"
+import CropperDialog from "../CropperDialog.vue"
 
 defineOptions({
   inheritAttrs: false
@@ -137,11 +121,10 @@ const server: FilePondServerConfigProps["server"] = {
   revert: null,
   load: "/"
 }
+
 const $q = useQuasar()
 const uploader = ref<typeof FilePond | null>(null)
-const cropperImg = ref<HTMLImageElement>()
-const showDialog = ref(false)
-const cropper = ref<Cropper | null>(null)
+const cropperFile = ref<File | null>(null)
 const processingFile = ref<{ current: File | null; queue: File[] }>({
   current: null,
   queue: []
@@ -170,6 +153,7 @@ const onAddFileStart = async (file: FilePondFile) => {
 
     if (Math.abs(imageAspectRatio - targetAspectRatio) < aspectRatioThreshold) {
       URL.revokeObjectURL(img.src)
+
       return
     }
 
@@ -199,49 +183,31 @@ const onProcessFile = (error: FilePondErrorDescription | null, file: FilePondFil
     props.maxFiles === 1
       ? file.serverId
       : Array.isArray(props.modelValue)
-        ? props.modelValue.concat([file.serverId])
+        ? props.modelValue.concat([file.serverId]).filter(item => item)
         : [file.serverId]
   )
 }
 
 const onRemoveFile = () => {
   const files = uploader.value!.getFiles().map((file: FilePondFile) => file.serverId)
+
   emit("update:modelValue", files.length === 0 ? null : files)
 }
 
-const onCropped = () => {
-  cropper
-    .value!.getCropperSelection()!
-    .$toCanvas()
-    .then((canvas) => {
-      canvas.toBlob((blob) => {
-        uploader.value!.addFile(blob, {
-          index: uploader.value?.getFiles().length
-        })
-        closeCropper()
-      }, processingFile.value.current!.type!)
+async function onCroppered(blob: Blob | null): Promise<void> {
+  if (blob) {
+    uploader.value!.addFile(blob, {
+      index: uploader.value?.getFiles().length
     })
-}
-
-const closeCropper = async () => {
-  showDialog.value = false
-
-  cropper.value?.element.removeAttribute("src")
-
+  }
+  cropperFile.value = null
   await processNextFile()
 }
 
-const cancelCropper = () => {
-  closeCropper()
+async function onCropperCancel(): Promise<void> {
+  cropperFile.value = null
+  await processNextFile()
 }
-
-const fileToBase64 = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
 
 const processNextFile = async () => {
   const file = processingFile.value.queue.shift() as File | undefined
@@ -250,27 +216,7 @@ const processNextFile = async () => {
 
   if (file) {
     try {
-      showDialog.value = true
-
-      await nextTick()
-
-      const image = new Image()
-      image.src = await fileToBase64(file)
-
-      // cropper.value!.getCropperImage()!.$zoom(.1)
-      image.onload = () => {
-        cropper.value = new Cropper(image, {
-          container: cropperImg.value!
-        })
-
-        const cropperCanvas = cropper.value!.getCropperCanvas()!
-        cropperCanvas.style.height = cropperCanvas.clientWidth * (image.height / image.width) + "px"
-
-        if (props.aspectRatio) {
-          cropper.value!.getCropperSelection()!.aspectRatio = props.aspectRatio
-        }
-
-      }
+      cropperFile.value = file
     } catch (error) {
       $q.notify({
         message: trans("messages.cropperInitFailed"),
@@ -293,25 +239,6 @@ addAllowSubmitHandler(() => {
 </script>
 
 <style scoped lang="scss">
-.cropper-box {
-  max-width: 100%;
-  position: relative;
-  overflow: hidden;
-
-  :deep(cropper-canvas) {
-    width: 650px;
-    max-width: 100%;
-    max-height: 100%;
-  }
-
-  .q-card__actions {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-}
-
 .q-field--auto-height.q-field--labeled :deep(.q-field__control-container) {
   padding-top: 30px;
 }

@@ -25,7 +25,7 @@ class UserForm extends FormBuilder
         $form
             ->add(Input::make('email', 'Email')->email()->autofocus())
             ->add(Input::make('name', 'Name'))
-            ->add(Uploader::make('photo', 'Photo')->cropper(1))
+            ->add(Uploader::make('photo', 'Photo')->cropper(1)->maxFiles(5))
             ->add(Input::make('password', 'Password')->password())
             ->add(Select::make('roles', 'Roles')->options($roles)->useChips()->multiple());
 
