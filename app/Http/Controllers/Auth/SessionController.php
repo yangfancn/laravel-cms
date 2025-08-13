@@ -22,6 +22,7 @@ class SessionController extends Controller
             ->add(Input::make('email', 'Email')->prependIcon('mdi-account'))
             ->add(Input::make('password', 'Password')->password()->prependIcon('mdi-lock'))
             ->add(Toggle::make('remember', 'Remember Me')->leftLabel(false)->cols(6))
+            ->disablePrecognitive()
             ->create();
 
         return Inertia::render('Session/Create', compact('form'))->rootView('admin::app');

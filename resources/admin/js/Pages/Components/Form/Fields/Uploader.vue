@@ -38,7 +38,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
 import FIlePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
 import { useQuasar } from "quasar"
-import { inject, nextTick, ref } from "vue"
+import { inject, onBeforeUnmount, ref } from "vue"
 import axios from "axios"
 import { trans } from "laravel-vue-i18n"
 import CropperDialog from "../CropperDialog.vue"
@@ -131,7 +131,7 @@ const processingFile = ref<{ current: File | null; queue: File[] }>({
 })
 
 const emit = defineEmits(["update:modelValue"])
-const addAllowSubmitHandler = inject("addAllowSubmitHandler") as (handler: () => boolean) => void
+const addAllowSubmitHandler = inject("addAllowSubmitHandler") as ((fn: () => boolean) => () => void)
 
 const onAddFileStart = async (file: FilePondFile) => {
   if (!props.cropper || !file.fileType.startsWith("image/") || !(file.source instanceof File)) {
@@ -228,13 +228,17 @@ const processNextFile = async () => {
   }
 }
 
-addAllowSubmitHandler(() => {
+const removeHandler = addAllowSubmitHandler(() => {
   for (const file of uploader.value?.getFiles()) {
     if (file.status === 3 || file.status === 9) {
       return false
     }
   }
   return true
+})
+
+onBeforeUnmount(() => {
+  removeHandler()
 })
 </script>
 

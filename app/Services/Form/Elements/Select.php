@@ -39,8 +39,8 @@ class Select extends Element
 
     /**
      * Set the options for the select element.
-     * @param array $options example: ['value1', 'value2'] or ['key1' => 'value1', 'key2' => 'value2'] or ['group1' => ['key1' => 'value1', ...], ...]
-     * @return \App\Services\Form\Elements\Select 
+     * @param array $options example: ['value', 'value'] or [label => value ,...] or ['group1' => [label => value,...], ...]
+     * @return \App\Services\Form\Elements\Select
      */
     public function options(array $options): self
     {
@@ -52,8 +52,8 @@ class Select extends Element
 
     /**
      * Set max selected options length.
-     * @param int $length 
-     * @return \App\Services\Form\Elements\Select 
+     * @param int $length
+     * @return \App\Services\Form\Elements\Select
      */
     public function maxLength(int $length): self
     {
@@ -64,8 +64,8 @@ class Select extends Element
 
    /**
     * Set xhr request url
-    * @param string $url 
-    * @return \App\Services\Form\Elements\Select 
+    * @param string $url
+    * @return \App\Services\Form\Elements\Select
     */
     public function xhrOptionsUrl(string $url): self
     {
@@ -78,7 +78,7 @@ class Select extends Element
      * Set the icon for the dropdown.
      * @param string $icon example: 'arrow_drop_down', 'expand_more' or any other mdi-
      * icon name
-     * @return \App\Services\Form\Elements\Select 
+     * @return \App\Services\Form\Elements\Select
      */
     public function dropdownIcon(string $icon): self
     {
@@ -89,35 +89,34 @@ class Select extends Element
 
     /**
      * Allow creating new options via an XHR request.
-     * @param string $url 
-     * @return \App\Services\Form\Elements\Select 
+     * @param string $url
+     * @return \App\Services\Form\Elements\Select
      */
-    public function allowCreate(string $url): self
+    public function allowCreate(?string $url = null): self
     {
         $this->newValueMode = 'add-unique';
         $this->xhrCreateOptionUrl = $url;
         $this->useInput();
+        $this->useChips();
 
         return $this;
     }
 
     /**
      * Generate options array from the provided options.
-     * @param array $options 
-     * @return array 
+     * @param array $options
+     * @return array
      */
     public static function makeOptions(array $options): array
     {
-        $onlyValues = array_keys($options) === range(0, count($options) - 1);
-
-        return collect($options)->flatMap(function ($item, $key) use ($onlyValues) {
+        return collect($options)->flatMap(function ($item, $key) {
             if (is_array($item)) {
                 return [
                     ['label' => $key, 'header' => true, 'disable' => true],
                     ...self::makeOptions($item),
                 ];
             } else {
-                return [['label' => $item, 'value' => $onlyValues ? $item : $key]];
+                return [['label' => $key, 'value' => $item]];
             }
         })->all();
     }

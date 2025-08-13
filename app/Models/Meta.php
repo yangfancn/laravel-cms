@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Meta extends Model
 {
-    protected $fillable = ['title', 'keywords', 'descirption', 'others'];
+    protected $fillable = ['title', 'keywords', 'description', 'others'];
 
     protected $hidden = ['metable_type', 'metable_id'];
 

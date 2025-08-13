@@ -21,11 +21,13 @@ class Form
 
     protected ?string $prefix = null;
 
+    protected bool $disablePrecognitive = false;
+
    /**
-    * @param string $action 
-    * @param 'PUT'|'POST' $method 
-    * @param null|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array $data 
-    * @return void 
+    * @param string $action
+    * @param 'PUT'|'POST' $method
+    * @param null|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array $data
+    * @return void
     */
     public function __construct(
         public string $action,
@@ -60,7 +62,7 @@ class Form
 
     /**
      * gerenrate from data props
-     * @return array 
+     * @return array
      */
     public function create(): array
     {
@@ -71,21 +73,32 @@ class Form
                 return $element->getProperties();
             }),
             'data' => $this->data,
+            'precognitive' => !$this->disablePrecognitive
         ];
     }
 
     /**
+     * disable precognition(禁用表单预测验证)
+     * @return Form
+     */
+    public function disablePrecognitive(): self
+    {
+        $this->disablePrecognitive = true;
+        return $this;
+    }
+
+    /**
      * render from view
-     * @param string $title 
-     * @param string $page 
-     * @return \Inertia\Response 
-     * @throws \RuntimeException 
+     * @param string $title
+     * @param string $page
+     * @return \Inertia\Response
+     * @throws \RuntimeException
      */
     public function render(string $title, string $page = 'DefaultForm'): Response
     {
         return inertia($page, [
             'form' => $this->create(),
-            'title' => $title,
+            'title' => $title
         ]);
     }
 }

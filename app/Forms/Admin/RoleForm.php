@@ -21,7 +21,7 @@ class RoleForm extends FormBuilder
         array|Model|Role|null $data = null
     ): Response {
         $form = new Form($action, $method, $data);
-        $permissions = Permission::all()->pluck('name', 'id')->toArray();
+        $permissions = Permission::all()->pluck('id', 'name')->toArray();
 
         $form
             ->add(Input::make('name', 'Name'))

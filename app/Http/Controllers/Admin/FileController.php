@@ -16,7 +16,7 @@ class FileController extends Controller
 
             return response()->json([
                 'message' => __('messages.fileUploadSuccess'),
-                'url' => Storage::disk()->url($name),
+                'url' => Storage::url($name),
             ]);
         }
 

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id', false, true);
-            $table->unsignedBigInteger('user_id', false, true)->nullable();
+            $table->unsignedBigInteger('category_id', false);
+            $table->unsignedBigInteger('user_id', false)->nullable();
             $table->string('title', 255);
             $table->string('summary', 255)->nullable();
             $table->string('thumb')->nullable();

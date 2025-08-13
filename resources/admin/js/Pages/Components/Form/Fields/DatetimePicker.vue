@@ -53,7 +53,7 @@ interface CustomProps extends BaseProps {
   appendIcon?: string
   hasTime: boolean
   hasDate: boolean
-  modelValue: string | number | { from: string; to: string } | null
+  modelValue: string | number | { from: string; to: string } | null | undefined
   "onUpdate:modelValue"?: (value: string | number | { from: string; to: string } | null) => void
 }
 

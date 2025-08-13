@@ -213,7 +213,11 @@ class ImageDownload
      */
     private function findOrCreateImageRecord(string $url, string $path, string $filename, string $fullPath): ImageDownloadResult
     {
-        $publicPath = Storage::disk($this->config->disk)->url($path . $filename);
+        /**
+         * @var \Illuminate\Filesystem\LocalFilesystemAdapter $disk
+         */
+        $disk = Storage::disk($this->config->disk);
+        $publicPath = $disk->url($path . $filename);
 
         try {
             $imageHash = $this->hashHandler->hash($fullPath);

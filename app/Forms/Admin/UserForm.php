@@ -21,7 +21,7 @@ class UserForm extends FormBuilder
     ): Response {
         $form = new Form($action, $method, $data);
 
-        $roles = Role::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('id', 'name')->toArray();
         $form
             ->add(Input::make('email', 'Email')->email()->autofocus())
             ->add(Input::make('name', 'Name'))

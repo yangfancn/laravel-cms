@@ -23,7 +23,7 @@ class PermissionForm extends FormBuilder
     ): Response {
         $form = new Form($action, $method, $data);
 
-        $parents = AdminMenu::pluck('label', 'id')->toArray();
+        $parents = AdminMenu::pluck('id', 'label')->toArray();
 
         $form->add(Input::make('name', 'Name'))
             ->add(

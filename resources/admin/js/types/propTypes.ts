@@ -10,4 +10,5 @@ export interface FormProps {
   errors?: {
     [key: string]: any
   }
+  precognitive: boolean
 }

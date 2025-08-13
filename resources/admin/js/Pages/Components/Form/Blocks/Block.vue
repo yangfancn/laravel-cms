@@ -31,6 +31,9 @@
           ></Field>
         </div>
       </div>
+      <div class="error" v-if="errorMessage">
+        <div role="alert">{{ errorMessage }}</div>
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -47,9 +50,17 @@ interface Props {
   name?: string
   title?: string
   reorder?: boolean
+  errorMessage?: string
 }
 
 defineProps<Props>()
 
 const emit = defineEmits(["update:modelValue", "delete", "getError"])
 </script>
+
+<style scoped>
+  .error {
+    color: var(--q-negative);
+    font-size: 12px;
+  }
+</style>

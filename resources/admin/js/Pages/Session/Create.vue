@@ -5,7 +5,13 @@
         <Head title="Login" />
         <q-card>
           <h1>Login</h1>
-          <Form :fields="form.fields" :action="form.action" :method="form.method" :data="form.data">
+          <Form
+            :fields="form.fields"
+            :action="form.action"
+            :method="form.method"
+            :data="form.data"
+            :precognitive="form.precognitive"
+          >
             <template v-slot:submit>
               <div class="col-6 text-right">
                 <q-btn type="submit" color="primary" square>{{ $t("login") }}</q-btn>

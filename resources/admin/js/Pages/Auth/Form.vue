@@ -2,10 +2,16 @@
   <q-layout view="lHh lpR fFf">
     <q-page-container>
       <q-page class="login-page">
-        <Head :title="title" />
+        <Head :title="title"/>
         <q-card>
           <h1 class="text-center">{{ title }}</h1>
-          <Form :fields="form.fields" :action="form.action" :method="form.method" :data="form.data">
+          <Form
+            :fields="form.fields"
+            :action="form.action"
+            :method="form.method"
+            :data="form.data"
+            :precognitive="false"
+          >
             <template v-slot:submit>
               <div class="col-12 text-center">
                 <q-btn type="submit" color="primary" square>{{ $t("submit") }}</q-btn>
@@ -16,21 +22,27 @@
       </q-page>
     </q-page-container>
 
-    <q-ajax-bar ref="bar" position="top" color="accent" size="10px" skip-hijack />
+    <q-ajax-bar
+      ref="bar"
+      position="top"
+      color="accent"
+      size="10px"
+      skip-hijack
+    />
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3"
-import Form from "../Components/Form/Form.vue"
-import { useNotify } from "../../composables/useNotify"
+import {Head} from "@inertiajs/vue3";
+import Form from "../Components/Form/Form.vue";
+import {useNotify} from "../../composables/useNotify";
 
 defineProps<{
-  form: any
+  form: any,
   title: string
-}>()
+}>();
 
-useNotify()
+useNotify();
 </script>
 
 <style lang="scss" scoped>
@@ -53,7 +65,7 @@ useNotify()
     }
 
     .q-toggle {
-      margin-left: -0.75rem;
+      margin-left: -.75rem;
     }
   }
 }

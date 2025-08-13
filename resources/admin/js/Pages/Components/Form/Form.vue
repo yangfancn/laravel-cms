@@ -17,7 +17,9 @@
           ></Field>
         </div>
         <slot name="submit">
-          <q-btn type="submit" :disable="form.processing">Submit</q-btn>
+          <!-- prevent scroll after press enter -->
+          <button type="submit" :disable="form.processing"></button>
+          <q-btn @click="submitFrom" :disable="form.processing">Submit</q-btn>
         </slot>
       </div>
     </div>
@@ -33,8 +35,10 @@ import { trans } from "laravel-vue-i18n"
 import Field from "./Field.vue"
 
 const props = defineProps<FormProps>()
-// console.log(props.data)
-const form = useForm(props.method.toLowerCase() as InertiaRequestMethod, props.action, props.data)
+const form = useForm(props.method.toLowerCase() as InertiaRequestMethod, props.action, props.data, {
+  onBefore: () => props.precognitive
+})
+
 const $q = useQuasar()
 const allowSubmitHandlers = ref<(() => boolean)[]>([])
 const formRef = ref<QForm>()
@@ -56,13 +60,7 @@ function submitFrom() {
     onError: async (errors: FormProps["errors"]) => {
       //这里可以改成 provide() 一个方法给全局，需要用到 error focus 的组件调用它，传递过来方法，在这里调用
       await nextTick()
-      for (const errorsKey in errors) {
-        const ele = formRef.value?.$el.querySelector(`[expand-name="${errorsKey}"]`)
-        if (ele) {
-          ele.scrollIntoView({ behavior: "smooth", block: "start" })
-          break
-        }
-      }
+      focusFirstErrorField(errors!)
     },
     preserveScroll: "errors",
     preserveState: "errors",
@@ -70,8 +68,27 @@ function submitFrom() {
   })
 }
 
-const getItemError = (name: string): string | null => {
-  return form.errors[name] ?? null
+const getItemError = (name: string, strict: boolean = true): string | null => {
+  if (strict) {
+    return form.errors[name] ?? null
+  }
+
+  const errors: string[] = []
+
+  // 父字段
+  if (Object.prototype.hasOwnProperty.call(form.errors, name)) {
+    errors.push(form.errors[name])
+  }
+
+  // 所有子字段
+  const prefix = name + "."
+  Object.keys(form.errors).forEach((key) => {
+    if (key.startsWith(prefix)) {
+      errors.push(form.errors[key])
+    }
+  })
+
+  return errors.length > 0 ? errors.join("; ") : null
 }
 
 const clearError = (name: string) => {
@@ -103,8 +120,47 @@ const sortError = (prefixName: string, newIndex: number, oldIndex: number) => {
 
 const addAllowSubmitHandler = (handler: () => boolean) => {
   allowSubmitHandlers.value.push(handler)
+
+  return () => {
+    const index = allowSubmitHandlers.value.indexOf(handler)
+    if (index !== -1) {
+      allowSubmitHandlers.value.splice(index, 1)
+    }
+  }
 }
 
+const fieldRefs = ref<{ name: string; focusOnError: () => void }[]>([])
+
+function registerField(name: string, focusOnError: () => void) {
+  fieldRefs.value.push({ name, focusOnError })
+}
+
+function unregisterField(name: string) {
+  const idx = fieldRefs.value.findIndex((f) => f.name === name)
+  if (idx !== -1) {
+    fieldRefs.value.splice(idx, 1)
+  }
+}
+
+function focusFirstErrorField(errors: { [key: string]: any }) {
+  for (const { name, focusOnError } of fieldRefs.value) {
+    console.log(name, focusOnError);
+
+    const hasDirectError = Object.prototype.hasOwnProperty.call(errors, name)
+    const hasNestedError = Object.keys(errors).some(key => key.startsWith(name + '.'))
+
+    if (hasDirectError || hasNestedError) {
+      console.log(focusOnError(), name);
+
+      focusOnError()
+      break
+    }
+  }
+}
+
+
+provide("registerField", registerField)
+provide("unregisterField", unregisterField)
 provide("getError", getItemError)
 provide("clearError", clearError)
 provide("sortError", sortError)

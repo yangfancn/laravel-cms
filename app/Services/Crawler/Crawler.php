@@ -452,7 +452,7 @@ class Crawler
             }
 
             if ($saveHandler instanceof SaveAbstract) {
-                $saveHandler->save($data, $listData['link'], $this->requestOptions);
+                $saveHandler->save($data, $listData['link']);
             } else {
                 $saveHandler($data);
             }

@@ -10,21 +10,20 @@ class ImageColumn extends Column
 {
     public string $type = 'image';
 
-    public ?string $width;
+    public ?string $width = null;
 
-    public ?string $height;
+    public ?string $height = null;
 
-    public ?string $radius;
+    public ?string $radius = null;
 
     /**
      * Set the width of the image column.
-     * @param int|string $width 
-     * @return \App\Services\DataTable\ImageColumn 
+     * @param int|string $width
+     * @return \App\Services\DataTable\ImageColumn
      */
     public function width(int|string $width): self
     {
-        $this->$width = is_int($width) ? ($width.'px') : $width;
-
+        $this->width = is_int($width) ? ($width.'px') : $width;
         return $this;
     }
 
@@ -42,8 +41,8 @@ class ImageColumn extends Column
 
     /**
      * Set the radius of the image column.
-     * @param int|string $radius 
-     * @return \App\Services\DataTable\ImageColumn 
+     * @param int|string $radius
+     * @return \App\Services\DataTable\ImageColumn
      */
     public function radius(int|string $radius): self
     {

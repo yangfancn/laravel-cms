@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
+use Session;
 
 class PasswordController extends Controller
 {
@@ -36,7 +37,7 @@ class PasswordController extends Controller
             return redirect()->back();
         }
 
-        $request->session()->passwordConfirmed();
+        Session::passwordConfirmed();
 
         return redirect()->intended();
     }

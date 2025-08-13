@@ -23,15 +23,15 @@ class CategoryForm extends FormBuilder
         Model|Category|array|null $data = null
     ): Response {
         $form = new Form($action, $method, $data);
-        $categories = Category::whereNotIn('id', $data ? [$data['id']] : [])->pluck('name', 'id')->all();
+        $categories = Category::whereNotIn('id', $data ? [$data['id']] : [])->pluck('id', 'name')->all();
         $form->add(Input::make('name', 'Name'))
             ->add(Select::make('parent_id', 'Parent')->options($categories))
             ->add(Input::make('directory', 'Path'))
             ->add(Input::make('route', 'Route'))
             ->add(Toggle::make('show', 'Show In Nav')->defaultValue(true))
             ->add(Select::make('type', 'Type')->options([
-                1 => 'Articles List',
-                0 => 'Single Page',
+                'Articles List' => 1,
+                'Single Page' => 0,
             ])->defaultValue(1))
             ->add(Input::make('rank', 'Rank')->number()->defaultValue(0))
             ->add(self::metaBlock());

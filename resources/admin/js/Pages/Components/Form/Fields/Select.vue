@@ -147,6 +147,8 @@ const createOption = (
           type: "negative"
         })
       })
+  } else {
+    done({ label: value, value }, props.newValueMode)
   }
 }
 </script>

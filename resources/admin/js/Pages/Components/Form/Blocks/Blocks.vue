@@ -10,7 +10,7 @@
       </q-card-section>
       <q-separator />
     </template>
-    <q-card-section>
+    <q-card-section v-if="reactiveData.length">
       <VueDraggable
         v-model="reactiveData"
         :sort="reorder"

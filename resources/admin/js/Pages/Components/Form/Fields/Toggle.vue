@@ -8,7 +8,7 @@
 import { QToggleProps } from "quasar"
 
 interface Props extends QToggleProps {
-  modelValue: boolean | number
+  modelValue: boolean | number | undefined
   error?: boolean
   errorMessage?: string
 }

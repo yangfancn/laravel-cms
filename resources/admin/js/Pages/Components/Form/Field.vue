@@ -1,18 +1,19 @@
 <template>
-  <component
-    ref="_component"
-    :is="componentType"
-    v-bind="{ ...fieldProps, dark: $q.dark.mode }"
-    :error="!!_error"
-    :errorMessage="_error"
-    @update:modelValue="updateModelValue"
-    @change="clearError(expandName)"
-    :expand-name="expandName"
-  ></component>
+  <div ref="_component" class="field-container">
+    <component
+      :is="componentType"
+      v-bind="{ ...fieldProps, dark: $q.dark.mode }"
+      :error="!!_error"
+      :errorMessage="_error"
+      @update:modelValue="updateModelValue"
+      @change="clearError(expandName)"
+      :expand-name="expandName"
+    ></component>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref } from "vue"
+import { computed, inject, ref, nextTick, onMounted, onBeforeUnmount } from "vue"
 import type { Component } from "vue"
 import { useQuasar } from "quasar"
 import Input from "./Fields/Input.vue"
@@ -39,13 +40,18 @@ interface Props {
 }
 
 const $q = useQuasar()
-const _component = ref(null)
+const _component = ref<HTMLElement | null>()
 const props = defineProps<Props>()
 
-const getError = inject("getError") as (name: string) => string | null
+const getError = inject("getError") as (name: string, strict: boolean) => string | null
 const clearError = inject("clearError") as (name: string) => void
 
-const _error = computed(() => getError(props.expandName))
+const _error = computed(() => {
+  if (props.field === "select" && props.fieldProps.multiple) {
+    return getError(props.expandName, false)
+  }
+  return getError(props.expandName, true)
+})
 
 const emit = defineEmits(["update:modelValue", "clear-error"])
 
@@ -72,7 +78,30 @@ const getComponent = (field: string) => {
 
 const componentType = getComponent(props.field)
 
+const registerField = inject<(name: string, fn: () => void) => void>("registerField")
+const unregisterField = inject<(name: string) => void>("unregisterField")
+
+function focusOnError() {
+  nextTick(() => {
+    _component.value?.scrollIntoView({ behavior: "smooth", block: "start" })
+  })
+}
+
 const updateModelValue = (data: any) => {
   emit("update:modelValue", data)
 }
+
+onMounted(() => {
+  registerField?.(props.expandName, focusOnError)
+})
+
+onBeforeUnmount(() => {
+  unregisterField?.(props.expandName)
+})
 </script>
+
+<style scoped>
+.field-container {
+  scroll-margin-top: 50px;
+}
+</style>

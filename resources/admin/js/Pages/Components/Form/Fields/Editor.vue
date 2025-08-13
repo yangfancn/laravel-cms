@@ -68,7 +68,7 @@ import {
 } from "ckeditor5"
 import { Ckeditor } from "@ckeditor/ckeditor5-vue"
 import { MyCustomUploadAdapterPlugin } from "../../../../utils/uploadAdapter"
-import { inject, ref } from "vue"
+import { inject, onMounted, ref } from "vue"
 import { Notify, QField } from "quasar"
 
 import "ckeditor5/ckeditor5.css"
@@ -93,7 +93,7 @@ const props = withDefaults(defineProps<Props>(), {
   minHeight: "15rem"
 })
 
-const addAllowSubmitHandler = inject("addAllowSubmitHandler") as (handler: () => boolean) => void
+const addAllowSubmitHandler = inject("addAllowSubmitHandler") as ((fn: () => boolean) => () => void)
 const counterText = ref(0)
 
 const editorConfig = {
@@ -189,8 +189,12 @@ const onReady = (editor: ClassicEditor) => {
   fileRepository = editor.plugins.get("FileRepository")
 }
 
-addAllowSubmitHandler(() => {
+const removeHander = addAllowSubmitHandler(() => {
   return fileRepository?.loaders.last === null
+})
+
+onMounted(() => {
+  removeHander()
 })
 </script>
 

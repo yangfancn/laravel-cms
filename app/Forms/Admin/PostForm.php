@@ -28,7 +28,7 @@ class PostForm extends FormBuilder
         Model|Post|array|null $data = null
     ): Response {
         $form = new Form($action, $method, $data);
-        $categories = Category::where('type', 1)->pluck('name', 'id')->all();
+        $categories = Category::where('type', 1)->pluck('id', 'name')->all();
         $form->add(Input::make('title', 'Title'))
             ->add(Select::make('category_id', 'Category')->options($categories));
 
