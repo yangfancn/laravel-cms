@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { QBtnProps, useQuasar } from "quasar"
+import { type QBtnProps, useQuasar } from "quasar"
 import { router } from "@inertiajs/vue3"
-import { RouteParams } from "ziggy-js"
+import { type RouteParams } from "ziggy-js"
 import { safeRoute } from "../../../helper"
 
 interface Props extends QBtnProps {
@@ -13,9 +13,7 @@ interface Props extends QBtnProps {
   routeParam?: RouteParams<any>
   withConfirm?: boolean
   method?: InertiaRequestMethod
-  requestData?: {
-    [key: string]: any
-  }
+  requestData?: Record<string, any>
   confirmMessage?: string
   routeParamName?: string
 }

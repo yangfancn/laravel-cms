@@ -6,7 +6,7 @@ axios.interceptors.response.use((response) => {
     shiftPool(response);
     return response;
 }, (error) => {
-    const errMsgInRes = (error.response?.data).message ?? null;
+    const errMsgInRes = error.response?.data?.message ?? null;
     if (errMsgInRes) {
         //@todo global notify
     }
@@ -17,15 +17,19 @@ const axiosPool = new Map();
 // 生成唯一标识 URL 的方法
 const generateUrl = (config) => {
     const params = new URLSearchParams(config.params).toString();
-    const data = typeof config.data === "object" ? JSON.stringify(config.data) : config.data || "";
-    return [config.method, config.url, params, data].join("&");
+    const data = typeof config.data === "object"
+        ? JSON.stringify(config.data)
+        : typeof config.data === "string"
+            ? config.data
+            : "";
+    return [config.method ?? "GET", config.url ?? "", params, data].join("&");
 };
 // 添加请求到池中
 const appendPool = (config) => {
     const url = generateUrl(config);
     // 如果池中没有该请求，设置取消令牌
     config.cancelToken =
-        config.cancelToken ||
+        config.cancelToken ??
             new axios.CancelToken((cancel) => {
                 if (!axiosPool.has(url)) {
                     axiosPool.set(url, cancel);

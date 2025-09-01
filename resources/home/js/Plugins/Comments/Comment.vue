@@ -65,7 +65,6 @@ import { ref } from "vue"
 import axios from "axios"
 import Input from "./Input.vue"
 import Vote from "../Vote/Vote.vue"
-import Rating from "../Rating/Rating.vue"
 
 export interface CommentItem {
   id: number
@@ -111,7 +110,7 @@ const lineInactive = () => {
 }
 
 const loadMore = () => {
-  axios
+  void axios
     .request<{
       data: CommentItem[]
     }>({

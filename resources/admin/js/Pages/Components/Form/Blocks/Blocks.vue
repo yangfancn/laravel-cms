@@ -15,7 +15,7 @@
         v-model="reactiveData"
         :sort="reorder"
         handle=".drag-handler"
-        @update:modelValue="sortedUpdate"
+        @update:model-value="sortedUpdate"
         :on-update="indexChange"
         :animation="300"
       >
@@ -42,7 +42,7 @@
 
 <script lang="ts" setup>
 import { computed, inject, onBeforeMount, ref } from "vue"
-import { SortableEvent, VueDraggable } from "vue-draggable-plus"
+import { type SortableEvent, VueDraggable } from "vue-draggable-plus"
 import Block from "./Block.vue"
 import { useQuasar } from "quasar"
 import { trans } from "laravel-vue-i18n"
@@ -56,34 +56,34 @@ interface Props {
   min: number | null
   max: number | null
   reorder: boolean
-  fields: any
-  modelValue: any
+  fields: unknown
+  modelValue?: Record<string, unknown>[]
 }
 
 const $q = useQuasar()
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: []
+  modelValue: (): Record<string, unknown>[] => []
 })
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits<(e: "update:modelValue", value: Record<string, unknown>[]) => void>()
 
-let reactiveData = computed({
-  get: (): any[] => props.modelValue ?? [],
-  set: (data: any) => {
+const reactiveData = computed<Record<string, unknown>[]>({
+  get: () => props.modelValue ?? [],
+  set: (data: Record<string, unknown>[]) => {
     emit("update:modelValue", data)
     clearError(props.expandName)
   }
 })
 
-const uniqueIds = ref((props.modelValue ?? []).map(() => uuid()))
-const sortError = inject("sortError") as (
+const uniqueIds = ref<string[]>((props.modelValue ?? []).map(() => uuid()))
+const sortError = inject<(
   prefixName: string,
   newIndex: number,
   oldIndex: number
-) => void
-const getError = inject("getError") as (name: string) => string | null
-const clearError = inject("clearError") as (name: string) => void
+) => void>("sortError")!
+const getError = inject<(name: string) => string | null>("getError")!
+const clearError = inject<(name: string) => void>("clearError")!
 const _error = computed(() => getError(props.expandName))
 
 const allowDelete = () => {
@@ -105,7 +105,7 @@ onBeforeMount(() => {
 const appendDefaultDataBlock = () => {
   if (props.max && reactiveData.value.length >= props.max) {
     $q.notify({
-      message: trans("messages.overMaxItems:max", { max: props.max.toString() }),
+      message: trans("messages.overMaxItems:max", { max: String(props.max) }),
       type: "warning"
     })
     return
@@ -117,7 +117,7 @@ const appendDefaultDataBlock = () => {
 const deleteBlock = (index: number) => {
   if (!allowDelete()) {
     $q.notify({
-      message: trans("messages.lessThanMinItems:min", { min: props.min!.toString() }),
+      message: trans("messages.lessThanMinItems:min", { min: String(props.min ?? "") }),
       type: "warning"
     })
     return

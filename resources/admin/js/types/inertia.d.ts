@@ -1,4 +1,4 @@
-import type { Page, PageProps } from "@inertiajs/core"
+import type { Page, PageProps } from '@inertiajs/core';
 
 interface InertiaNotify {
   type: "positive" | "negative" | "warning" | "info"
@@ -16,7 +16,7 @@ interface InertiaNotify {
   | "bottom-right"
 }
 
-interface Props extends PageProps {
+interface SharedProps extends PageProps {
   inertiaNotify?: InertiaNotify[]
   user?: {
     id: number
@@ -29,6 +29,7 @@ interface Props extends PageProps {
   menu: MenuItem[]
 }
 
+
 declare module "@inertiajs/vue3" {
-  export function usePage(): Page<Props>
+  export function usePage(): Page<SharedProps>
 }

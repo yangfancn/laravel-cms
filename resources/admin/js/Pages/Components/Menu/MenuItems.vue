@@ -7,8 +7,8 @@
           :label="$t('menu.' + item.label)"
           :icon="item.icon"
           :model-value="expandedItems.includes(item.id)"
-          @update:model-value="toggleExpansion(item.id, $event)"
           :style="{ '--icon-color': item.icon_color }"
+          @update:model-value="toggleExpansion(item.id, $event)"
         >
           <q-item-section>
             <MenuItems :menu="item.children" />
@@ -18,11 +18,11 @@
 
       <q-item
         v-else
-        clickable
         v-ripple
-        @click="item.route && router.get($safeRoute(item.route, item.params ?? undefined))"
+        clickable
         :active="route().current() === item.route"
         active-class="bg-teal-1 text-grey-8"
+        @click="item.route && router.get(safeRoute(item.route, item.params ?? undefined))"
       >
         <q-item-section avatar>
           <q-icon :name="item.icon" :style="{ color: item.icon_color }"></q-icon>
@@ -40,17 +40,18 @@
 
 <script lang="ts" setup>
 import { router } from "@inertiajs/vue3"
-import { onMounted, ref } from "vue"
+import { ref } from "vue"
 import { route } from "ziggy-js"
+import { safeRoute } from "../../../helper"
 
-const props = defineProps<{
+defineProps<{
   menu: MenuItem[]
 }>()
 
 const loadExpandedItems = (): number[] => {
   const storedItems = sessionStorage.getItem("expandedItems")
   if (storedItems) {
-    return JSON.parse(storedItems)
+    return JSON.parse(storedItems) as number[]
   }
   return []
 }
@@ -71,8 +72,6 @@ const toggleExpansion = (id: number, expanded: boolean) => {
   }
   saveExpandedItems()
 }
-
-onMounted(() => {})
 </script>
 
 <style>

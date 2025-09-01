@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QFileProps } from "quasar"
+import { type QFileProps } from "quasar"
 
 interface Props extends QFileProps {
   appendIcon?: string

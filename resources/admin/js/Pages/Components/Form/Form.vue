@@ -18,7 +18,7 @@
         </div>
         <slot name="submit">
           <!-- prevent scroll after press enter -->
-          <button type="submit" :disable="form.processing"></button>
+          <button type="submit" :disable="form.processing" hidden></button>
           <q-btn @click="submitFrom" :disable="form.processing">Submit</q-btn>
         </slot>
       </div>
@@ -35,9 +35,30 @@ import { trans } from "laravel-vue-i18n"
 import Field from "./Field.vue"
 
 const props = defineProps<FormProps>()
-const form = useForm(props.method.toLowerCase() as InertiaRequestMethod, props.action, props.data, {
-  onBefore: () => props.precognitive
-})
+
+type FormErrors = Record<string, string | null>
+interface SubmitOptions {
+  onFinish?: () => void
+  onError?: (errors: FormErrors) => void | Promise<void>
+  preserveScroll?: boolean | "errors"
+  preserveState?: boolean | "errors"
+  replace?: boolean
+}
+type FormInstance = Record<string, unknown> & {
+  submit: (opts: SubmitOptions) => void
+  reset: (...fields: string[]) => void
+  validate: (field: string) => void
+  processing: boolean
+  progress?: { percentage: number } | null
+  errors: FormErrors
+}
+
+const form = useForm(
+  props.method.toLowerCase() as InertiaRequestMethod,
+  props.action,
+  props.data,
+  { onBefore: () => props.precognitive }
+) as unknown as FormInstance
 
 const $q = useQuasar()
 const allowSubmitHandlers = ref<(() => boolean)[]>([])
@@ -57,10 +78,10 @@ function submitFrom() {
 
   form.submit({
     onFinish: () => form.reset("password"),
-    onError: async (errors: FormProps["errors"]) => {
+    onError: async (errors: FormErrors) => {
       //这里可以改成 provide() 一个方法给全局，需要用到 error focus 的组件调用它，传递过来方法，在这里调用
       await nextTick()
-      focusFirstErrorField(errors!)
+      focusFirstErrorField(errors)
     },
     preserveScroll: "errors",
     preserveState: "errors",
@@ -68,7 +89,7 @@ function submitFrom() {
   })
 }
 
-const getItemError = (name: string, strict: boolean = true): string | null => {
+const getItemError = (name: string, strict = true): string | null => {
   if (strict) {
     return form.errors[name] ?? null
   }
@@ -77,14 +98,16 @@ const getItemError = (name: string, strict: boolean = true): string | null => {
 
   // 父字段
   if (Object.prototype.hasOwnProperty.call(form.errors, name)) {
-    errors.push(form.errors[name])
+    const v = form.errors[name]
+    if (typeof v === "string") errors.push(v)
   }
 
   // 所有子字段
   const prefix = name + "."
   Object.keys(form.errors).forEach((key) => {
     if (key.startsWith(prefix)) {
-      errors.push(form.errors[key])
+      const v = form.errors[key]
+      if (typeof v === "string") errors.push(v)
     }
   })
 
@@ -96,10 +119,10 @@ const clearError = (name: string) => {
 }
 
 const sortError = (prefixName: string, newIndex: number, oldIndex: number) => {
-  const updatedErrors: Record<string, any> = {}
+  const updatedErrors: FormErrors = {}
 
   for (const key in form.errors) {
-    const match = key.match(new RegExp(`^${prefixName}\\.([0-9]+)\\.`))
+    const match = new RegExp(`^${prefixName}\\.([0-9]+)\\.`).exec(key)
     if (match) {
       const index = parseInt(match[1], 10)
       let newKey = key
@@ -110,9 +133,9 @@ const sortError = (prefixName: string, newIndex: number, oldIndex: number) => {
       } else if (index < oldIndex && index >= newIndex) {
         newKey = key.replace(`${prefixName}.${index}.`, `${prefixName}.${index + 1}.`)
       }
-      updatedErrors[newKey] = form.errors[key]
+      updatedErrors[newKey] = form.errors[key] ?? null
     } else {
-      updatedErrors[key] = form.errors[key]
+      updatedErrors[key] = form.errors[key] ?? null
     }
   }
   form.errors = updatedErrors
@@ -142,7 +165,7 @@ function unregisterField(name: string) {
   }
 }
 
-function focusFirstErrorField(errors: { [key: string]: any }) {
+function focusFirstErrorField(errors: Record<string, unknown>) {
   for (const { name, focusOnError } of fieldRefs.value) {
     console.log(name, focusOnError);
 

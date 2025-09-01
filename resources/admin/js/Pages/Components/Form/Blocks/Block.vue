@@ -26,7 +26,7 @@
           <Field
             :field="item.field"
             :field-props="{ ...item, modelValue: modelValue[item.name] }"
-            @update:modelValue="modelValue[item.name] = $event"
+            @update:model-value="modelValue[item.name] = $event"
             :expand-name="`${expandName}.${item.name}`"
           ></Field>
         </div>
@@ -42,9 +42,7 @@
 import Field from "../Field.vue"
 
 interface Props {
-  modelValue: {
-    [key: string]: any
-  }
+  modelValue: Record<string, any>
   fields: any
   expandName: string
   name?: string

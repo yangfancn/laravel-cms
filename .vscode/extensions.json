@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "laravel.vscode-laravel",
+        "DEVSENSE.phptools-vscode",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "Vue.volar",
+        "dbaeumer.vscode-eslint"
+    ]
+}

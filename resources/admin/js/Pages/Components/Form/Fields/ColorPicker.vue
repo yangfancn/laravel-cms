@@ -1,19 +1,19 @@
 <template>
   <q-input v-bind="props">
-    <template v-slot:prepend>
+    <template #prepend>
       <div class="color-preview" :style="{ backgroundColor: modelValue ?? 'transparent' }"></div>
     </template>
-    <template v-slot:append>
+    <template #append>
       <q-icon name="colorize" class="cursor-pointer">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-color
             :model-value="modelValue"
-            @update:model-value="$emit('update:modelValue', $event)"
             :default-value="defaultView"
             :palette="palette"
             :no-header="noHeader"
             :no-header-tabs="noHeaderTabs"
             :no-footer="noFooter"
+            @update:model-value="$emit('update:modelValue', $event)"
           />
         </q-popup-proxy>
       </q-icon>
@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QColorProps, QInputProps } from "quasar"
+import type { QColorProps, QInputProps } from "quasar"
 
 type Props = (QInputProps & QColorProps) & {
   modelValue: string | null

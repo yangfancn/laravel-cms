@@ -1,14 +1,10 @@
-export interface FormFieldProps {
-  [key: string]: any
-}
+export type FormFieldProps = Record<string, any>;
 
 export interface FormProps {
   fields: FormFieldProps[]
   action: string
   method: "PUT" | "POST"
   data: any
-  errors?: {
-    [key: string]: any
-  }
+  errors?: Record<string, any>
   precognitive: boolean
 }

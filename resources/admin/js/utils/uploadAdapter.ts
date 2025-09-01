@@ -1,6 +1,8 @@
 import { Editor } from "ckeditor5"
-import type { FileLoader, UploadAdapter, UploadResponse } from "ckeditor5"
+import type { FileLoader, UploadAdapter } from "ckeditor5"
 import { Cookies } from "quasar"
+
+type CkUploadResponse = Record<string, unknown>
 
 class MyUploadAdapter implements UploadAdapter {
   private readonly loader: FileLoader
@@ -11,10 +13,10 @@ class MyUploadAdapter implements UploadAdapter {
     this.xhr = null
   }
 
-  async upload(): Promise<UploadResponse> {
+  async upload(): Promise<CkUploadResponse> {
     return this.loader.file.then(
       (file: File | null) =>
-        new Promise((resolve, reject) => {
+        new Promise<CkUploadResponse>((resolve, reject) => {
           this._initRequest()
           this._initListeners(resolve, reject, file!)
           this._sendRequest(file!)
@@ -37,14 +39,8 @@ class MyUploadAdapter implements UploadAdapter {
 
   // Initializes XMLHttpRequest listeners.
   _initListeners(
-    resolve: (
-      value:
-        | { default: string }
-        | PromiseLike<{
-          default: string
-        }>
-    ) => void,
-    reject: (reason?: any) => void,
+    resolve: (value: CkUploadResponse | PromiseLike<CkUploadResponse>) => void,
+    reject: (reason?: unknown) => void,
     file: File
   ): void {
     const loader = this.loader
@@ -52,20 +48,18 @@ class MyUploadAdapter implements UploadAdapter {
 
     const genericErrorText = `Couldn't upload file: ${file.name}.`
 
-    xhr!.addEventListener("error", () => {
+    xhr.addEventListener("error", () => {
       reject(genericErrorText)
     })
-    xhr!.addEventListener("abort", () => reject())
-    xhr!.addEventListener("load", () => {
-      const response = xhr.response
+    xhr.addEventListener("abort", () => reject())
+    xhr.addEventListener("load", () => {
+      const response = xhr.response as UploadResponse
 
-      if (!response || response.error) {
-        return reject(response && response.error ? response.error.message : genericErrorText)
+      if (!response?.url) {
+        return reject(response?.message ?? "Upload failed")
       }
 
-      resolve({
-        default: response.url
-      })
+      resolve({ default: response.url })
     })
 
     if (xhr.upload) {

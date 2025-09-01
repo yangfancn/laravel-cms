@@ -57,11 +57,11 @@ watch(props, async (value) => {
         container: container.value
       })
 
-      const cropperCanvas = cropper.value!.getCropperCanvas()!
+      const cropperCanvas = cropper.value.getCropperCanvas()!
       cropperCanvas.style.height = cropperCanvas.clientWidth * (image.height / image.width) + "px"
 
       if (props.aspectRatio) {
-        cropper.value!.getCropperSelection()!.aspectRatio = props.aspectRatio
+        cropper.value.getCropperSelection()!.aspectRatio = props.aspectRatio
       }
     }
   }
@@ -76,7 +76,7 @@ function onCropped() {
         emit("on-cropperd", blob)
       }, props.img!.type)
       closeDialog()
-    })
+    }).catch(e => console.error(e))
 }
 
 function closeDialog() {
@@ -95,7 +95,10 @@ function fileToBase64(file: File): Promise<string> {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
+    reader.onerror = () => {
+      const reason = reader.error ?? new Error("Failed to read file")
+      reject(reason)
+    }
   })
 }
 </script>

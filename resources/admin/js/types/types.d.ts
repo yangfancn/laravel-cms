@@ -22,10 +22,8 @@ interface MenuItem {
   icon_color: string | null
   route: string | null
   params:
-    | {
-        [key: string]: any
-      }[]
-    | null
+  | Record<string, any>[]
+  | null
   show_in_menu: boolean
   children?: MenuItem[]
   label: string
@@ -58,3 +56,9 @@ interface DashboardVisitDistribution {
 }
 
 type InertiaRequestMethod = "get" | "post" | "put" | "patch" | "delete"
+
+interface UploadResponse {
+  message: string
+  url?: string
+}
+

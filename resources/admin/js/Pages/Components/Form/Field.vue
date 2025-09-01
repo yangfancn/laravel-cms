@@ -34,17 +34,15 @@ import Block from "./Blocks/Block.vue"
 interface Props {
   field: string
   expandName: string
-  fieldProps: {
-    [key: string]: any
-  }
+  fieldProps: Record<string, any>
 }
 
 const $q = useQuasar()
 const _component = ref<HTMLElement | null>()
 const props = defineProps<Props>()
 
-const getError = inject("getError") as (name: string, strict: boolean) => string | null
-const clearError = inject("clearError") as (name: string) => void
+const getError: (name: string, strict?: boolean) => string | null = inject("getError")!
+const clearError: (name: string) => void = inject("clearError")!
 
 const _error = computed(() => {
   if (props.field === "select" && props.fieldProps.multiple) {
@@ -82,7 +80,7 @@ const registerField = inject<(name: string, fn: () => void) => void>("registerFi
 const unregisterField = inject<(name: string) => void>("unregisterField")
 
 function focusOnError() {
-  nextTick(() => {
+  void nextTick(() => {
     _component.value?.scrollIntoView({ behavior: "smooth", block: "start" })
   })
 }

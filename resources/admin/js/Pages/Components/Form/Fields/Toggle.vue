@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { QToggleProps } from "quasar"
+import { type QToggleProps } from "quasar"
 
 interface Props extends QToggleProps {
   modelValue: boolean | number | undefined

@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
-import { QSelect, QSelectProps, useQuasar } from "quasar"
-import axios from "axios"
+import { ref, onMounted } from "vue"
+import { QSelect, type QSelectProps, useQuasar } from "quasar"
+import axios, { isAxiosError } from "axios"
 
 interface Option {
   label: string | number
@@ -53,12 +53,19 @@ const search = ref<string>("")
 const oldSearch = ref<string>("")
 const $q = useQuasar()
 
-const xhrLoadOptions = async (clear: boolean = false) => {
+const xhrLoadOptions = async (clear = false) => {
   loading.value = true
   // clear options,like in search
   if (clear) {
     optionsRef.value.splice(0, optionsRef.value.length)
   }
+
+  const mv: any = props.modelValue as unknown
+  const required: string | number | null =
+    (typeof mv === "string" || typeof mv === "number") && !optionsRef.value.some((item) => item.value === mv)
+      ? mv
+      : null
+
   await axios
     .request<{
       options: {
@@ -71,10 +78,7 @@ const xhrLoadOptions = async (clear: boolean = false) => {
       params: {
         page: nextPage.value,
         pageSize: 15,
-        require:
-          optionsRef.value.map((item) => item.value).indexOf(props.modelValue) === -1
-            ? props.modelValue
-            : null,
+        require: required,
         search: search.value
       }
     })
@@ -89,21 +93,20 @@ const xhrLoadOptions = async (clear: boolean = false) => {
     })
 }
 
-if (props.options.length === 0 && props.xhrOptionsUrl) {
-  nextPage.value = 1
-  xhrLoadOptions()
-}
+onMounted(() => {
+  if (props.xhrOptionsUrl && props.options.length === 0) {
+    nextPage.value = 1
+    void xhrLoadOptions()
+  }
+})
 
-const onScroll = ({ index, to }: { index: number | string; to: number | string }) => {
+const onScroll = async ({ index, to }: { index: number | string; to: number | string }) => {
   if (props.xhrOptionsUrl && !loading.value && index === to) {
-    xhrLoadOptions()
+    await xhrLoadOptions()
   }
 }
 
-const filterFn = async (
-  val: string,
-  update: (callbackFn: () => void, afterFn?: ((ref: QSelect) => void) | undefined) => void
-) => {
+const filterFn = async (val: string, update: (callbackFn: () => void, afterFn?: (ref: QSelect) => void) => void) => {
   if (props.xhrOptionsUrl) {
     if (oldSearch.value !== val) {
       search.value = val
@@ -118,17 +121,12 @@ const filterFn = async (
   } else {
     update(() => {
       const needle = val.toLowerCase()
-      optionsRef.value = props.options.filter(
-        (item: Option) => item.label.toString().toLowerCase().indexOf(needle) > -1
-      )
+      optionsRef.value = props.options.filter((item: Option) => item.label.toString().toLowerCase().includes(needle))
     })
   }
 }
 
-const createOption = (
-  value: string,
-  done: (item: any, mode: "add" | "add-unique" | "toggle" | undefined) => void
-) => {
+const createOption = (value: string, done: (item: any, mode: "add" | "add-unique" | "toggle" | undefined) => void) => {
   if (props.xhrCreateOptionUrl) {
     axios
       .post<{
@@ -141,11 +139,14 @@ const createOption = (
         optionsRef.value.push(data)
         done(data.value, props.newValueMode)
       })
-      .catch((error) => {
-        $q.notify({
-          message: error.response.data.message,
-          type: "negative"
-        })
+      .catch((err: unknown) => {
+        let message = "Request failed"
+        if (isAxiosError(err)) {
+          const data = err.response?.data as { message?: unknown } | undefined
+          const msg = data?.message
+          message = typeof msg === "string" ? msg : (err.message ?? message)
+        }
+        $q.notify({ message, type: "negative" })
       })
   } else {
     done({ label: value, value }, props.newValueMode)

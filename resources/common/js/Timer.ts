@@ -9,7 +9,7 @@ export default class Timer {
   private startTime: number | null = null
   private stop: number
   private remaining: number
-  private running: boolean = false
+  private running = false
   private counter: number
   private readonly onFinish?: () => void
   private readonly onChange?: (remaining: number) => void
@@ -23,7 +23,7 @@ export default class Timer {
   }
 
   private step = (timestamp: number) => {
-    if (!this.startTime) this.startTime = timestamp
+    this.startTime ??= timestamp;
     const elapsed = timestamp - this.startTime
     this.remaining = Math.max(0, this.stop - elapsed)
     this.counter++

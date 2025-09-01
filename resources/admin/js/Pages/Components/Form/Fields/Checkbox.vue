@@ -3,6 +3,7 @@
     <div :class="{ 'q-gutter-sm': true, column: column }">
       <q-checkbox
         v-for="item in options"
+        :key="`${label}-${item.label}`"
         :name="name"
         :val="item.val"
         :label="item.label"
@@ -20,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { QCheckboxProps } from "quasar"
+import { type QCheckboxProps } from "quasar"
 
 interface Props {
   label: string

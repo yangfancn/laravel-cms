@@ -1,11 +1,5 @@
 <template>
-  <q-field
-    :error="error"
-    :error-message="errorMessage"
-    :label="label"
-    standout
-    :bg-color="dark ? '' : 'grey-2'"
-  >
+  <q-field :error="error" :error-message="errorMessage" :label="label" standout :bg-color="dark ? '' : 'grey-2'">
     <file-pond
       :class="[allowMultiple ? 'multi' : 'single', 'q-field__native q-placeholder']"
       ref="uploader"
@@ -33,13 +27,13 @@
 
 <script lang="ts" setup>
 import VueFilePond from "vue-filepond"
-import { FilePondErrorDescription, FilePondFile, FilePondServerConfigProps } from "filepond"
+import type { FilePondFile, FilePondErrorDescription, FilePondServerConfigProps, FileStatus } from "filepond"
 import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
 import FIlePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
 import { useQuasar } from "quasar"
 import { inject, onBeforeUnmount, ref } from "vue"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { trans } from "laravel-vue-i18n"
 import CropperDialog from "../CropperDialog.vue"
 
@@ -70,17 +64,17 @@ const FilePond = VueFilePond(
 )
 
 const props = defineProps<Props>()
-const files = (
-  props.modelValue ? (Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]) : []
-).map((source) => ({
-  source,
-  options: {
-    type: "local"
-  }
-}))
+const files = (props.modelValue ? (Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]) : []).map(
+  (source) => ({
+    source,
+    options: {
+      type: "local"
+    }
+  })
+)
 
 const server: FilePondServerConfigProps["server"] = {
-  process: (filedName, file, metadata, load, error, progress, abort, transfer, options) => {
+  process: (_filedName, file, _metadata, load, error, progress, abort) => {
     const formData = new FormData()
     formData.append("file", file, file.name)
 
@@ -90,7 +84,7 @@ const server: FilePondServerConfigProps["server"] = {
 
     // Axios request configuration
     axios
-      .request({
+      .request<UploadResponse>({
         method: "post",
         url: "/manager/upload",
         data: formData,
@@ -100,9 +94,9 @@ const server: FilePondServerConfigProps["server"] = {
         }
       })
       .then((response) => {
-        load(response.data.url)
+        load(response.data.url!)
       })
-      .catch((thrown) => {
+      .catch((thrown: AxiosError | UploadResponse) => {
         const message = thrown.message ?? "upload failed: unknown error"
         $q.notify({
           message: message,
@@ -123,7 +117,14 @@ const server: FilePondServerConfigProps["server"] = {
 }
 
 const $q = useQuasar()
-const uploader = ref<typeof FilePond | null>(null)
+// FilePond FileStatus enum isn't available at runtime; create typed constants
+const FILE_STATUS_PROCESSING: FileStatus = 3 as FileStatus
+const FILE_STATUS_PROCESSING_QUEUED: FileStatus = 9 as FileStatus
+interface FilePondComponent {
+  getFiles: () => FilePondFile[]
+  addFile: (file: Blob | File, options?: { index?: number }) => void
+}
+const uploader = ref<FilePondComponent | null>(null)
 const cropperFile = ref<File | null>(null)
 const processingFile = ref<{ current: File | null; queue: File[] }>({
   current: null,
@@ -131,7 +132,7 @@ const processingFile = ref<{ current: File | null; queue: File[] }>({
 })
 
 const emit = defineEmits(["update:modelValue"])
-const addAllowSubmitHandler = inject("addAllowSubmitHandler") as ((fn: () => boolean) => () => void)
+const addAllowSubmitHandler: (fn: () => boolean) => () => void = inject("addAllowSubmitHandler")!
 
 const onAddFileStart = async (file: FilePondFile) => {
   if (!props.cropper || !file.fileType.startsWith("image/") || !(file.source instanceof File)) {
@@ -166,7 +167,7 @@ const onAddFileStart = async (file: FilePondFile) => {
   processingFile.value.queue.push(file.source)
 
   if (!processingFile.value.current) {
-    await processNextFile()
+    processNextFile()
   }
 }
 
@@ -177,13 +178,13 @@ const onReorderFiles = (files: FilePondFile[]) => {
   )
 }
 
-const onProcessFile = (error: FilePondErrorDescription | null, file: FilePondFile) => {
+const onProcessFile = (_error: FilePondErrorDescription | null, file: FilePondFile) => {
   emit(
     "update:modelValue",
     props.maxFiles === 1
       ? file.serverId
       : Array.isArray(props.modelValue)
-        ? props.modelValue.concat([file.serverId]).filter(item => item)
+        ? props.modelValue.concat([file.serverId]).filter((item) => item)
         : [file.serverId]
   )
 }
@@ -194,25 +195,25 @@ const onRemoveFile = () => {
   emit("update:modelValue", files.length === 0 ? null : files)
 }
 
-async function onCroppered(blob: Blob | null): Promise<void> {
+function onCroppered(blob: Blob | null): void {
   if (blob) {
     uploader.value!.addFile(blob, {
       index: uploader.value?.getFiles().length
     })
   }
   cropperFile.value = null
-  await processNextFile()
+  processNextFile()
 }
 
-async function onCropperCancel(): Promise<void> {
+function onCropperCancel(): void {
   cropperFile.value = null
-  await processNextFile()
+  processNextFile()
 }
 
-const processNextFile = async () => {
+const processNextFile = () => {
   const file = processingFile.value.queue.shift() as File | undefined
 
-  processingFile.value.current = file ? file : null
+  processingFile.value.current = file ?? null
 
   if (file) {
     try {
@@ -229,8 +230,8 @@ const processNextFile = async () => {
 }
 
 const removeHandler = addAllowSubmitHandler(() => {
-  for (const file of uploader.value?.getFiles()) {
-    if (file.status === 3 || file.status === 9) {
+  for (const file of uploader.value!.getFiles()) {
+    if (file.status === FILE_STATUS_PROCESSING || file.status === FILE_STATUS_PROCESSING_QUEUED) {
       return false
     }
   }

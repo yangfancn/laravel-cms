@@ -1,4 +1,4 @@
-import { createApp, DefineComponent, h } from "vue"
+import { createApp, type DefineComponent, h } from "vue"
 import { createInertiaApp } from "@inertiajs/vue3"
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers"
 import { ZiggyVue } from "ziggy-js"
@@ -18,7 +18,7 @@ createInertiaApp({
       .use(plugin)
       .use(Quasar, QuasarConfig)
       .use(ZiggyVue)
-      .use(i18nVue as any, {
+      .use(i18nVue as unknown as import("vue").Plugin, {
         resolve: async (lang: string) => {
           const langFiles = import.meta.glob("../../../lang/*.json")
           return langFiles[`../../../lang/${lang}.json`]?.()
@@ -28,4 +28,6 @@ createInertiaApp({
     app.config.globalProperties.$safeRoute = safeRoute
     app.mount(el)
   }
-}).then()
+}).then().catch((e) => {
+  console.error(e)
+})

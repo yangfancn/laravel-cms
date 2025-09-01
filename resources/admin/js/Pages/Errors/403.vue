@@ -4,8 +4,4 @@
 
 <script setup lang="ts">
 import Layout from "../Layout.vue"
-
-const props = defineProps<{}>()
-
-console.log(props)
 </script>

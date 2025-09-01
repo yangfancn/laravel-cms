@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QSliderProps } from "quasar"
+import { type QSliderProps } from "quasar"
 
 interface Props extends QSliderProps {
   outLabel?: string

@@ -64,7 +64,7 @@ const _down = ref(props.down)
 const _currentUserVote = ref(props.currentUserVote)
 
 const handleClick = (vote: boolean) => {
-  axios
+  void axios
     .request<{
       vote: boolean | null
     }>({

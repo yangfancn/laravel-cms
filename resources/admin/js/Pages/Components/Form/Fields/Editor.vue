@@ -93,7 +93,7 @@ const props = withDefaults(defineProps<Props>(), {
   minHeight: "15rem"
 })
 
-const addAllowSubmitHandler = inject("addAllowSubmitHandler") as ((fn: () => boolean) => () => void)
+const addAllowSubmitHandler: (fn: () => boolean) => () => void = inject("addAllowSubmitHandler")!
 const counterText = ref(0)
 
 const editorConfig = {
@@ -178,7 +178,7 @@ const editorConfig = {
 let fileRepository: FileRepository | null
 
 const onReady = (editor: ClassicEditor) => {
-  editor.plugins.get("Notification").on("show:warning", (evt: EventInfo, data) => {
+  editor.plugins.get("Notification").on("show:warning", (evt: EventInfo, data: {message: string}) => {
     Notify.create({
       message: data.message,
       type: "negative"

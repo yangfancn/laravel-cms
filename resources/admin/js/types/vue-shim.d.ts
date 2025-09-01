@@ -2,13 +2,11 @@ import { trans } from "laravel-vue-i18n"
 import { route as routeFn } from "ziggy-js"
 import { safeRoute } from "../helper"
 import { Quasar } from "quasar"
-import { ComponentCustomProperties } from "vue"
-import { Composer } from "vue-i18n"
 
 declare module "*.vue" {
-  import { defineComponent } from "vue"
-  const component: ReturnType<typeof defineComponent>
-  export default component
+  import { DefineComponent } from "vue";
+  const component: DefineComponent<object, object, any>;
+  export default component;
 }
 
 declare module "@vue/runtime-core" {

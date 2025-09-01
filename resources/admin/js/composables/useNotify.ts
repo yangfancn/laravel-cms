@@ -1,11 +1,11 @@
 import { watch } from "vue"
 import { usePage } from "@inertiajs/vue3"
 import { useQuasar } from "quasar"
-import { InertiaNotify } from "../types/inertia"
+import type { InertiaNotify } from "../types/inertia"
 
 export function useNotify() {
   const $q = useQuasar()
-  const page = usePage()
+  const page = usePage<{ inertiaNotify?: InertiaNotify[] }>()
 
   watch(
     () => page.props.inertiaNotify,

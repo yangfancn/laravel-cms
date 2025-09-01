@@ -14,7 +14,7 @@
         /* 使用 ES 模块 */
         "module": "ESNext",
         /* 使用 Node.js 模块解析策略 */
-        "moduleResolution": "node",
+        "moduleResolution": "Bundler",
         /* 允许对没有默认导出的模块使用默认导入语法 */
         "allowSyntheticDefaultImports": true,
         /* 保留 JSX，交给 Vue 3 的编译器处理 */
@@ -45,6 +45,10 @@
         "skipLibCheck": true,
         /* 强制文件名的一致性 */
         "forceConsistentCasingInFileNames": true,
+        "moduleDetection": "force",
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
         "baseUrl": ".",
         "paths": {
             "~lang/*": [

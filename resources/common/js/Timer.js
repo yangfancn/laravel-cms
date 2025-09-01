@@ -15,8 +15,7 @@ export default class Timer {
         this.start();
     }
     step = (timestamp) => {
-        if (!this.startTime)
-            this.startTime = timestamp;
+        this.startTime ??= timestamp;
         const elapsed = timestamp - this.startTime;
         this.remaining = Math.max(0, this.stop - elapsed);
         this.counter++;

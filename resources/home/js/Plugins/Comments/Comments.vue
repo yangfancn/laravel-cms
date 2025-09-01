@@ -23,9 +23,10 @@
 <script lang="ts" setup>
 import "./comments.css"
 import Input from "./Input.vue"
-import Comment, { CommentItem } from "./Comment.vue"
+import Comment from "./Comment.vue"
+import type { CommentItem } from "./Comment.vue"
 import { onMounted, provide, reactive } from "vue"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 
 interface Comments {
   count: number
@@ -37,7 +38,7 @@ const props = defineProps<{
   id: number | string
 }>()
 
-const comments = reactive<Comments>({
+const comments: Comments = reactive<Comments>({
   data: [],
   count: 0
 })
@@ -45,7 +46,7 @@ const comments = reactive<Comments>({
 onMounted(() => requestComments())
 
 const requestComments = () => {
-  axios
+  void axios
     .request<Comments>({
       url: "/api/comments",
       method: "get",
@@ -77,7 +78,7 @@ const submitComment = (content: string, id: number | null = null) => {
       .then(({ data }) => {
         resolve(data)
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         reject(error)
       })
   })

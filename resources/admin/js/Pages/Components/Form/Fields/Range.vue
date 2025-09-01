@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QRangeProps } from "quasar"
+import { type QRangeProps } from "quasar"
 
 interface Props extends QRangeProps {
   outLabel?: string

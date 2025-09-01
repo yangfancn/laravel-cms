@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Vue Type Check",
+            "type": "shell",
+            "command": "npx vue-tsc --noEmit",
+            "problemMatcher": "$tsc-watch"
+        }
+    ]
+}

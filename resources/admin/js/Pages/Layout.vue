@@ -71,21 +71,22 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue"
-import { usePage, Link } from "@inertiajs/vue3"
+import { Link, usePage } from "@inertiajs/vue3"
 import { QPage, useQuasar } from "quasar"
 import MenuItems from "./Components/Menu/MenuItems.vue"
 import { Head } from "@inertiajs/vue3"
 import { useNotify } from "../composables/useNotify"
 import { safeRoute } from "../helper"
 
-interface Props {
+interface LayoutProps {
   title?: string
 }
 
-defineProps<Props>()
+defineProps<LayoutProps>()
 
 const $q = useQuasar()
 const page = usePage()
+
 const pageRef = ref<InstanceType<typeof QPage> | null>(null)
 const drawerOpen = ref(true)
 const drawerMini = ref(false)
@@ -136,7 +137,7 @@ const styleFn = (offset: number, height: number) => {
 useNotify()
 
 onMounted(() => {
-  const style = window.getComputedStyle(pageRef.value?.$el, null)
+  const style = window.getComputedStyle(pageRef.value?.$el as Element, null)
   pagePadding.value =
     parseInt(style.paddingTop.replace("px", "")) + parseInt(style.paddingBottom.replace("px", ""))
   $q.dark.set($q.localStorage.getItem("darkMode") ?? "auto")

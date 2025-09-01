@@ -3,7 +3,7 @@ export const safeRoute = (name, params, absolute, config) => {
     try {
         return route(name, params, absolute, config);
     }
-    catch (error) {
+    catch {
         console.warn(`Route ${name} not found`);
         return "#";
     }
@@ -11,36 +11,37 @@ export const safeRoute = (name, params, absolute, config) => {
 export const transformObject = (input) => {
     const result = {};
     for (const key in input) {
-        if (input.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(input, key)) {
             const parts = key.split(".");
             parts.reduce((acc, part, index) => {
                 const isLast = index === parts.length - 1;
-                const arrayIndex = parseInt(part, 10);
-                if (!isNaN(arrayIndex)) {
-                    if (!Array.isArray(acc[arrayIndex])) {
-                        acc[arrayIndex] = [];
+                const arrayIndex = Number.isInteger(Number(part)) ? Number(part) : NaN;
+                if (acc !== null && typeof acc === "object") {
+                    const container = acc;
+                    if (!Number.isNaN(arrayIndex)) {
+                        if (!Array.isArray(container[arrayIndex])) {
+                            container[arrayIndex] = [];
+                        }
+                        if (isLast) {
+                            container[arrayIndex] = input[key];
+                            return container;
+                        }
+                        if (container[arrayIndex] === undefined ||
+                            typeof container[arrayIndex] !== "object") {
+                            container[arrayIndex] = {};
+                        }
+                        return container[arrayIndex];
                     }
                     if (isLast) {
-                        acc[arrayIndex] = input[key];
+                        container[part] = input[key];
+                        return container;
                     }
-                    else {
-                        if (!acc[arrayIndex]) {
-                            acc[arrayIndex] = {};
-                        }
-                        return acc[arrayIndex];
+                    if (container[part] === undefined || typeof container[part] !== "object") {
+                        container[part] = {};
                     }
+                    return container[part];
                 }
-                else {
-                    if (isLast) {
-                        acc[part] = input[key];
-                    }
-                    else {
-                        if (!acc[part]) {
-                            acc[part] = {};
-                        }
-                        return acc[part];
-                    }
-                }
+                return acc;
             }, result);
         }
     }

@@ -25,7 +25,7 @@
       <q-icon :name="appendIcon" class="cursor-pointer">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-time
-            :model-value="modelValue as string | null"
+            :model-value="timeModelValue"
             @update:model-value="$emit('update:modelValue', $event)"
             :mask="datetimeMask"
           >
@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { QDateProps, QInputProps, QTimeProps } from "quasar"
+import type { QDateProps, QInputProps, QTimeProps } from "quasar"
 import { computed } from "vue"
 
 type BaseProps = Omit<QInputProps, "modelValue" | "onUpdate:modelValue"> &
@@ -75,9 +75,25 @@ const datetimeMask = props.range
     : undefined
 
 const displayModelValue = computed<string | null | undefined>(() => {
-  if (props.range && typeof props.modelValue === "object") {
-    return `${props.modelValue?.from} - ${props.modelValue?.to}`
+  const mv = props.modelValue
+  if (props.range && mv && typeof mv === "object" && "from" in mv && "to" in mv) {
+    const from = typeof mv.from === "string" ? mv.from : String(mv.from ?? "")
+    const to = typeof mv.to === "string" ? mv.to : String(mv.to ?? "")
+    return `${from} - ${to}`
   }
-  return props.modelValue?.toString()
+  if (mv == null) return mv
+  if (typeof mv === "string") return mv
+  if (typeof mv === "number") return String(mv)
+  return null
+})
+
+const timeModelValue = computed<string | null | undefined>(() => {
+  const mv = props.modelValue
+  if (mv == null) return mv
+  if (typeof mv === "string") return mv
+  if (typeof mv === "number") return String(mv)
+  // When range/object is present, time popup is hidden via `!range`,
+  // but guard here to satisfy types.
+  return undefined
 })
 </script>

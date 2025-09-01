@@ -23,7 +23,9 @@ import { shallowRef } from "vue"
 import VChart from "vue-echarts"
 import worldMap from "../../jsons/world.json"
 import { useQuasar } from "quasar"
-import { GeoJSONSourceInput } from "echarts/types/src/coord/geo/geoTypes"
+// import { GeoJSONSourceInput } from "echarts/types/src/coord/geo/geoTypes"
+// import { GeoJSONSourceInput } from "echarts/types/src/coord/geo/geoTypes"
+import type { GeoJSONSourceInput } from "echarts/types/src/coord/geo/geoTypes.js"
 
 const props = defineProps<{
   data: DashboardVisitDistribution[]

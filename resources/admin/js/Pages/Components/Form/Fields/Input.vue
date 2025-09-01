@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { QInputProps } from "quasar"
+import { type QInputProps } from "quasar"
 import { ref } from "vue"
 
 interface Props extends QInputProps {

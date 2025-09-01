@@ -31,7 +31,7 @@
           style="margin-right: 1rem"
         >
         </q-btn>
-        <template v-for="item in options.selectOptions">
+        <template v-for="item in options.selectOptions" :key="item.label + item.value">
           <q-select
             :options="item.options"
             :label="item.name"
@@ -71,7 +71,7 @@
           <!--    Image      -->
           <template v-if="props.col.type === 'image'">
             <img
-              :src="parseCellValue(props)"
+              :src="parseCellValue(props) as string"
               alt=""
               :width="props.col.width"
               :height="props.col.height"
@@ -106,13 +106,13 @@
             <Button
               v-if="btn.type === 'status-button'"
               v-bind="computedStatusBtnProps(props.row[btn.statusFiled!] as boolean, btn)"
-              :routeParam="btn.routeParamName ? props.row[btn.routeParamName] : undefined"
+              :route-param="btn.routeParamName ? props.row[btn.routeParamName] : undefined"
               :dense="true"
             />
             <Button
               v-else
               v-bind="btn"
-              :routeParam="btn.routeParamName ? props.row[btn.routeParamName] : undefined"
+              :route-param="btn.routeParamName ? props.row[btn.routeParamName] : undefined"
               :dense="true"
             />
           </template>
@@ -126,7 +126,7 @@
 import Layout from "./Layout.vue"
 import { Link, router } from "@inertiajs/vue3"
 import { computed, ref, watch } from "vue"
-import { QBtnProps, QSelectProps, QSelect, useQuasar } from "quasar"
+import { type QBtnProps, type QSelectProps, QSelect, useQuasar } from "quasar"
 import Button from "./Components/Table/Button.vue"
 import { safeRoute } from "../helper"
 import { trans } from "laravel-vue-i18n"
@@ -143,7 +143,8 @@ interface selectOptions extends Omit<QSelectProps, "dark"> {
   prependIcon?: string
   options: Option[]
   dark?: boolean
-  modelValue: any
+  name: string
+  modelValue: unknown
 }
 
 interface Props {
@@ -160,12 +161,10 @@ interface Props {
       width?: string
       height?: string
       radius?: string
-      format?: (val: any, row: { [key: string]: any }) => string
+      format?: (val: any, row: Record<string, any>) => string
     }[]
     data: {
-      data: {
-        [key: string]: any
-      }[]
+      data: Record<string, any>[]
     }
     pagination: {
       currentPage: number
@@ -210,15 +209,11 @@ interface Pagination extends RequestPagination {
 }
 
 const props = defineProps<Props>()
+
 const $q = useQuasar()
 const selected = ref<
-  {
-    [key: string]: any
-  }[]
+  Record<string, any>[]
 >()
-
-console.log(props.options.selectOptions)
-const group = ref(2)
 
 const pagination = ref<Pagination>({
   page: props.options.pagination.currentPage,
@@ -228,7 +223,7 @@ const pagination = ref<Pagination>({
   descending: props.options.descending
 })
 
-const selectedIds = computed(() => selected.value?.map((item) => item.id))
+const selectedIds = computed(() => selected.value?.map((item) => item.id as number))
 
 const computedStatusBtnProps = (status: boolean, props: ButtonProps) => {
   return {
@@ -253,11 +248,11 @@ const requestHandler = (arg?: {
   getCellValue: (col: any, row: any) => any
 }) => {
   const appendParams = props.options.selectOptions?.reduce(
-    (acc: Record<string, any>, curr) => {
-      acc[curr.name!] = curr.modelValue
+    (acc: Record<string, unknown>, curr): Record<string, unknown> => {
+      acc[curr.name] = curr.modelValue
       return acc
     },
-    {} as Record<string, any>
+    {} as Record<string, unknown>
   )
   router.get("", {
     ...{
@@ -281,7 +276,7 @@ const batchDeleteHandler = () => {
     router.delete(safeRoute(props.options.batchDeleteRoute!), {
       preserveState: false,
       data: {
-        ids: selected.value?.map((item) => item.id)
+        ids: selected.value?.map((item): any => item.id)
       }
     })
   })
@@ -289,17 +284,48 @@ const batchDeleteHandler = () => {
 
 watch(
   () => props.options.selectOptions,
-  (value) => {
+  () => {
     requestHandler()
   },
   { deep: true }
 )
 
-const parseCellValue = (props: { [key: string]: any }) => {
-  return (
-    props.value ??
-    props.col.field.split(".").reduce((acc: any, key: string) => acc && acc[key], props.row)
-  )
+interface CellProps {
+  col: Props["options"]["columns"][number]
+  row: Record<string, unknown>
+  value?: unknown
+}
+
+const getDeepValue = (obj: unknown, path: string): unknown => {
+  if (!path) return undefined
+  return path.split(".").reduce<unknown>((acc, key) => {
+    if (acc !== null && typeof acc === "object") {
+      const rec = acc as Record<string, unknown>
+      return rec[key]
+    }
+    return undefined
+  }, obj)
+}
+
+const toStringSafe = (val: unknown): string => {
+  if (val == null) return ""
+  return val as string
+}
+
+const toStringArraySafe = (val: unknown): string[] => {
+  if (Array.isArray(val)) {
+    return val.map((v) => (typeof v === "string" ? v : String(v)))
+  }
+  if (val == null) return []
+  return [toStringSafe(val)]
+}
+
+const parseCellValue = (cell: CellProps): string | string[] => {
+  const raw = cell.value ?? getDeepValue(cell.row, cell.col.field)
+  if (cell.col.type === "chips") {
+    return toStringArraySafe(raw)
+  }
+  return toStringSafe(raw)
 }
 </script>
 

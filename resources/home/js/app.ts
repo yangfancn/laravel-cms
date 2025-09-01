@@ -1,5 +1,5 @@
 import.meta.glob(["../images/**"])
-import axios, { AxiosError, AxiosRequestConfig } from "axios"
+import axios, { AxiosError, type AxiosRequestConfig } from "axios"
 import { themeChange } from "theme-change"
 
 axios.defaults.timeout = 10000
@@ -8,8 +8,8 @@ axios.interceptors.response.use(
     shiftPool(response)
     return response
   },
-  (error: AxiosError) => {
-    const errMsgInRes = (error.response?.data as any).message ?? null
+  (error: AxiosError<{ message?: string }>) => {
+    const errMsgInRes = error.response?.data?.message ?? null
     if (errMsgInRes) {
       //@todo global notify
     }
@@ -18,13 +18,18 @@ axios.interceptors.response.use(
 )
 
 // 创建一个用于存储请求的池
-const axiosPool = new Map<string, Function>()
+const axiosPool = new Map<string, (...args: any[]) => unknown>()
 
 // 生成唯一标识 URL 的方法
-const generateUrl = (config: AxiosRequestConfig): string => {
+const generateUrl = (config: AxiosRequestConfig<unknown>): string => {
   const params = new URLSearchParams(config.params as Record<string, string>).toString()
-  const data = typeof config.data === "object" ? JSON.stringify(config.data) : config.data || ""
-  return [config.method, config.url, params, data].join("&")
+  const data =
+    typeof config.data === "object"
+      ? JSON.stringify(config.data as Record<string, unknown>)
+      : typeof config.data === "string"
+        ? config.data
+        : ""
+  return [config.method ?? "GET", config.url ?? "", params, data].join("&")
 }
 
 // 添加请求到池中
@@ -33,7 +38,7 @@ const appendPool = (config: AxiosRequestConfig) => {
 
   // 如果池中没有该请求，设置取消令牌
   config.cancelToken =
-    config.cancelToken ||
+    config.cancelToken ??
     new axios.CancelToken((cancel) => {
       if (!axiosPool.has(url)) {
         axiosPool.set(url, cancel)
@@ -52,7 +57,7 @@ axios.interceptors.request.use(
 
     return config
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 )
 
 // 移除请求

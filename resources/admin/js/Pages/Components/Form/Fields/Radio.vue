@@ -4,6 +4,7 @@
       <q-radio
         :name="name"
         v-for="item in options"
+        :key="`${name} + ${item.label}`"
         :val="item.val"
         :label="item.label"
         :model-value="modelValue"
@@ -20,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { QRadioProps } from "quasar"
+import { type QRadioProps } from "quasar"
 
 interface Props {
   label: string
@@ -38,7 +39,7 @@ interface Props {
   errorMessage?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   keepColor: false,
   size: "3rem"
 })

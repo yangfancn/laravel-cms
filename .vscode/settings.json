@@ -1,0 +1,141 @@
+{
+    // ===== 文件与安全 =====
+    "files.autoSave": "onFocusChange",
+    "files.associations": {
+        "*.css": "tailwindcss",
+        "*.module": "php",
+        "*.blade.php": "blade"
+    },
+    "files.exclude": {
+        "**/.git/**": true,
+        "**/.svn/**": true,
+        "**/.hg/**": true,
+        "**/CVS/**": true,
+        "**/.DS_Store/**": true,
+        "**/node_modules/**": true,
+        "**/bower_components/**": true,
+        "**/vendor/**/{Tests,tests}/**": true,
+        "**/.history/**": true,
+        "**/vendor/**/vendor/**": true,
+        "**/vendor/_laravel_ide": true
+    },
+
+    // ===== 编辑器通用 =====
+    "editor.formatOnSave": true,
+    "editor.copyWithSyntaxHighlighting": false,
+    "editor.dragAndDrop": false,
+    "editor.cursorBlinking": "expand",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.selectionHighlight": true,
+    "editor.mouseWheelZoom": true,
+    "editor.scrollBeyondLastLine": false,
+    "editor.cursorSurroundingLines": 2,
+    "editor.tabCompletion": "on",
+    "editor.autoIndent": "full",
+    "editor.folding": true,
+    "editor.foldingStrategy": "indentation",
+    "editor.foldingImportsByDefault": true,
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 120,
+    "editor.rulers": [120],
+    "editor.maxTokenizationLineLength": 20000000,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": false,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.quickSuggestions": {
+        "strings": "on",
+        "comments": "on"
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+
+    // ===== 编辑辅助 =====
+    "problems.decorations.enabled": true,
+    "problems.showCurrentInStatus": true,
+    "diffEditor.hideUnchangedRegions.enabled": true,
+
+    // ===== Prettier 全局 =====
+    "prettier.useEditorConfig": true,
+    "prettier.printWidth": 120,
+    "prettier.proseWrap": "preserve",
+    "prettier.htmlWhitespaceSensitivity": "ignore",
+
+    // ===== HTML 格式化 =====
+    "html.format.wrapLineLength": 0,
+
+    // ===== PHP Tools =====
+    "php.format.rules.indentBraces": false,
+    "php.format.rules.indentHeredoc": true,
+
+    // ===== TailwindCSS =====
+    "tailwindcss-intellisense.trace.server": "verbose",
+    "tailwindCSS.classFunctions": ["tw", "clsx", "tw\\.[a-z-]+"],
+    "tailwindCSS.emmetCompletions": true,
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html",
+        "blade": "html",
+        "vue": "html"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        ["class\\s*=\\s*\"([^\"]*)", 1],
+        ["class:\\s*'([^']*)", 1],
+        ["@class\\(([^)]*)\\)", 1]
+    ],
+
+    // ===== Emmet / HTML 辅助 =====
+    "emmet.includeLanguages": { "blade": "html" },
+    "auto-rename-tag.activationOnLanguage": ["html", "vue", "blade", "xml"],
+
+    // ===== 各语言配置 =====
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+    },
+    "[css,scss,sass]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnPaste": true
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "prettier.printWidth": 120
+    },
+    "[blade]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnPaste": true,
+        "editor.autoClosingBrackets": "always"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "DEVSENSE.phptools-vscode",
+
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // ===== JS/TS 提示 =====
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterNames.enabled": "none",
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "typescript.inlayHints.enumMemberValues.enabled": true,
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "typescript.inlayHints.parameterNames.enabled": "none",
+    "typescript.inlayHints.parameterTypes.enabled": true,
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "typescript.inlayHints.variableTypes.enabled": true,
+    "typescript.tsserver.log": "verbose",
+
+    //eslint problems
+    "eslint.run": "onSave",
+    "eslint.lintTask.enable": true,
+    "eslint.useFlatConfig": true,
+    "eslint.workingDirectories": [{ "mode": "auto" }],
+    "eslint.quiet": false
+}

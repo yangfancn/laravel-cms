@@ -12,7 +12,7 @@
             :data="form.data"
             :precognitive="false"
           >
-            <template v-slot:submit>
+            <template #submit>
               <div class="col-12 text-center">
                 <q-btn type="submit" color="primary" square>{{ $t("submit") }}</q-btn>
               </div>

@@ -35,12 +35,10 @@ class MyUploadAdapter {
         xhr.addEventListener("abort", () => reject());
         xhr.addEventListener("load", () => {
             const response = xhr.response;
-            if (!response || response.error) {
-                return reject(response && response.error ? response.error.message : genericErrorText);
+            if (!response?.url) {
+                return reject(response?.message ?? "Upload failed");
             }
-            resolve({
-                default: response.url
-            });
+            resolve({ default: response.url });
         });
         if (xhr.upload) {
             xhr.upload.addEventListener("progress", (evt) => {
