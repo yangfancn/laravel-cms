@@ -1,5 +1,5 @@
 <template>
-  <q-form @submit.prevent="submitFrom" ref="formRef">
+  <q-form @submit.prevent="submitForm">
     <q-linear-progress v-if="form.progress" :value="form.progress.percentage"></q-linear-progress>
     <div class="content">
       <div class="row q-gutter-y-sm">
@@ -14,8 +14,8 @@
         </div>
         <slot name="submit">
           <!-- prevent scroll after press enter -->
-          <button type="submit" :disable="form.processing" hidden></button>
-          <q-btn @click="submitFrom" :disable="form.processing">Submit</q-btn>
+          <button type="submit" :disabled="form.processing" hidden></button>
+          <q-btn @click="submitForm" :disable="form.processing">Submit</q-btn>
         </slot>
       </div>
     </div>
@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { useForm } from "laravel-precognition-vue-inertia"
 import type { FormProps } from "../../../types/propTypes"
-import { QForm, useQuasar } from "quasar"
+import { useQuasar } from "quasar"
 import { nextTick, provide, ref } from "vue"
 import { trans } from "laravel-vue-i18n"
 import Field from "./Field.vue"
@@ -55,9 +55,8 @@ const form = useForm(props.method.toLowerCase() as InertiaRequestMethod, props.a
 
 const $q = useQuasar()
 const allowSubmitHandlers = ref<(() => boolean)[]>([])
-const formRef = ref<QForm>()
 
-function submitFrom() {
+function submitForm() {
   for (const handler of allowSubmitHandlers.value) {
     if (!handler()) {
       $q.notify({
@@ -160,14 +159,10 @@ function unregisterField(name: string) {
 
 function focusFirstErrorField(errors: Record<string, unknown>) {
   for (const { name, focusOnError } of fieldRefs.value) {
-    console.log(name, focusOnError)
-
     const hasDirectError = Object.prototype.hasOwnProperty.call(errors, name)
     const hasNestedError = Object.keys(errors).some((key) => key.startsWith(name + "."))
 
     if (hasDirectError || hasNestedError) {
-      console.log(focusOnError(), name)
-
       focusOnError()
       break
     }

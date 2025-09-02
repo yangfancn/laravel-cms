@@ -12,7 +12,7 @@
       @addfilestart="onAddFileStart"
       @processfile="onProcessFile"
       @removefile="onRemoveFile"
-      :imagePreviewHeight="allowMultiple ? '200px' : null"
+      :imagePreviewHeight="allowMultiple ? 200 : null"
     >
     </file-pond>
   </q-field>
@@ -20,7 +20,7 @@
     v-if="cropper"
     :img="cropperFile"
     :aspect-ratio="aspectRatio"
-    @on-cacnel="onCropperCancel"
+    @on-cancel="onCropperCancel"
     @on-cropperd="onCroppered"
   />
 </template>

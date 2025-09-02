@@ -29,7 +29,7 @@ interface Props {
 
 const emit = defineEmits<{
   (e: "on-cropperd", blob: Blob | null): void
-  (e: "on-cacnel"): void
+  (e: "on-cancel"): void
 }>()
 
 const props = defineProps<Props>()
@@ -82,7 +82,7 @@ function closeDialog() {
 function cancelCropper() {
   closeDialog()
 
-  emit("on-cacnel")
+  emit("on-cancel")
 }
 
 function fileToBase64(file: File): Promise<string> {

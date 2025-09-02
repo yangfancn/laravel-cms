@@ -24,8 +24,6 @@ createInertiaApp({
     app.config.globalProperties.$safeRoute = safeRoute
     app.mount(el)
   }
+}).catch((e) => {
+  console.error(e)
 })
-  .then()
-  .catch((e) => {
-    console.error(e)
-  })
