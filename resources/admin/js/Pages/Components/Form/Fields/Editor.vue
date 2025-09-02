@@ -148,13 +148,7 @@ const editorConfig = {
     items: props.toolbarItems
   },
   image: {
-    toolbar: [
-      "imageTextAlternative",
-      "toggleImageCaption",
-      "imageStyle:inline",
-      "imageStyle:block",
-      "imageStyle:side"
-    ]
+    toolbar: ["imageTextAlternative", "toggleImageCaption", "imageStyle:inline", "imageStyle:block", "imageStyle:side"]
   },
   table: {
     contentToolbar: [
@@ -178,7 +172,7 @@ const editorConfig = {
 let fileRepository: FileRepository | null
 
 const onReady = (editor: ClassicEditor) => {
-  editor.plugins.get("Notification").on("show:warning", (evt: EventInfo, data: {message: string}) => {
+  editor.plugins.get("Notification").on("show:warning", (evt: EventInfo, data: { message: string }) => {
     Notify.create({
       message: data.message,
       type: "negative"

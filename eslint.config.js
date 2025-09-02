@@ -1,7 +1,7 @@
 import tseslint from "typescript-eslint"
 import vue from "eslint-plugin-vue"
 import vueParser from "vue-eslint-parser"
-import prettier from "eslint-config-prettier"
+import prettierPlugin from "eslint-plugin-prettier/recommended"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
 
@@ -9,7 +9,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default [
   {
-    ignores: ["node_modules", "dist", "public/build", "vendor", ".vite", ".idea", ".vscode", "coverage"]
+    ignores: [
+      "node_modules",
+      "public",
+      "vendor",
+      ".vscode",
+      "app",
+      "bootstrap",
+      "config",
+      "database",
+      "lang",
+      "routes",
+      "storage",
+      "tests"
+    ]
   },
   // js.configs.recommended,
   ...vue.configs["flat/essential"],
@@ -52,7 +65,6 @@ export default [
       }
     }
   },
-
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
@@ -60,6 +72,5 @@ export default [
       "vue/multi-word-component-names": "off"
     }
   },
-
-  prettier
+  prettierPlugin
 ]

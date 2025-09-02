@@ -13,13 +13,7 @@
 import { CanvasRenderer } from "echarts/renderers"
 import { use } from "echarts/core"
 import { LineChart } from "echarts/charts"
-import {
-  GridComponent,
-  LegendComponent,
-  TitleComponent,
-  ToolboxComponent,
-  TooltipComponent
-} from "echarts/components"
+import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from "echarts/components"
 import { useQuasar } from "quasar"
 import VChart from "vue-echarts"
 import dayjs from "dayjs"
@@ -30,15 +24,7 @@ const props = defineProps<{
 }>()
 
 // 注册需要的组件和地图
-use([
-  CanvasRenderer,
-  LineChart,
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-  ToolboxComponent,
-  GridComponent
-])
+use([CanvasRenderer, LineChart, TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridComponent])
 
 // 数据处理逻辑
 const calcData = props.data.reduce(

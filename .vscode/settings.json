@@ -47,12 +47,13 @@
         "comments": "on"
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+        "source.fixAll.eslint": "always"
     },
 
     // ===== 编辑辅助 =====
     "problems.decorations.enabled": true,
     "problems.showCurrentInStatus": true,
+    "problems.autoReveal": true,
     "diffEditor.hideUnchangedRegions.enabled": true,
 
     // ===== Prettier 全局 =====
@@ -89,7 +90,7 @@
 
     // ===== 各语言配置 =====
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[css,scss,sass]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -105,11 +106,11 @@
         "editor.autoClosingBrackets": "always"
     },
     "[php]": {
-        "editor.defaultFormatter": "DEVSENSE.phptools-vscode",
-
+        "editor.defaultFormatter": "DEVSENSE.phptools-vscode"
     },
     "[vue]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": false
     },
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"

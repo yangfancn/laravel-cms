@@ -11,19 +11,13 @@
         <q-item clickable :class="{ active: profileMenuOpen }">
           <q-item-section side>
             <q-avatar rounded>
-              <img
-                v-if="page.props.user?.photo"
-                :src="page.props.user?.photo"
-                :alt="page.props.user?.name"
-              />
+              <img v-if="page.props.user?.photo" :src="page.props.user?.photo" :alt="page.props.user?.name" />
               <img v-else src="../../images/default-avatar.jpg" :alt="page.props.user?.name" />
             </q-avatar>
           </q-item-section>
           <q-item-section>
             <q-item-label>{{ page.props.user?.name }}</q-item-label>
-            <q-item-label caption class="text-white">{{
-              page.props.user?.roles[0].name
-            }}</q-item-label>
+            <q-item-label caption class="text-white">{{ page.props.user?.roles[0].name }}</q-item-label>
           </q-item-section>
           <q-menu auto-close square fit v-model="profileMenuOpen" class="user-avatar bg-teal-4">
             <q-list>
@@ -35,9 +29,7 @@
               <q-separator />
               <q-item>
                 <q-item-section>
-                  <Link :href="safeRoute('admin.users.edit', { id: page.props.user!.id })"
-                    >Edit Profile</Link
-                  >
+                  <Link :href="safeRoute('admin.users.edit', { id: page.props.user!.id })">Edit Profile</Link>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -138,8 +130,7 @@ useNotify()
 
 onMounted(() => {
   const style = window.getComputedStyle(pageRef.value?.$el as Element, null)
-  pagePadding.value =
-    parseInt(style.paddingTop.replace("px", "")) + parseInt(style.paddingBottom.replace("px", ""))
+  pagePadding.value = parseInt(style.paddingTop.replace("px", "")) + parseInt(style.paddingBottom.replace("px", ""))
   $q.dark.set($q.localStorage.getItem("darkMode") ?? "auto")
 })
 </script>

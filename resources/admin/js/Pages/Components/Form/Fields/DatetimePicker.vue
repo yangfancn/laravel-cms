@@ -1,9 +1,5 @@
 <template>
-  <q-input
-    v-bind="{ ...props, mask: undefined }"
-    :model-value="displayModelValue"
-    :mask="inputMask"
-  >
+  <q-input v-bind="{ ...props, mask: undefined }" :model-value="displayModelValue" :mask="inputMask">
     <template v-slot:prepend v-if="hasDate">
       <q-icon :name="prependIcon" class="cursor-pointer">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">

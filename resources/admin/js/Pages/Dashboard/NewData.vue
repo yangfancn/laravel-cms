@@ -6,11 +6,7 @@
     <div>
       <span>{{ changePercent ? `${changePercent.toFixed(2)}%` : "-" }}</span>
       <q-icon v-if="changePercent && changePercent > 0" name="mdi_arrow_upward_alt" color="green" />
-      <q-icon
-        v-else-if="changePercent && changePercent < 0"
-        name="mdi_arrow_upward_alt"
-        color="red"
-      />
+      <q-icon v-else-if="changePercent && changePercent < 0" name="mdi_arrow_upward_alt" color="red" />
     </div>
   </div>
 </template>

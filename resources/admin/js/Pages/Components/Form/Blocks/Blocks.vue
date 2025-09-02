@@ -2,7 +2,7 @@
   <q-card>
     <template v-if="title">
       <q-card-section>
-        <div class="row justify-between items-center">
+        <div class="row items-center justify-between">
           <p class="no-margin">
             <i>{{ title }}</i>
           </p>
@@ -77,11 +77,7 @@ const reactiveData = computed<Record<string, unknown>[]>({
 })
 
 const uniqueIds = ref<string[]>((props.modelValue ?? []).map(() => uuid()))
-const sortError = inject<(
-  prefixName: string,
-  newIndex: number,
-  oldIndex: number
-) => void>("sortError")!
+const sortError = inject<(prefixName: string, newIndex: number, oldIndex: number) => void>("sortError")!
 const getError = inject<(name: string) => string | null>("getError")!
 const clearError = inject<(name: string) => void>("clearError")!
 const _error = computed(() => getError(props.expandName))

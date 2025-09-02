@@ -1,12 +1,7 @@
 import { route } from "ziggy-js"
 import type { Config, RouteParams } from "ziggy-js"
 
-export const safeRoute = (
-  name: string,
-  params?: RouteParams<any>,
-  absolute?: boolean,
-  config?: Config
-) => {
+export const safeRoute = (name: string, params?: RouteParams<any>, absolute?: boolean, config?: Config) => {
   try {
     return route(name, params, absolute, config)
   } catch {
@@ -15,9 +10,7 @@ export const safeRoute = (
   }
 }
 
-export const transformObject = (
-  input: Record<string, unknown>
-): Record<string, unknown> => {
+export const transformObject = (input: Record<string, unknown>): Record<string, unknown> => {
   const result: Record<string, unknown> = {}
 
   for (const key in input) {
@@ -39,10 +32,7 @@ export const transformObject = (
               container[arrayIndex] = input[key]
               return container
             }
-            if (
-              container[arrayIndex] === undefined ||
-              typeof container[arrayIndex] !== "object"
-            ) {
+            if (container[arrayIndex] === undefined || typeof container[arrayIndex] !== "object") {
               container[arrayIndex] = {}
             }
             return container[arrayIndex]

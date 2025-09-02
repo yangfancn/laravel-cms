@@ -1,15 +1,13 @@
 <template>
   <div :class="{ comment: true, hasChildren: children_count, active: treeLineActive }" class="mb-5">
     <div class="info">
-      <span class="avatar" :style="{ backgroundImage: `url('${data.user.photo ?? ''}')` }">{{
-        avatarName
-      }}</span>
+      <span class="avatar" :style="{ backgroundImage: `url('${data.user.photo ?? ''}')` }">{{ avatarName }}</span>
       <span class="name">{{ data.user.name }}</span>
       <span class="time">{{ data.created_at }}</span>
     </div>
     <div class="content">
       <div class="text prose prose-md max-w-none" v-html="data.content"></div>
-      <div class="flex items-center mt-4">
+      <div class="mt-4 flex items-center">
         <vote
           :id="data.id"
           type="comment"
@@ -43,13 +41,7 @@
         <div class="line" @mouseenter="lineActive" @mouseleave="lineInactive"></div>
         <div class="text">
           <div class="icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#5f6368"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
               <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
             </svg>
           </div>

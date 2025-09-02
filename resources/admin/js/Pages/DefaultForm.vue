@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import Layout from "./Layout.vue"
 import Form from "./Components/Form/Form.vue"
-import { type FormProps } from "../types/propTypes";
+import { type FormProps } from "../types/propTypes"
 
 defineProps<{
   form: FormProps

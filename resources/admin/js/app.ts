@@ -8,11 +8,7 @@ import { i18nVue } from "laravel-vue-i18n"
 import { safeRoute } from "./helper"
 
 createInertiaApp({
-  resolve: (name) =>
-    resolvePageComponent(
-      `./Pages/${name}.vue`,
-      import.meta.glob<DefineComponent>("./Pages/**/*.vue")
-    ),
+  resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>("./Pages/**/*.vue")),
   setup({ el, App, props, plugin }) {
     const app = createApp({ render: () => h(App, props) })
       .use(plugin)
@@ -28,6 +24,8 @@ createInertiaApp({
     app.config.globalProperties.$safeRoute = safeRoute
     app.mount(el)
   }
-}).then().catch((e) => {
-  console.error(e)
 })
+  .then()
+  .catch((e) => {
+    console.error(e)
+  })

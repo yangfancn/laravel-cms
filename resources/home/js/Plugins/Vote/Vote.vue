@@ -1,20 +1,12 @@
 <template>
-  <div class="vote-box border border-accent rounded-full join">
+  <div class="vote-box border-accent join rounded-full border">
     <button
       class="up btn join-item rounded-l-full"
       @click="handleClick(true)"
       :class="{ 'btn-active': _currentUserVote }"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#5f6368"
-      >
-        <path
-          d="M320-120v-320H120l360-440 360 440H640v320H320Zm80-80h160v-320h111L480-754 289-520h111v320Zm80-320Z"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
+        <path d="M320-120v-320H120l360-440 360 440H640v320H320Zm80-80h160v-320h111L480-754 289-520h111v320Zm80-320Z" />
       </svg>
       <span>{{ _up }}</span>
     </button>
@@ -24,16 +16,8 @@
       @click="handleClick(false)"
       :class="{ 'btn-active': _currentUserVote === false }"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#5f6368"
-      >
-        <path
-          d="M320-120v-320H120l360-440 360 440H640v320H320Zm80-80h160v-320h111L480-754 289-520h111v320Zm80-320Z"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
+        <path d="M320-120v-320H120l360-440 360 440H640v320H320Zm80-80h160v-320h111L480-754 289-520h111v320Zm80-320Z" />
       </svg>
       <span>{{ _down }}</span>
     </div>

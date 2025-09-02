@@ -6,7 +6,8 @@
         "dev": "vite",
         "build": "vite build",
         "admin:dev": "VITE_BUILD_TARGET=admin vite",
-        "admin:build": "VITE_BUILD_TARGET=admin vite build"
+        "admin:build": "VITE_BUILD_TARGET=admin vite build",
+        "lint": "eslint . --fix"
     },
     "devDependencies": {
         "@eslint/js": "^9.34.0",
@@ -25,6 +26,7 @@
         "daisyui": "^5.0.49",
         "eslint": "^9.32.0",
         "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
         "eslint-plugin-vue": "^10.3.0",
         "laravel-vite-plugin": "^2.0.0",
         "prettier": "^3.6.2",

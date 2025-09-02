@@ -21,7 +21,7 @@
         </tr>
       </tbody>
     </q-markup-table>
-    <div class="q-pa-lg flex flex-center">
+    <div class="q-pa-lg flex-center flex">
       <q-pagination
         :max="users.last_page"
         v-model="currentPage"

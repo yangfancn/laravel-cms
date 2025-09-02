@@ -21,9 +21,7 @@ interface MenuItem {
   icon?: string
   icon_color: string | null
   route: string | null
-  params:
-  | Record<string, any>[]
-  | null
+  params: Record<string, any>[] | null
   show_in_menu: boolean
   children?: MenuItem[]
   label: string
@@ -61,4 +59,3 @@ interface UploadResponse {
   message: string
   url?: string
 }
-

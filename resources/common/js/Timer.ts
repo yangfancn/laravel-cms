@@ -23,7 +23,7 @@ export default class Timer {
   }
 
   private step = (timestamp: number) => {
-    this.startTime ??= timestamp;
+    this.startTime ??= timestamp
     const elapsed = timestamp - this.startTime
     this.remaining = Math.max(0, this.stop - elapsed)
     this.counter++

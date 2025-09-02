@@ -13,12 +13,7 @@
 import { CanvasRenderer } from "echarts/renderers"
 import { registerMap, use } from "echarts/core"
 import { EffectScatterChart, MapChart } from "echarts/charts"
-import {
-  GeoComponent,
-  TitleComponent,
-  TooltipComponent,
-  VisualMapComponent
-} from "echarts/components"
+import { GeoComponent, TitleComponent, TooltipComponent, VisualMapComponent } from "echarts/components"
 import { shallowRef } from "vue"
 import VChart from "vue-echarts"
 import worldMap from "../../jsons/world.json"
@@ -34,15 +29,7 @@ const props = defineProps<{
 const $q = useQuasar()
 
 // 注册需要的组件和地图
-use([
-  CanvasRenderer,
-  MapChart,
-  EffectScatterChart,
-  TitleComponent,
-  TooltipComponent,
-  VisualMapComponent,
-  GeoComponent
-])
+use([CanvasRenderer, MapChart, EffectScatterChart, TitleComponent, TooltipComponent, VisualMapComponent, GeoComponent])
 
 // 注册世界地图
 registerMap("world", worldMap as GeoJSONSourceInput)

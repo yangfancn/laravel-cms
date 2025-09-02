@@ -2,7 +2,7 @@
   <q-card>
     <template v-if="title">
       <q-card-section>
-        <div class="row justify-between items-center">
+        <div class="row items-center justify-between">
           <p class="no-margin">
             <i>{{ title }}</i>
           </p>
@@ -12,13 +12,7 @@
     </template>
     <q-card-actions v-else align="between">
       <q-btn v-if="reorder" round icon="mdi-drag" class="drag-handler"></q-btn>
-      <q-btn
-        round
-        class="q-ml-auto"
-        icon="mdi-delete-outline"
-        color="negative"
-        @click="emit('delete')"
-      ></q-btn>
+      <q-btn round class="q-ml-auto" icon="mdi-delete-outline" color="negative" @click="emit('delete')"></q-btn>
     </q-card-actions>
     <q-card-section>
       <div class="row q-gutter-y-sm">
@@ -57,8 +51,8 @@ const emit = defineEmits(["update:modelValue", "delete", "getError"])
 </script>
 
 <style scoped>
-  .error {
-    color: var(--q-negative);
-    font-size: 12px;
-  }
+.error {
+  color: var(--q-negative);
+  font-size: 12px;
+}
 </style>

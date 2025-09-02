@@ -3,11 +3,7 @@
     <q-linear-progress v-if="form.progress" :value="form.progress.percentage"></q-linear-progress>
     <div class="content">
       <div class="row q-gutter-y-sm">
-        <div
-          v-for="(item, key) in fields"
-          :class="'col-' + item.cols"
-          :key="`${item.field}-${key}`"
-        >
+        <div v-for="(item, key) in fields" :class="'col-' + item.cols" :key="`${item.field}-${key}`">
           <Field
             :field="item.field"
             :field-props="{ ...item, modelValue: form[item.name] }"
@@ -53,12 +49,9 @@ type FormInstance = Record<string, unknown> & {
   errors: FormErrors
 }
 
-const form = useForm(
-  props.method.toLowerCase() as InertiaRequestMethod,
-  props.action,
-  props.data,
-  { onBefore: () => props.precognitive }
-) as unknown as FormInstance
+const form = useForm(props.method.toLowerCase() as InertiaRequestMethod, props.action, props.data, {
+  onBefore: () => props.precognitive
+}) as unknown as FormInstance
 
 const $q = useQuasar()
 const allowSubmitHandlers = ref<(() => boolean)[]>([])
@@ -167,20 +160,19 @@ function unregisterField(name: string) {
 
 function focusFirstErrorField(errors: Record<string, unknown>) {
   for (const { name, focusOnError } of fieldRefs.value) {
-    console.log(name, focusOnError);
+    console.log(name, focusOnError)
 
     const hasDirectError = Object.prototype.hasOwnProperty.call(errors, name)
-    const hasNestedError = Object.keys(errors).some(key => key.startsWith(name + '.'))
+    const hasNestedError = Object.keys(errors).some((key) => key.startsWith(name + "."))
 
     if (hasDirectError || hasNestedError) {
-      console.log(focusOnError(), name);
+      console.log(focusOnError(), name)
 
       focusOnError()
       break
     }
   }
 }
-
 
 provide("registerField", registerField)
 provide("unregisterField", unregisterField)

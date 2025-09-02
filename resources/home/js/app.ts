@@ -78,6 +78,5 @@ document.addEventListener("DOMContentLoaded", () => {
   themeChange(false)
 
   //copy mobile menu
-  document.querySelector(".menu.mobile")!.innerHTML =
-    document.querySelector(".menu.desktop")!.innerHTML
+  document.querySelector(".menu.mobile")!.innerHTML = document.querySelector(".menu.desktop")!.innerHTML
 })

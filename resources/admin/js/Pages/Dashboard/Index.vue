@@ -3,7 +3,7 @@
     <div class="grid">
       <div class="item">
         <div class="row full-height">
-          <div class="col-4 full-height">
+          <div class="full-height col-4">
             <div class="left-items">
               <new-data
                 title="Today New Posts"
@@ -73,10 +73,7 @@
         </div>
       </div>
       <div class="item">
-        <visitors
-          :page-views="page.props.pageVisits"
-          :unique-ip-visitors="page.props.uniqueVisitors"
-        />
+        <visitors :page-views="page.props.pageVisits" :unique-ip-visitors="page.props.uniqueVisitors" />
       </div>
       <div class="item">
         <distribution :data="page.props.visitDistribution" />

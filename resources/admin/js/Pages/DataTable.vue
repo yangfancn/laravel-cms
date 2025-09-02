@@ -14,13 +14,7 @@
       <template v-slot:top>
         <div class="q-table__title">{{ options.title }}</div>
         <q-space />
-        <Button
-          v-if="options.createRoute"
-          icon="mdi-plus"
-          dense
-          :flat="true"
-          :route="options.createRoute"
-        ></Button>
+        <Button v-if="options.createRoute" icon="mdi-plus" dense :flat="true" :route="options.createRoute"></Button>
         <q-btn
           v-if="options.batchDeleteRoute && selectedIds?.length"
           icon="mdi-delete"
@@ -70,12 +64,7 @@
         <q-td :align="props.col.align">
           <!--    Image      -->
           <template v-if="props.col.type === 'image'">
-            <img
-              :src="parseCellValue(props) as string"
-              alt=""
-              :width="props.col.width"
-              :height="props.col.height"
-            />
+            <img :src="parseCellValue(props) as string" alt="" :width="props.col.width" :height="props.col.height" />
           </template>
           <!--    Link      -->
           <template v-else-if="props.col.type === 'link'">
@@ -99,10 +88,7 @@
       <!--    Actions   -->
       <template v-slot:body-cell-actions="props">
         <q-td>
-          <template
-            v-for="(btn, index) in options.rowButtons"
-            :key="`${props.row.id}-button-${index}`"
-          >
+          <template v-for="(btn, index) in options.rowButtons" :key="`${props.row.id}-button-${index}`">
             <Button
               v-if="btn.type === 'status-button'"
               v-bind="computedStatusBtnProps(props.row[btn.statusFiled!] as boolean, btn)"
@@ -211,9 +197,7 @@ interface Pagination extends RequestPagination {
 const props = defineProps<Props>()
 
 const $q = useQuasar()
-const selected = ref<
-  Record<string, any>[]
->()
+const selected = ref<Record<string, any>[]>()
 
 const pagination = ref<Pagination>({
   page: props.options.pagination.currentPage,

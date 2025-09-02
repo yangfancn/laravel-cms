@@ -1,4 +1,4 @@
-export type FormFieldProps = Record<string, any>;
+export type FormFieldProps = Record<string, any>
 
 export interface FormProps {
   fields: FormFieldProps[]

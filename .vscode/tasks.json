@@ -2,10 +2,49 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Vue Type Check",
-            "type": "shell",
-            "command": "npx vue-tsc --noEmit",
-            "problemMatcher": "$tsc-watch"
+            "label": "eslint workspace",
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": {
+                "base": "$eslint-stylish",
+                "owner": "eslint-workspace"
+            },
+            "presentation": {
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": false
+            }
         }
+        // {
+        //     "label": "eslint watch workspace",
+        //     "type": "npm",
+        //     "script": "lint:watch",
+        //     "problemMatcher": [
+        //         {
+        //             "base": "$eslint-stylish",
+        //             "background": {
+        //                 "activeOnStart": true,
+        //                 "beginsPattern": "^__ESLINT_START__$",
+        //                 "endsPattern": "^__ESLINT_DONE__$"
+        //             },
+        //             "owner": "_lintWatch"
+        //         }
+        //     ],
+        //     "presentation": {
+        //         "echo": false,
+        //         "reveal": "never",
+        //         "focus": false,
+        //         "panel": "dedicated",
+        //         "showReuseMessage": false,
+        //         "clear": true,
+        //         "close": false
+        //     },
+        //     "runOptions": {
+        //         "runOn": "folderOpen"
+        //     },
+        //     "isBackground": true
+        // }
     ]
 }

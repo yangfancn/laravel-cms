@@ -11,13 +11,7 @@
           size=".75rem"
           @click="cropper!.getCropperImage()!.$rotate(-90)"
         ></q-btn>
-        <q-btn
-          color="primary"
-          round
-          icon="redo"
-          size=".75rem"
-          @click="cropper!.getCropperImage()!.$rotate(90)"
-        ></q-btn>
+        <q-btn color="primary" round icon="redo" size=".75rem" @click="cropper!.getCropperImage()!.$rotate(90)"></q-btn>
         <q-btn color="primary" round icon="check" size=".75rem" @click="onCropped"></q-btn>
       </q-card-actions>
     </q-card>
@@ -76,7 +70,8 @@ function onCropped() {
         emit("on-cropperd", blob)
       }, props.img!.type)
       closeDialog()
-    }).catch(e => console.error(e))
+    })
+    .catch((e) => console.error(e))
 }
 
 function closeDialog() {
