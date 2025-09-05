@@ -17,8 +17,8 @@ axios.interceptors.response.use(
   }
 )
 
-// 创建一个用于存储请求的池
-const axiosPool = new Map<string, (...args: any[]) => unknown>()
+// 创建一个用于存储请求的池（使用 AbortController 替代 CancelToken）
+const axiosPool = new Map<string, AbortController>()
 
 // 生成唯一标识 URL 的方法
 const generateUrl = (config: AxiosRequestConfig<unknown>): string => {
@@ -35,26 +35,20 @@ const generateUrl = (config: AxiosRequestConfig<unknown>): string => {
 // 添加请求到池中
 const appendPool = (config: AxiosRequestConfig) => {
   const url = generateUrl(config)
-
-  // 如果池中没有该请求，设置取消令牌
-  config.cancelToken =
-    config.cancelToken ??
-    new axios.CancelToken((cancel) => {
-      if (!axiosPool.has(url)) {
-        axiosPool.set(url, cancel)
-      }
-    })
+  if (!axiosPool.has(url)) {
+    const controller = new AbortController()
+    axiosPool.set(url, controller)
+    Object.assign(config, { signal: controller.signal })
+  }
 }
 
 // 请求拦截器
 axios.interceptors.request.use(
   (config) => {
-    // 移除之前的相同请求
+    // 取消并移除之前的相同请求
     shiftPool(config)
-
-    // 添加当前请求到池中
+    // 为当前请求创建并附加 AbortController
     appendPool(config)
-
     return config
   },
   (error: AxiosError) => Promise.reject(error)
@@ -65,10 +59,9 @@ const shiftPool = (config: AxiosRequestConfig) => {
   const url = generateUrl(config)
 
   if (axiosPool.has(url)) {
-    // 调用取消函数
-    const cancel = axiosPool.get(url)
-    if (cancel) cancel(url)
-
+    const controller = axiosPool.get(url)
+    // 取消之前挂起的相同请求
+    controller?.abort("Canceled duplicate request")
     // 从池中移除
     axiosPool.delete(url)
   }

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -77,6 +78,17 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (PostTooLargeException $e, Request $request) {
+            $msg = __('messages.exceedsAllowSize', [
+                'size' => ini_get('upload_max_filesize'),
+            ]);
+            // 普通表单场景
+            return back()
+                ->withErrors(['file' => $msg])
+                ->withInput()
+                ->setStatusCode(422);
+        });
+
         $exceptions->respond(function (SymfonyResponse $response, Throwable $e, Request $request) {
             $status = $response->getStatusCode();
 

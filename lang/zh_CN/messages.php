@@ -28,5 +28,7 @@ return [
     'createTagSuccess' => '标签创建成功',
     'updateTagSuccess' => '标签更新成功',
     'deleteTagSuccess' => '标签删除成功',
-    'fileUploadSuccess' => '文件上传成功'
+    'fileUploadSuccess' => '文件上传成功',
+    'disallowFileMimes' => '不允许的文件类型，必须是: :mime',
+    'exceedsAllowSize' => '超出允许的大小: :size'
 ];

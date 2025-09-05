@@ -1,7 +1,7 @@
 import tseslint from "typescript-eslint"
 import vue from "eslint-plugin-vue"
 import vueParser from "vue-eslint-parser"
-import prettierPlugin from "eslint-plugin-prettier/recommended"
+import eslintConfigPrettier from "eslint-config-prettier"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
 
@@ -68,9 +68,10 @@ export default [
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
-      "no-undef": "off",
+      // "no-undef": "off",
       "vue/multi-word-component-names": "off"
     }
   },
-  prettierPlugin
+  // Disable any ESLint rules that might conflict with Prettier formatting
+  eslintConfigPrettier
 ]

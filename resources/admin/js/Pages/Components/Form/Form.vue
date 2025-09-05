@@ -29,10 +29,10 @@ import { useQuasar } from "quasar"
 import { nextTick, provide, ref } from "vue"
 import { trans } from "laravel-vue-i18n"
 import Field from "./Field.vue"
+import { provideFormContext, type FormErrors } from "./useFormContext"
 
 const props = defineProps<FormProps>()
 
-type FormErrors = Record<string, string | null>
 interface SubmitOptions {
   onFinish?: () => void
   onError?: (errors: FormErrors) => void | Promise<void>
@@ -170,9 +170,19 @@ function focusFirstErrorField(errors: Record<string, unknown>) {
 }
 
 provide("registerField", registerField)
+// Back-compat for existing components still using string keys
 provide("unregisterField", unregisterField)
 provide("getError", getItemError)
 provide("clearError", clearError)
 provide("sortError", sortError)
 provide("addAllowSubmitHandler", addAllowSubmitHandler)
+
+provideFormContext({
+  registerField,
+  unregisterField,
+  getError: getItemError,
+  clearError,
+  sortError,
+  addAllowSubmitHandler
+})
 </script>

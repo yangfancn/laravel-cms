@@ -40,7 +40,7 @@ class PostForm extends FormBuilder
             );
         }
 
-        $form->add(Uploader::make('thumb', 'Thumb')->cropper(4 / 3))
+        $form->add(Uploader::make('thumb', 'Thumb'))
             ->add(Input::make('summary', 'Summary')->textarea())
             ->add(self::tagSelect())
             ->add(DatetimePicker::make('created_at', 'Publish Time'))

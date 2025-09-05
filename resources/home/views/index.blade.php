@@ -1,11 +1,11 @@
-@extends('home::layout')
+@extends("home::layout")
 
-@section('content')
+@section("content")
   <div class="container mx-auto py-5">
-    <div class="border border-accent-content/60 rounded-md shadow p-5">
-    @foreach($posts as $post)
-    <x-post-list-item :post="$post" />
-    @endforeach
+    <div class="border-accent-content/60 rounded-md border p-5 shadow">
+      @foreach ($posts as $post)
+        <x-post-list-item :post="$post" />
+      @endforeach
     </div>
   </div>
 @endsection

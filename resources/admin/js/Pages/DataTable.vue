@@ -36,7 +36,6 @@
             clearable
             dense
             outlined
-            autocomplete=""
           />
         </template>
 

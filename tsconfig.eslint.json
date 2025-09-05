@@ -6,8 +6,6 @@
   "include": [
     "resources/**/*.ts",
     "resources/**/*.vue",
-    "env.d.ts",
     "*.config.ts",
-    "*.config.mts"
   ]
 }

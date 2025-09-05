@@ -5,8 +5,13 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
+        "analyze": "ANALYZE=true vite build",
         "admin:dev": "VITE_BUILD_TARGET=admin vite",
         "admin:build": "VITE_BUILD_TARGET=admin vite build",
+        "admin:analyze": "ANALYZE=true VITE_BUILD_TARGET=admin vite build",
+        "format:check": "prettier -c .",
+        "format": "prettier -w .",
+        "lint:check": "eslint .",
         "lint": "eslint . --fix"
     },
     "devDependencies": {

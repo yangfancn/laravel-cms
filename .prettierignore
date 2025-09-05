@@ -1,6 +1,11 @@
+.vscode
+bootstrap
 public
 node_modules
+storage
 vendor
 LICENSE.md
 tsconfig.json
 tsconfig.*.json
+pnpm-*.yaml
+stat.html

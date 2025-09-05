@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('upload', [FileController::class, 'store'])->name('upload');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('test', function () {
-    return inertia('Test');
-});
 
 // append resource route
 Route::delete('users', [UserController::class, 'batchDestroy'])->name('users.batchDestroy');

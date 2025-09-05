@@ -20,8 +20,8 @@
     v-if="cropper"
     :img="cropperFile"
     :aspect-ratio="aspectRatio"
-    @on-cancel="onCropperCancel"
-    @on-cropperd="onCroppered"
+    @on-cancel="onCroppedCancel"
+    @on-cropped="onCropped"
   />
 </template>
 
@@ -32,10 +32,11 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
 import FIlePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
 import { useQuasar } from "quasar"
-import { inject, onBeforeUnmount, ref } from "vue"
+import { onBeforeUnmount, ref } from "vue"
 import axios, { AxiosError } from "axios"
 import { trans } from "laravel-vue-i18n"
 import CropperDialog from "../CropperDialog.vue"
+import { useFormContext } from "../useFormContext"
 
 defineOptions({
   inheritAttrs: false
@@ -96,8 +97,9 @@ const server: FilePondServerConfigProps["server"] = {
       .then((response) => {
         load(response.data.url!)
       })
-      .catch((thrown: AxiosError | UploadResponse) => {
-        const message = thrown.message ?? "upload failed: unknown error"
+      .catch((thrown: AxiosError<UploadResponse>) => {
+        console.log(thrown.response)
+        const message = thrown.response?.data.message ?? "upload failed: unknown error"
         $q.notify({
           message: message,
           type: "negative"
@@ -132,7 +134,7 @@ const processingFile = ref<{ current: File | null; queue: File[] }>({
 })
 
 const emit = defineEmits(["update:modelValue"])
-const addAllowSubmitHandler: (fn: () => boolean) => () => void = inject("addAllowSubmitHandler")!
+const { addAllowSubmitHandler } = useFormContext()
 
 const onAddFileStart = async (file: FilePondFile) => {
   if (!props.cropper || !file.fileType.startsWith("image/") || !(file.source instanceof File)) {
@@ -195,7 +197,7 @@ const onRemoveFile = () => {
   emit("update:modelValue", files.length === 0 ? null : files)
 }
 
-function onCroppered(blob: Blob | null): void {
+function onCropped(blob: Blob | null): void {
   if (blob) {
     uploader.value!.addFile(blob, {
       index: uploader.value?.getFiles().length
@@ -205,7 +207,7 @@ function onCroppered(blob: Blob | null): void {
   processNextFile()
 }
 
-function onCropperCancel(): void {
+function onCroppedCancel(): void {
   cropperFile.value = null
   processNextFile()
 }

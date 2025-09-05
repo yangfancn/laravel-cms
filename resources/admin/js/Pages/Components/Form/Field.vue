@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, nextTick, onMounted, onBeforeUnmount } from "vue"
+import { computed, ref, nextTick, onMounted, onBeforeUnmount, defineAsyncComponent } from "vue"
 import type { Component } from "vue"
 import { useQuasar } from "quasar"
 import Input from "./Fields/Input.vue"
@@ -26,10 +26,12 @@ import Slider from "./Fields/Slider.vue"
 import Range from "./Fields/Range.vue"
 import DatetimePicker from "./Fields/DatetimePicker.vue"
 import ColorPicker from "./Fields/ColorPicker.vue"
-import Uploader from "./Fields/Uploader.vue"
-import Editor from "./Fields/Editor.vue"
-import Blocks from "./Blocks/Blocks.vue"
-import Block from "./Blocks/Block.vue"
+// heavy components lazy-loaded to reduce initial chunk size
+const Uploader = defineAsyncComponent(() => import("./Fields/Uploader.vue"))
+const Editor = defineAsyncComponent(() => import("./Fields/Editor.vue"))
+const Blocks = defineAsyncComponent(() => import("./Blocks/Blocks.vue"))
+const Block = defineAsyncComponent(() => import("./Blocks/Block.vue"))
+import { useFormContext } from "./useFormContext"
 
 interface Props {
   field: string
@@ -41,8 +43,7 @@ const $q = useQuasar()
 const _component = ref<HTMLElement | null>()
 const props = defineProps<Props>()
 
-const getError: (name: string, strict?: boolean) => string | null = inject("getError")!
-const clearError: (name: string) => void = inject("clearError")!
+const { getError, clearError, registerField, unregisterField } = useFormContext()
 
 const _error = computed(() => {
   if (props.field === "select" && props.fieldProps.multiple) {
@@ -76,9 +77,6 @@ const getComponent = (field: string) => {
 
 const componentType = getComponent(props.field)
 
-const registerField = inject<(name: string, fn: () => void) => void>("registerField")
-const unregisterField = inject<(name: string) => void>("unregisterField")
-
 function focusOnError() {
   void nextTick(() => {
     _component.value?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -90,11 +88,11 @@ const updateModelValue = (data: any) => {
 }
 
 onMounted(() => {
-  registerField?.(props.expandName, focusOnError)
+  registerField(props.expandName, focusOnError)
 })
 
 onBeforeUnmount(() => {
-  unregisterField?.(props.expandName)
+  unregisterField(props.expandName)
 })
 </script>
 

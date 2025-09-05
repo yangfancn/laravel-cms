@@ -54,7 +54,7 @@ abstract class Controller extends BaseController
             $model = $model->where('name', 'like', "%$search%");
         }
         if ($require_id = $request->get('require')) {
-            $model = $model->whereOr('id', 'in', is_array($require_id) ? $require_id : [$require_id]);
+            $model = $model->orWhereIn('id', is_array($require_id) ? $require_id : [$require_id]);
         }
         $data = $model->offset(($page - 1) * $pageSize)
             ->limit($pageSize)

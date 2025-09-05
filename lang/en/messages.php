@@ -28,4 +28,6 @@ return [
     'createTagSuccess' => 'Create Tag Success',
     'updateTagSuccess' => 'Update Tag Success',
     'deleteTagSuccess' => 'Delete Tag Success',
+    'disallowFileMimes' => 'Disallowed file types must be: :mimes',
+    'exceedsAllowSize' => 'The file exceeds the allowed size: :size'
 ];

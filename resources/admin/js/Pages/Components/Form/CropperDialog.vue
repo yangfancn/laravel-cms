@@ -28,7 +28,7 @@ interface Props {
 }
 
 const emit = defineEmits<{
-  (e: "on-cropperd", blob: Blob | null): void
+  (e: "on-cropped", blob: Blob | null): void
   (e: "on-cancel"): void
 }>()
 
@@ -67,7 +67,7 @@ function onCropped() {
     .$toCanvas()
     .then((canvas) => {
       canvas.toBlob((blob) => {
-        emit("on-cropperd", blob)
+        emit("on-cropped", blob)
       }, props.img!.type)
       closeDialog()
     })

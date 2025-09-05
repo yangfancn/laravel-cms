@@ -41,12 +41,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onBeforeMount, ref } from "vue"
+import { computed, onBeforeMount, ref } from "vue"
 import { type SortableEvent, VueDraggable } from "vue-draggable-plus"
 import Block from "./Block.vue"
 import { useQuasar } from "quasar"
 import { trans } from "laravel-vue-i18n"
 import { v4 as uuid } from "uuid"
+import { useFormContext } from "../useFormContext"
 
 interface Props {
   name: string | null
@@ -77,9 +78,7 @@ const reactiveData = computed<Record<string, unknown>[]>({
 })
 
 const uniqueIds = ref<string[]>((props.modelValue ?? []).map(() => uuid()))
-const sortError = inject<(prefixName: string, newIndex: number, oldIndex: number) => void>("sortError")!
-const getError = inject<(name: string) => string | null>("getError")!
-const clearError = inject<(name: string) => void>("clearError")!
+const { sortError, getError, clearError } = useFormContext()
 const _error = computed(() => getError(props.expandName))
 
 const allowDelete = () => {

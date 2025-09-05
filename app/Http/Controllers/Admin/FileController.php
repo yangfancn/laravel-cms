@@ -4,24 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UploadRequest;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    public function store(UploadRequest $request): JsonResponse
     {
-        if ($file = $request->file('file')) {
-            $name = $file->store('uploads/'.date('Ymd'));
+        $file = $request->file('file');
 
-            return response()->json([
-                'message' => __('messages.fileUploadSuccess'),
-                'url' => Storage::url($name),
-            ]);
-        }
+        $disk = config('upload.disk', 'public');
+        $baseDir = trim(config('upload.dir', 'uploads'), '/');
+        $dir = $baseDir . '/' . date('Ymd');
+
+        $path = $file->storePublicly($dir, $disk);
 
         return response()->json([
-            'message' => 'No File',
-        ], 400);
+            'message' => __('messages.fileUploadSuccess'),
+            'url' => Storage::disk($disk)->url($path),
+            'path' => $path,
+        ]);
     }
 }

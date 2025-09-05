@@ -2,34 +2,26 @@ import { defineConfig } from "vite"
 import laravel from "laravel-vite-plugin"
 import vue from "@vitejs/plugin-vue"
 import svgLoader from "vite-svg-loader"
-import { visualizer } from "rollup-plugin-visualizer"
 import { quasar } from "@quasar/vite-plugin"
 import i18n from "laravel-vue-i18n/vite"
 import path from "node:path"
 import tailwindcss from "@tailwindcss/vite"
+import { visualizer } from "rollup-plugin-visualizer"
 
 const isAdmin = process.env.VITE_BUILD_TARGET === "admin"
+const isAnalyze = process.env.ANALYZE === "true"
 
 export default defineConfig({
-  server: {
-    host: "127.0.0.1",
-    port: 5173,
-    strictPort: true,
-    cors: {
-      origin: "http://127.0.0.1:8000",
-      credentials: true
-    }
-  },
   plugins: [
     laravel({
       input: isAdmin
         ? [
-            //backend
+            // backend (admin)
             "resources/admin/js/app.ts",
             "resources/admin/css/app.scss"
           ]
         : [
-            //frontend
+            // frontend (home)
             "resources/home/js/app.ts",
             "resources/home/js/Plugins/Comments/comments.ts",
             "resources/home/js/Plugins/Vote/vote.ts",
@@ -47,12 +39,13 @@ export default defineConfig({
       }
     }),
     svgLoader(),
-    visualizer(),
-    quasar({
-      // sassVariables: 'resources/admin/css/quasar.variables.sass'
-    }),
-    i18n(),
-    tailwindcss()
+    // enable Quasar only for admin build
+    ...(isAdmin ? [quasar({})] : []),
+    // enable Tailwind (and DaisyUI via CSS plugin directive) only for home build
+    ...(!isAdmin ? [tailwindcss()] : []),
+    // enable bundle visualizer only when ANALYZE=true
+    ...(isAnalyze ? [visualizer()] : []),
+    i18n()
   ],
   resolve: {
     alias: {
