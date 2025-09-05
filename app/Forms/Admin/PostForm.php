@@ -32,7 +32,7 @@ class PostForm extends FormBuilder
         $form->add(Input::make('title', 'Title'))
             ->add(Select::make('category_id', 'Category')->options($categories));
 
-        if (! Auth::user()->hasPermissionTo('posts own resource')) {
+        if (!Auth::user()->hasPermissionTo('posts own resource')) {
             $form->add(
                 Select::make('user_id', 'User')
                     ->xhrOptionsUrl(route('admin.users.load'))
@@ -40,7 +40,7 @@ class PostForm extends FormBuilder
             );
         }
 
-        $form->add(Uploader::make('thumb', 'Thumb'))
+        $form->add(Uploader::make('thumb', 'Thumb')->cropper(4 / 3))
             ->add(Input::make('summary', 'Summary')->textarea())
             ->add(self::tagSelect())
             ->add(DatetimePicker::make('created_at', 'Publish Time'))
