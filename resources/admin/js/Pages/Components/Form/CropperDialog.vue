@@ -27,6 +27,13 @@ interface Props {
   aspectRatio?: number
 }
 
+interface CropperSelection {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 const emit = defineEmits<{
   (e: "on-cropped", blob: Blob | null): void
   (e: "on-cancel"): void
@@ -58,14 +65,33 @@ watch(props, async (value) => {
       if (props.aspectRatio) {
         cropper.value.getCropperSelection()!.aspectRatio = props.aspectRatio
       }
+
+      //max selection
+      const cropperImageRect = cropper.value!.getCropperImage()!.getBoundingClientRect()
+
+      cropper.value.getCropperSelection()!.addEventListener("change", (e) => {
+        const selection = (e as CustomEvent).detail as CropperSelection
+        const isInBox =
+          selection.x >= 0 &&
+          selection.y >= 0 &&
+          selection.x + selection.width <= cropperImageRect.width &&
+          selection.y + selection.height <= cropperImageRect.height
+
+        if (!isInBox) {
+          e.preventDefault()
+        }
+      })
     }
   }
 })
 
 function onCropped() {
-  cropper
-    .value!.getCropperSelection()!
-    .$toCanvas()
+  const selection = cropper.value!.getCropperSelection()!
+  selection
+    .$toCanvas({
+      width:
+        (cropper.value!.getCropperImage()!.$image.clientWidth * selection.width) / cropper.value!.container.clientWidth
+    })
     .then((canvas) => {
       canvas.toBlob((blob) => {
         emit("on-cropped", blob)
@@ -106,7 +132,7 @@ function fileToBase64(file: File): Promise<string> {
   overflow: hidden;
 
   :deep(cropper-canvas) {
-    width: 650px;
+    width: 840px;
     max-width: 100%;
     max-height: 100%;
   }
