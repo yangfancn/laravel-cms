@@ -59,7 +59,8 @@ watch(props, async (value) => {
       })
 
       const cropperCanvas = cropper.value.getCropperCanvas()!
-      //@todo 这里调整了图片显示宽度，导致裁剪时的宽度也变小了
+      const cropperImage = cropper.value!.getCropperImage()!
+
       cropperCanvas.style.height = cropperCanvas.clientWidth * (image.height / image.width) + "px"
 
       if (props.aspectRatio) {
@@ -67,7 +68,7 @@ watch(props, async (value) => {
       }
 
       //max selection
-      const cropperImageRect = cropper.value!.getCropperImage()!.getBoundingClientRect()
+      const cropperImageRect = cropperImage.getBoundingClientRect()
 
       cropper.value.getCropperSelection()!.addEventListener("change", (e) => {
         const selection = (e as CustomEvent).detail as CropperSelection
