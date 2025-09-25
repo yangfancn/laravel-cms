@@ -1,17 +1,11 @@
 <template>
   <q-dialog v-model="showDialog" :persistent="true" transition-show="fade">
     <q-card class="cropper-box">
-      <div ref="container" />
+      <img v-if="imgSrc" :src="imgSrc" alt="crop image" ref="image" />
       <q-card-actions align="center" class="q-py-md">
         <q-btn color="primary" round icon="close" size=".75rem" @click="cancelCropper"></q-btn>
-        <q-btn
-          color="primary"
-          round
-          icon="undo"
-          size=".75rem"
-          @click="cropper!.getCropperImage()!.$rotate(-90)"
-        ></q-btn>
-        <q-btn color="primary" round icon="redo" size=".75rem" @click="cropper!.getCropperImage()!.$rotate(90)"></q-btn>
+        <q-btn color="primary" round icon="undo" size=".75rem" @click="cropper!.rotate(-90)"></q-btn>
+        <q-btn color="primary" round icon="redo" size=".75rem" @click="cropper!.rotate(90)"></q-btn>
         <q-btn color="primary" round icon="check" size=".75rem" @click="onCropped"></q-btn>
       </q-card-actions>
     </q-card>
@@ -21,17 +15,11 @@
 <script lang="ts" setup>
 import { nextTick, ref, watch } from "vue"
 import Cropper from "cropperjs"
+import "cropperjs/dist/cropper.min.css"
 
 interface Props {
   img: File | null
   aspectRatio?: number
-}
-
-interface CropperSelection {
-  x: number
-  y: number
-  width: number
-  height: number
 }
 
 const emit = defineEmits<{
@@ -42,69 +30,38 @@ const emit = defineEmits<{
 const props = defineProps<Props>()
 const showDialog = ref(false)
 const cropper = ref<Cropper | null>()
-const container = ref<HTMLElement>()
+const imgSrc = ref<string | null>()
+const image = ref<HTMLImageElement | null>()
 
 watch(props, async (value) => {
   if (value.img) {
+    imgSrc.value = await fileToBase64(value.img)
     showDialog.value = true
 
     await nextTick()
 
-    const image = new Image()
-    image.src = await fileToBase64(value.img)
-
-    image.onload = () => {
-      cropper.value = new Cropper(image, {
-        container: container.value
-      })
-
-      const cropperCanvas = cropper.value.getCropperCanvas()!
-      const cropperImage = cropper.value!.getCropperImage()!
-
-      cropperCanvas.style.height = cropperCanvas.clientWidth * (image.height / image.width) + "px"
-
-      if (props.aspectRatio) {
-        cropper.value.getCropperSelection()!.aspectRatio = props.aspectRatio
-      }
-
-      //max selection
-      const cropperImageRect = cropperImage.getBoundingClientRect()
-
-      cropper.value.getCropperSelection()!.addEventListener("change", (e) => {
-        const selection = (e as CustomEvent).detail as CropperSelection
-        const isInBox =
-          selection.x >= 0 &&
-          selection.y >= 0 &&
-          selection.x + selection.width <= cropperImageRect.width &&
-          selection.y + selection.height <= cropperImageRect.height
-
-        if (!isInBox) {
-          e.preventDefault()
-        }
-      })
-    }
+    cropper.value = new Cropper(image.value!, {
+      aspectRatio: props.aspectRatio,
+      viewMode: ["image/png", "image/webp"].includes(props.img!.type) ? 0 : 1
+    })
   }
 })
 
 function onCropped() {
-  const selection = cropper.value!.getCropperSelection()!
-  selection
-    .$toCanvas({
-      width:
-        (cropper.value!.getCropperImage()!.$image.clientWidth * selection.width) / cropper.value!.container.clientWidth
+  const imageData = cropper.value!.getImageData()
+  cropper
+    .value!.getCroppedCanvas({
+      width: (imageData.width * imageData.naturalWidth) / cropper.value!.getContainerData().width
     })
-    .then((canvas) => {
-      canvas.toBlob((blob) => {
-        emit("on-cropped", blob)
-      }, props.img!.type)
+    .toBlob((blob) => {
+      emit("on-cropped", blob)
       closeDialog()
-    })
-    .catch((e) => console.error(e))
+    }, props.img!.type)
 }
 
 function closeDialog() {
   showDialog.value = false
-  cropper.value?.element.removeAttribute("src")
+  cropper.value?.destroy()
 }
 
 function cancelCropper() {
@@ -131,12 +88,6 @@ function fileToBase64(file: File): Promise<string> {
   max-width: 100%;
   position: relative;
   overflow: hidden;
-
-  :deep(cropper-canvas) {
-    width: 840px;
-    max-width: 100%;
-    max-height: 100%;
-  }
 
   .q-card__actions {
     position: absolute;
