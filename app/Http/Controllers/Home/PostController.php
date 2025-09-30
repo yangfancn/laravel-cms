@@ -23,7 +23,9 @@ class PostController extends Controller
 
     public function show(Post $post): View
     {
-        $post->meta ? Seo::model($post) : Seo::seo($post->title);
+        $post->meta()->exists()
+            ? Seo::model($post)
+            : Seo::seo($post->title, description: $post->summary ?: null);
 
         return view('home::posts.show', compact('post'));
     }

@@ -18,6 +18,15 @@ trait Metable
             if ($meta = \request()->post('meta')) {
                 $model->meta()->updateOrCreate([], $meta);
             }
+            if (
+                $model->meta
+                && ! $model->meta->title
+                && ! $model->meta->keywords
+                && ! $model->meta->description
+                && ! $model->meta->others
+            ) {
+                $model->meta->delete();
+            }
         });
     }
 }
