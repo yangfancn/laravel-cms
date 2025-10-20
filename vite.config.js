@@ -54,5 +54,8 @@ export default defineConfig({
       "ziggy-js": path.resolve("vendor/tightenco/ziggy/dist/index.esm.js"),
       vue: "vue/dist/vue.esm-bundler.js"
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1500
   }
 })
