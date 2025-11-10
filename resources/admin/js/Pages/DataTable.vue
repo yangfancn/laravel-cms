@@ -25,7 +25,7 @@
           style="margin-right: 1rem"
         >
         </q-btn>
-        <template v-for="item in options.selectOptions" :key="item.label + item.value">
+        <template v-for="(item, index) in options.selectOptions" :key="`${item.label}_${index}`">
           <q-select
             :options="item.options"
             :label="item.name"

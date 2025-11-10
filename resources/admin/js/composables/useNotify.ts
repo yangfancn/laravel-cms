@@ -1,7 +1,12 @@
-import { watch } from "vue"
+import { watch, nextTick } from "vue"
 import { usePage } from "@inertiajs/vue3"
 import { useQuasar } from "quasar"
 import type { InertiaNotify } from "../types/inertia"
+
+let lastWasPopState = false
+window.addEventListener("popstate", () => {
+  lastWasPopState = true
+})
 
 export function useNotify() {
   const $q = useQuasar()
@@ -9,7 +14,14 @@ export function useNotify() {
 
   watch(
     () => page.props.inertiaNotify,
-    (notifies) => {
+    async (notifies) => {
+      await nextTick()
+
+      if (lastWasPopState) {
+        lastWasPopState = false
+        return
+      }
+
       notifies?.forEach((notify: InertiaNotify) => {
         if (notify) {
           $q.notify({
@@ -20,8 +32,6 @@ export function useNotify() {
           })
         }
       })
-      // 清空消息，防止页面回退时再次弹出消息
-      page.props.inertiaNotify?.splice(0, page.props.inertiaNotify.length)
     },
     { immediate: true }
   )
