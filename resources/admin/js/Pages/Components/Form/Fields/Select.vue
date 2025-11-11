@@ -46,22 +46,18 @@ interface selectOptions extends Omit<QSelectProps, "dark"> {
 
 const props = defineProps<selectOptions>()
 
-const PAGE_SIZE = 5
 const loading = ref<boolean>(false)
 const nextPage = ref(2)
 const optionsRef = ref<Option[]>(props.options)
 const search = ref<string>("")
 const oldSearch = ref<string>("")
-const hasMore = ref(!!props.xhrOptionsUrl && (props.options.length === 0 || props.options.length >= PAGE_SIZE))
 const $q = useQuasar()
 
 const xhrLoadOptions = async (clear = false) => {
-  if (!props.xhrOptionsUrl) return
   loading.value = true
   // clear options,like in search
   if (clear) {
     optionsRef.value.splice(0, optionsRef.value.length)
-    hasMore.value = true
   }
 
   const mv: any = props.modelValue as unknown
@@ -81,7 +77,7 @@ const xhrLoadOptions = async (clear = false) => {
       method: "get",
       params: {
         page: nextPage.value,
-        pageSize: PAGE_SIZE,
+        pageSize: 15,
         require: required,
         search: search.value
       }
@@ -91,7 +87,6 @@ const xhrLoadOptions = async (clear = false) => {
         nextPage.value++
         optionsRef.value.push(...data.options)
       }
-      hasMore.value = data.options.length === PAGE_SIZE
     })
     .finally(() => {
       loading.value = false
@@ -105,19 +100,10 @@ onMounted(() => {
   }
 })
 
-const onScroll = async ({ to }: { to: number | string }) => {
-  if (
-    !props.xhrOptionsUrl ||
-    loading.value ||
-    !hasMore.value ||
-    typeof to !== "number" ||
-    optionsRef.value.length < PAGE_SIZE ||
-    to < optionsRef.value.length - 1
-  ) {
-    return
+const onScroll = async ({ index, to }: { index: number | string; to: number | string }) => {
+  if (props.xhrOptionsUrl && !loading.value && index === to) {
+    await xhrLoadOptions()
   }
-
-  await xhrLoadOptions()
 }
 
 const filterFn = async (val: string, update: (callbackFn: () => void, afterFn?: (ref: QSelect) => void) => void) => {
