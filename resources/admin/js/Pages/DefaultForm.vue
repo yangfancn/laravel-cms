@@ -5,7 +5,7 @@
       :action="form.action"
       :method="form.method"
       :data="form.data"
-      :precognitive="true"
+      :precognitive="form.precognitive"
     ></Form>
   </Layout>
 </template>

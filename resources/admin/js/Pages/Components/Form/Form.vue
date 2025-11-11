@@ -69,7 +69,7 @@ function submitForm() {
   }
 
   form.submit({
-    onFinish: () => form.reset("password"),
+    // onFinish: () => form.reset("password"),
     onError: async (errors: FormErrors) => {
       //这里可以改成 provide() 一个方法给全局，需要用到 error focus 的组件调用它，传递过来方法，在这里调用
       await nextTick()

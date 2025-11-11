@@ -38,8 +38,6 @@ export default [
         parser: tseslint.parser,
         extraFileExtensions: [".vue"],
         tsconfigRootDir: __dirname,
-        projectService: true,
-        project: [path.join(__dirname, "tsconfig.eslint.json")],
         ecmaVersion: "latest",
         sourceType: "module"
       }
@@ -58,8 +56,6 @@ export default [
       parser: tseslint.parser,
       parserOptions: {
         tsconfigRootDir: __dirname,
-        projectService: true,
-        project: [path.join(__dirname, "tsconfig.eslint.json")],
         ecmaVersion: "latest",
         sourceType: "module"
       }

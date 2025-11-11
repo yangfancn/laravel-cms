@@ -23,12 +23,12 @@ class Form
 
     protected bool $disablePrecognitive = false;
 
-   /**
-    * @param string $action
-    * @param 'PUT'|'POST' $method
-    * @param null|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array $data
-    * @return void
-    */
+    /**
+     * @param string $action
+     * @param 'PUT'|'POST' $method
+     * @param null|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array $data
+     * @return void
+     */
     public function __construct(
         public string $action,
         public string $method = 'POST',
@@ -69,11 +69,11 @@ class Form
         return [
             'action' => $this->action,
             'method' => $this->method,
-            'fields' => $this->options->map(function (Element|Block $element) {
+            'fields' => $this->options ? $this->options->map(function (Element|Block $element) {
                 return $element->getProperties();
-            }),
+            }) : collect(),
             'data' => $this->data,
-            'precognitive' => !$this->disablePrecognitive
+            'precognitive' => ! $this->disablePrecognitive
         ];
     }
 
@@ -94,7 +94,7 @@ class Form
      * @return \Inertia\Response
      * @throws \RuntimeException
      */
-    public function render(string $title, string $page = 'DefaultForm'): Response
+    public function render(?string $title, string $page = 'DefaultForm'): Response
     {
         return inertia($page, [
             'form' => $this->create(),

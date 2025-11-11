@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <header id="header" class="border-b-1">
+  <header id="header" class="border-b">
     <div id="mobile-menu-overlay" class="fixed inset-0 z-40 hidden bg-black/50"></div>
     <div class="font-work navbar container mx-auto">
       <div class="drawer w-auto lg:hidden">
@@ -111,7 +111,7 @@
                   <span class="text-base-content flex items-center gap-2">
                     Light
                   </span>
-                  <div class="flex h-full flex-shrink-0 flex-wrap gap-1">
+                  <div class="flex h-full shrink-0 flex-wrap gap-1">
                     <div class="bg-primary w-2 rounded"></div>
                     <div class="bg-secondary w-2 rounded"></div>
                     <div class="bg-accent w-2 rounded"></div>
@@ -123,7 +123,7 @@
                   <span class="text-base-content flex items-center gap-2">
                     Dark
                   </span>
-                  <div class="flex h-full flex-shrink-0 flex-wrap gap-1">
+                  <div class="flex h-full shrink-0 flex-wrap gap-1">
                     <div class="bg-primary w-2 rounded"></div>
                     <div class="bg-secondary w-2 rounded"></div>
                     <div class="bg-accent w-2 rounded"></div>

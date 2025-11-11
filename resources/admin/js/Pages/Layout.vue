@@ -63,10 +63,9 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue"
-import { Link, usePage } from "@inertiajs/vue3"
+import { Link, usePage, Head } from "@inertiajs/vue3"
 import { QPage, useQuasar } from "quasar"
 import MenuItems from "./Components/Menu/MenuItems.vue"
-import { Head } from "@inertiajs/vue3"
 import { useNotify } from "../composables/useNotify"
 import { safeRoute } from "../helper"
 
