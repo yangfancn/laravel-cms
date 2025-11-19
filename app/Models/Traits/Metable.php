@@ -3,7 +3,9 @@
 namespace App\Models\Traits;
 
 use App\Models\Meta;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 
 trait Metable
 {
@@ -14,9 +16,16 @@ trait Metable
 
     protected static function bootMetable(): void
     {
+        static::saving(fn () => DB::beginTransaction());
         static::saved(function (self $model) {
             if ($meta = \request()->post('meta')) {
-                $model->meta()->updateOrCreate([], $meta);
+                try {
+                    $model->meta()->updateOrCreate([], $meta);
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    throw $e;
+                }
+                DB::commit();
             }
             if (
                 $model->meta

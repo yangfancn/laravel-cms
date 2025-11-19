@@ -38,7 +38,7 @@ export default defineConfig({
         }
       }
     }),
-    svgLoader(),
+    ...(isAnalyze ? [svgLoader()] : []),
     // enable Quasar only for admin build
     ...(isAdmin ? [quasar({})] : []),
     // enable Tailwind (and DaisyUI via CSS plugin directive) only for home build

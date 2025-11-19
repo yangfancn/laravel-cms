@@ -24,8 +24,9 @@ class SiteRequest extends FormRequest
      */
     public function rules(): array
     {
-        return array_merge([
+        return [
             'name' => 'required|string',
-        ], $this->meta());
+            ...$this->meta()
+        ];
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Http\Requests\Traits\MetaRequestTrait;
 use App\Rules\FileExist;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
 {
+    use MetaRequestTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,6 +30,7 @@ class PostRequest extends FormRequest
             'thumb' => ['nullable', new FileExist],
             'summary' => 'nullable|max:255',
             'created_at' => 'nullable|date',
+            ...$this->meta()
         ];
     }
 }
