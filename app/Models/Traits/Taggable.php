@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait Taggable
 {
+    protected ?array $tagsPayload = null;
+
+    public function initializeTaggable(): void
+    {
+        $this->mergeFillable(['tags']);
+    }
+
+    public function setTagsAttribute(?array $tags): void
+    {
+        $this->tagsPayload = $tags;
+    }
+
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
@@ -19,8 +31,9 @@ trait Taggable
         });
 
         static::saved(function (self $model) {
-            if ($tag_ids = request('tags')) {
-                $model->tags()->sync($tag_ids);
+            if ($model->tagsPayload) {
+                $model->tags()->sync($model->tagsPayload);
+                $model->tagsPayload = null;
             }
         });
     }

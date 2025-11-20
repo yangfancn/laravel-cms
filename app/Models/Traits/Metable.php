@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\DB;
 
 trait Metable
 {
+    protected ?array $metaPayload = null;
+
+    public function initializeMetable(): void
+    {
+        $this->mergeFillable(['meta']);
+    }
+
+    public function setMetaAttribute(array $meta): void
+    {
+        $this->metaPayload = $meta;
+    }
+
     public function meta(): MorphOne
     {
         return $this->morphOne(Meta::class, 'metable');
@@ -18,14 +30,13 @@ trait Metable
     {
         static::saving(fn () => DB::beginTransaction());
         static::saved(function (self $model) {
-            if ($meta = \request()->post('meta')) {
+            if ($model->metaPayload) {
                 try {
-                    $model->meta()->updateOrCreate([], $meta);
+                    $model->meta()->updateOrCreate([], $model->metaPayload);
                 } catch (Exception $e) {
                     DB::rollBack();
                     throw $e;
                 }
-                DB::commit();
             }
             if (
                 $model->meta
@@ -36,6 +47,8 @@ trait Metable
             ) {
                 $model->meta->delete();
             }
+            DB::commit();
+            $model->metaPayload = null;
         });
     }
 }

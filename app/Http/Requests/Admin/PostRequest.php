@@ -27,9 +27,11 @@ class PostRequest extends FormRequest
         return [
             'title' => 'required|string|min:3|max:255',
             'category_id' => 'required|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
             'thumb' => ['nullable', new FileExist],
             'summary' => 'nullable|max:255',
             'created_at' => 'nullable|date',
+            'content' => 'required|string',
             ...$this->meta()
         ];
     }
