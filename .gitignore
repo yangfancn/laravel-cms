@@ -17,5 +17,6 @@ npm-debug.log
 yarn-error.log
 pnpm-lock.yaml
 composer.lock
+stats.html
 /.fleet
 /.idea
