@@ -321,8 +321,14 @@ const parseCellValue = (cell: CellProps): string | string[] => {
   }
 }
 
-.search {
-  margin-left: 1rem;
+.q-table__top {
+  margin-left: -10px;
+  margin-top: -10px;
+
+  > * {
+    margin-left: 10px;
+    margin-top: 10px;
+  }
 }
 
 td p:last-child {
