@@ -14,10 +14,10 @@ createInertiaApp({
       .use(plugin)
       .use(Quasar, QuasarConfig)
       .use(ZiggyVue)
-      .use(i18nVue as unknown as import("vue").Plugin, {
+      .use(i18nVue, {
         resolve: async (lang: string) => {
-          const langFiles = import.meta.glob("../../../lang/*.json")
-          return langFiles[`../../../lang/${lang}.json`]?.()
+          const langs = import.meta.glob("~lang/*.json")
+          return await langs[`/lang/${lang}.json`]?.()
         }
       })
 

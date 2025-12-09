@@ -27,7 +27,7 @@ export default defineConfig({
             "resources/home/js/Plugins/Vote/vote.ts",
             "resources/home/css/app.css"
           ],
-      refresh: true,
+      refresh: ["config/*", "routes/**", "app/Http/Controllers/**", "resources/home/views/**"],
       buildDirectory: isAdmin ? "build/admin" : "build/home"
     }),
     vue({
@@ -38,7 +38,7 @@ export default defineConfig({
         }
       }
     }),
-    ...(isAnalyze ? [svgLoader()] : []),
+    ...(isAdmin ? [svgLoader()] : []),
     // enable Quasar only for admin build
     ...(isAdmin ? [quasar({})] : []),
     // enable Tailwind (and DaisyUI via CSS plugin directive) only for home build
@@ -49,8 +49,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": "./resources",
-      "~lang": "./lang",
+      "@": path.resolve("resources"),
+      "~lang": path.resolve("lang"),
       "ziggy-js": path.resolve("vendor/tightenco/ziggy/dist/index.esm.js"),
       vue: "vue/dist/vue.esm-bundler.js"
     }
