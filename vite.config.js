@@ -17,8 +17,7 @@ export default defineConfig({
       input: isAdmin
         ? [
             // backend (admin)
-            "resources/admin/js/app.ts",
-            "resources/admin/css/app.scss"
+            "resources/admin/js/app.ts"
           ]
         : [
             // frontend (home)
@@ -38,12 +37,9 @@ export default defineConfig({
         }
       }
     }),
-    ...(isAdmin ? [svgLoader()] : []),
-    // enable Quasar only for admin build
-    ...(isAdmin ? [quasar({})] : []),
-    // enable Tailwind (and DaisyUI via CSS plugin directive) only for home build
-    ...(!isAdmin ? [tailwindcss()] : []),
-    // enable bundle visualizer only when ANALYZE=true
+    svgLoader(),
+    quasar({}),
+    tailwindcss(),
     ...(isAnalyze ? [visualizer()] : []),
     i18n()
   ],

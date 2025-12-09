@@ -6,6 +6,7 @@ import { Quasar } from "quasar"
 import QuasarConfig from "./quasar"
 import { i18nVue } from "laravel-vue-i18n"
 import { safeRoute } from "./helper"
+import "../css/app.scss"
 
 createInertiaApp({
   resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>("./Pages/**/*.vue")),
