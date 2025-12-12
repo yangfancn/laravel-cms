@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\CarbonPeriod;
 use App\Models\Traits\Countable;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

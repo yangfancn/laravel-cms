@@ -15,8 +15,8 @@ function flattenTree(Collection $collection, string $prefix = '', string $column
             // $prefix = '<i class="tree space-half"></i>';
         } else {
             $category->flatten = $prefix
-                . ($isLast ? '<i class="tree end"></i>' : '<i class="tree branch"></i>')
-                . $category->$column;
+                .($isLast ? '<i class="tree end"></i>' : '<i class="tree branch"></i>')
+                .$category->$column;
         }
 
         $flatten->push($category);
@@ -24,7 +24,7 @@ function flattenTree(Collection $collection, string $prefix = '', string $column
         if ($category->children->isNotEmpty()) {
             $children = flattenTree(
                 $category->children,
-                $prefix . ($isLast ? '<i class="tree space"></i>' : '<i class="tree line"></i>'),
+                $prefix.($isLast ? '<i class="tree space"></i>' : '<i class="tree line"></i>'),
                 $column
             );
 

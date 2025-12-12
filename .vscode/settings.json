@@ -49,8 +49,13 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[php]": {
-    "editor.defaultFormatter": "DEVSENSE.phptools-vscode"
+    "editor.defaultFormatter": "open-southeners.laravel-pint",
+    "editor.formatOnSave": true
   },
+
+  // === Laravel Pint ===
+  "laravel-pint.enable": true,
+
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

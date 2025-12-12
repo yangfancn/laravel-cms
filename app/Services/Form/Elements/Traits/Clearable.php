@@ -6,8 +6,6 @@ namespace App\Services\Form\Elements\Traits;
  * Trait Clearable
  * This trait provides functionality to make form elements clearable.
  * It allows setting a clear icon and enabling/disabling the clearable feature.
- *
- * @package App\Services\Form\Elements\Traits
  */
 trait Clearable
 {
@@ -18,8 +16,8 @@ trait Clearable
     /**
      * Set whether the form element is clearable.
      * If set to true, a clear icon will be displayed, allowing users to clear the input.
-     * @param bool $able 
-     * @return \App\Services\Form\Elements\Traits\Clearable 
+     *
+     * @return \App\Services\Form\Elements\Traits\Clearable
      */
     public function clearable(bool $able = true): self
     {
@@ -30,8 +28,9 @@ trait Clearable
 
     /**
      * Set the icon to be used for clearing the input.
-     * @param string $icon example: 'close', 'clear', or any mdi icon name
-     * @return \App\Services\Form\Elements\Traits\Clearable 
+     *
+     * @param  string  $icon  example: 'close', 'clear', or any mdi icon name
+     * @return \App\Services\Form\Elements\Traits\Clearable
      */
     public function clearIcon(string $icon): self
     {

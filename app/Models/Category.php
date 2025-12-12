@@ -54,6 +54,7 @@ class Category extends Model
                 if ($attributes['route']) {
                     return route($attributes['route'], ['search' => request()->get('search')]);
                 }
+
                 return route('categories.show', [
                     'category' => $attributes['full_path'],
                     'search' => request()->get('search'),

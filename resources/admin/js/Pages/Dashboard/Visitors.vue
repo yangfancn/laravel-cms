@@ -26,7 +26,16 @@ const props = defineProps<{
 }>()
 
 // 注册需要的组件和地图
-use([CanvasRenderer, LineChart, TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridComponent, LegacyGridContainLabel])
+use([
+  CanvasRenderer,
+  LineChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  ToolboxComponent,
+  GridComponent,
+  LegacyGridContainLabel
+])
 
 // 数据处理逻辑
 const mergeData = (() => {

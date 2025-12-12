@@ -18,19 +18,21 @@ use Symfony\Component\DomCrawler\Crawler;
 class ImageDownload
 {
     private ImageHash $hashHandler;
+
     private ImageManager $imageManager;
 
     public function __construct(
         private ImageConfig $config,
         private ?ClientInterface $client = null
     ) {
-        $this->client = $this->client ?: new Client();
-        $this->hashHandler = new ImageHash(new DifferenceHash());
-        $this->imageManager = new ImageManager(new Driver());
+        $this->client = $this->client ?: new Client;
+        $this->hashHandler = new ImageHash(new DifferenceHash);
+        $this->imageManager = new ImageManager(new Driver);
     }
 
     /**
      * 下载单个图片
+     *
      * @throws \Exception
      */
     public function download(string $url, ?string $saveName = null): ImageDownloadResult
@@ -43,7 +45,7 @@ class ImageDownload
             // 保存原始图片
             $fullPath = $this->saveOriginalImage($imageContent, $path, $filename);
 
-            if (!in_array($this->getExtensionFromUrl($fullPath), ['svg', 'gif'])) {
+            if (! in_array($this->getExtensionFromUrl($fullPath), ['svg', 'gif'])) {
                 // 验证和处理图片
                 $this->validateAndProcessImage($fullPath);
             }
@@ -70,13 +72,13 @@ class ImageDownload
         $crawler->filter('img')->each(function (Crawler $node) use ($attributes) {
             $url = $this->extractImageUrl($node, $attributes);
 
-            if (!$url) {
+            if (! $url) {
                 return;
             }
 
             try {
                 $result = $this->download($url);
-                if (!$result->error) {
+                if (! $result->error) {
                     $this->updateImageNode($node, $result->public_path, $attributes);
                 }
             } catch (\Exception) {
@@ -92,10 +94,11 @@ class ImageDownload
      */
     private function getStoragePath(): string
     {
-        $path = $this->config->saveDir . DIRECTORY_SEPARATOR;
+        $path = $this->config->saveDir.DIRECTORY_SEPARATOR;
         if ($this->config->dateDirFormat) {
-            $path .= date($this->config->dateDirFormat) . DIRECTORY_SEPARATOR;
+            $path .= date($this->config->dateDirFormat).DIRECTORY_SEPARATOR;
         }
+
         return $path;
     }
 
@@ -109,7 +112,8 @@ class ImageDownload
         }
 
         $ext = $this->getExtensionFromUrl($url);
-        return Str::random(40) . '.' . $ext;
+
+        return Str::random(40).'.'.$ext;
     }
 
     /**
@@ -118,11 +122,13 @@ class ImageDownload
     private function getExtensionFromUrl(string $url): string
     {
         $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+
         return in_array($ext, ['jpg', 'png', 'gif', 'svg', 'jpeg', 'webp', 'svg']) ? $ext : 'png';
     }
 
     /**
      * 从远程获取图片内容
+     *
      * @throws GuzzleException
      */
     private function fetchImage(string $url): string
@@ -138,12 +144,14 @@ class ImageDownload
      */
     private function saveOriginalImage(string $content, string $path, string $filename): string
     {
-        Storage::disk($this->config->disk)->put($path . $filename, $content);
-        return Storage::disk($this->config->disk)->path($path . $filename);
+        Storage::disk($this->config->disk)->put($path.$filename, $content);
+
+        return Storage::disk($this->config->disk)->path($path.$filename);
     }
 
     /**
      * 验证和处理图片
+     *
      * @throws RuntimeException
      */
     private function validateAndProcessImage(string $fullPath): void
@@ -166,8 +174,9 @@ class ImageDownload
         // 处理宽高比
         if ($this->config->aspectRatio) {
             $this->cropToAspectRatio($image, $width, $height);
-            if (!$this->config->maxWidth && !$this->config->maxHeight) {
+            if (! $this->config->maxWidth && ! $this->config->maxHeight) {
                 $image->save($fullPath);
+
                 return;
             }
         }
@@ -176,6 +185,7 @@ class ImageDownload
         if ($this->config->maxWidth && $width > $this->config->maxWidth) {
             $image->scaleDown(width: $this->config->maxWidth);
             $image->save($fullPath);
+
             return;
         }
 
@@ -217,7 +227,7 @@ class ImageDownload
          * @var \Illuminate\Filesystem\LocalFilesystemAdapter $disk
          */
         $disk = Storage::disk($this->config->disk);
-        $publicPath = $disk->url($path . $filename);
+        $publicPath = $disk->url($path.$filename);
 
         try {
             $imageHash = $this->hashHandler->hash($fullPath);
@@ -225,8 +235,9 @@ class ImageDownload
                 ['hash' => $imageHash],
                 ['path' => $publicPath]
             );
-            if (!$imageModel->wasRecentlyCreated) {
-                Storage::disk($this->config->disk)->delete($path . $filename);
+            if (! $imageModel->wasRecentlyCreated) {
+                Storage::disk($this->config->disk)->delete($path.$filename);
+
                 return new ImageDownloadResult(
                     $url,
                     Storage::disk($this->config->disk)->path($imageModel->path),
@@ -234,7 +245,7 @@ class ImageDownload
                 );
             }
         } catch (RuntimeException $exception) {
-            //不是普通图片，例如svg，无法生成hash
+            // 不是普通图片，例如svg，无法生成hash
         }
 
         return new ImageDownloadResult($url, $fullPath, $publicPath);
@@ -247,10 +258,11 @@ class ImageDownload
     {
         foreach ($attributes as $attr) {
             $source = $node->attr($attr);
-            if ($source && !str_starts_with($source, 'data:image')) {
+            if ($source && ! str_starts_with($source, 'data:image')) {
                 return $source;
             }
         }
+
         return null;
     }
 

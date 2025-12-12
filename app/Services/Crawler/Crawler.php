@@ -2,11 +2,11 @@
 
 namespace App\Services\Crawler;
 
-use Closure;
 use App\Services\Crawler\Collections\RequestCollection;
 use App\Services\Crawler\Collections\RuleCollection;
 use App\Services\Crawler\FilterHandlers\FilterAbstract;
 use App\Services\Crawler\SaveHandlers\SaveAbstract;
+use Closure;
 use DOMDocument;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -25,14 +25,12 @@ class Crawler
         'verify' => false,
         'timeout' => 20,
         'headers' => [
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
-        ]
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36',
+        ],
     ];
 
     /**
      * The base URI for the crawler.
-     *
-     * @var string
      */
     private string $baseUri;
 
@@ -108,14 +106,11 @@ class Crawler
             return $this->$name;
         }
 
-        throw new \InvalidArgumentException("Property {$name} does not exist on " . static::class);
+        throw new \InvalidArgumentException("Property {$name} does not exist on ".static::class);
     }
 
     /**
      * Set the base URI for the crawler.
-     *
-     * @param string $baseUri
-     * @return self
      */
     public function setBaseUri(string $baseUri): self
     {
@@ -127,8 +122,8 @@ class Crawler
 
     /**
      * Set crawler list
-     * @param array $list [[link => string, [thumb] => string, ...], ...] link is required
-     * @return self
+     *
+     * @param  array  $list  [[link => string, [thumb] => string, ...], ...] link is required
      */
     public function setList(array $list): self
     {
@@ -139,8 +134,6 @@ class Crawler
 
     /**
      * Set concurrency for the crawler.
-     * @param int $concurrency
-     * @return self
      */
     public function setConcurrency(int $concurrency): self
     {
@@ -151,8 +144,6 @@ class Crawler
 
     /**
      * Determine the crawlered html value is compressed or not.
-     * @param bool $compressHtml
-     * @return self
      */
     public function setCompressHtml(bool $compressHtml = true): self
     {
@@ -161,13 +152,8 @@ class Crawler
         return $this;
     }
 
-
     /**
      * Send reqests
-     * @param RequestCollection $requests
-     * @param Closure $success
-     * @param Closure|null $failed
-     * @return void
      */
     protected function request(RequestCollection $requests, Closure $success, ?Closure $failed = null): void
     {
@@ -189,7 +175,7 @@ class Crawler
                 $failed && $failed($exception, $index);
                 $this->output?->error($exception->getMessage());
                 $this->interval && sleep($this->interval);
-            }
+            },
         ]);
 
         $pool->promise()->wait();
@@ -197,9 +183,10 @@ class Crawler
 
     /**
      * Query the HTML content using the provided rules.
-     * @param string $html The HTML content to query.
-     * @param RuleCollection $rules The rules to apply for querying the HTML.
-     * @param string|null $rangeSelector Optional CSS selector to limit the scope of the query.
+     *
+     * @param  string  $html  The HTML content to query.
+     * @param  RuleCollection  $rules  The rules to apply for querying the HTML.
+     * @param  string|null  $rangeSelector  Optional CSS selector to limit the scope of the query.
      * @return array The queried data as an array.
      */
     public function query(string $html, RuleCollection $rules, ?string $rangeSelector = null): array
@@ -207,7 +194,7 @@ class Crawler
         $domCrawler = new DomCrawler($html);
 
         if ($rangeSelector) {
-            return $domCrawler->filter($rangeSelector)->each(fn(DomCrawler $node) => $this->queryData($node, $rules));
+            return $domCrawler->filter($rangeSelector)->each(fn (DomCrawler $node) => $this->queryData($node, $rules));
         } else {
             return $this->queryData($domCrawler, $rules);
         }
@@ -215,10 +202,6 @@ class Crawler
 
     /**
      * Query data from the DOM crawler based on the provided rules.
-     *
-     * @param DomCrawler $domCrawler
-     * @param RuleCollection $rules
-     * @return array
      */
     private function queryData(DomCrawler $domCrawler, RuleCollection $rules): array
     {
@@ -227,9 +210,10 @@ class Crawler
         foreach ($rules as $rule) {
             $element = $rule->selector ? $domCrawler->filter($rule->selector) : $domCrawler;
 
-            if (!$element->count()) {
+            if (! $element->count()) {
                 $this->output?->warning("Rule '{$rule->name}' did not match any elements.");
                 $data[$rule->name] = null;
+
                 continue;
             }
 
@@ -237,8 +221,10 @@ class Crawler
                 $data[$rule->name] = $element->each(function (DomCrawler $item) use ($rule) {
                     $node = $this->cloneDomCrawler($item);
                     $rule->filterSelector && $this->removeChild($node, $rule->filterSelector);
+
                     return $node->text();
                 });
+
                 continue;
             }
 
@@ -250,6 +236,7 @@ class Crawler
                 'text' => $node->text(),
                 'html' => (function (DomCrawler $ele) {
                     $this->removeUnlessAttributes && $this->removeAttrsUnless($ele);
+
                     return html_entity_decode($this->compressHtml ? self::compressHtml($ele->html()) : $ele->html());
                 })($node),
                 default => $node->attr($rule->attribute),
@@ -259,22 +246,24 @@ class Crawler
                 $data[$rule->name] = ($rule->callback)($data[$rule->name]);
             }
         }
+
         return $data;
     }
 
     private function cloneDomCrawler(DomCrawler $domCrawler): DomCrawler
     {
         $cloneNode = $domCrawler->getNode(0)->cloneNode(true);
-        $doc = new DOMDocument();
+        $doc = new DOMDocument;
         $importedNode = $doc->importNode($cloneNode, true);
         $doc->appendChild($importedNode);
+
         return new DomCrawler($doc);
     }
 
     /**
      * Remove child elements from the DOM crawler based on the provided selectors.
-     * @param DomCrawler $domCrawler
-     * @param string[] $selectors
+     *
+     * @param  string[]  $selectors
      * @return void
      */
     private function removeChild(DomCrawler $domCrawler, array $selectors)
@@ -293,8 +282,6 @@ class Crawler
 
     /**
      * Remove element tag but keep its children.
-     * @param DomCrawler $domCrawler
-     * @return void
      */
     private function unwrap(DomCrawler $domCrawler, string $selector): void
     {
@@ -315,8 +302,6 @@ class Crawler
 
     /**
      * Remove attributes from elements unless they are in the specified list.
-     * @param DomCrawler $domCrawler
-     * @return void
      */
     private function removeAttrsUnless(DomCrawler $domCrawler): void
     {
@@ -339,7 +324,8 @@ class Crawler
 
     /**
      * Compress HTML content by removing unnecessary whitespace and comments.
-     * @param string $html The HTML content to compress.
+     *
+     * @param  string  $html  The HTML content to compress.
      * @return string The compressed HTML content.
      */
     public static function compressHtml(string $html): string
@@ -348,21 +334,19 @@ class Crawler
             '/\>[^\S\r\n]+/',        // 去掉标签后的空白
             '/[^\S\r\n]+\</',        // 去掉标签前的空白
             '/\s+/',                 // 多余空白合并
-            '/<!--.*?-->/s'          // 去掉注释（非贪婪模式 + 支持多行）
+            '/<!--.*?-->/s',          // 去掉注释（非贪婪模式 + 支持多行）
         ], [
             '>',
             '<',
             ' ',
-            ''
+            '',
         ], $html);
     }
 
     /**
      * Crawler list
-     * @param string|string[] $urls
-     * @param string $rangeSelector
-     * @param RuleCollection $rules
-     * @return self
+     *
+     * @param  string|string[]  $urls
      */
     public function crawlerList(string|array $urls, string $rangeSelector, RuleCollection $rules): self
     {
@@ -370,7 +354,7 @@ class Crawler
             $urls = [$urls];
         }
 
-        $requests = new RequestCollection();
+        $requests = new RequestCollection;
         foreach ($urls as $url) {
             $requests->add(new Request('GET', $url));
         }
@@ -385,8 +369,8 @@ class Crawler
 
     /**
      * Filter $this->lists by closure or FilterAbstract, and slice
-     * @param FilterAbstract|Closure $filter
-     * @param ?int $slice max length of list
+     *
+     * @param  ?int  $slice  max length of list
      * @return self
      */
     public function filterList(FilterAbstract|Closure $filter, ?int $slice = null): static
@@ -397,6 +381,7 @@ class Crawler
             // unique by item link
             if (in_array($item['link'], $existUrls)) {
                 unset($this->list[$key]);
+
                 continue;
             }
             $existUrls[] = $item['link'];
@@ -416,11 +401,10 @@ class Crawler
 
     /**
      * Crawler Detail Data
-     * @param RuleCollection $rules filter data rules
-     * @param SaveAbstract|Closure $saveHandler save data handler
-     * @param ?array $appendData append data to crawled before save
-     * @param ?Closure $closure
-     * @return void
+     *
+     * @param  RuleCollection  $rules  filter data rules
+     * @param  SaveAbstract|Closure  $saveHandler  save data handler
+     * @param  ?array  $appendData  append data to crawled before save
      */
     public function crawlerData(
         RuleCollection $rules,

@@ -7,8 +7,6 @@ use Illuminate\Support\Collection;
 
 /**
  * form options trait
- * 
- * @package App\Services\Form
  */
 trait Options
 {
@@ -19,8 +17,8 @@ trait Options
 
     /**
      * Add form element
-     * @param \App\Services\Form\Elements\Element|\App\Services\Form\Block $element 
-     * @return \App\Services\Form\Options 
+     *
+     * @return \App\Services\Form\Options
      */
     public function add(Element|Block $element): self
     {

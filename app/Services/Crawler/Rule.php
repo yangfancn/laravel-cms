@@ -18,11 +18,9 @@ class Rule
     /**
      * Create a new Rule instance.
      *
-     * @param string $name
-     * @param string $selector css selector
-     * @param string $attribute which attribute value to use
-     * @param string[] $filterSelector css selectors to filter the elements
-     * @return static
+     * @param  string  $selector  css selector
+     * @param  string  $attribute  which attribute value to use
+     * @param  string[]  $filterSelector  css selectors to filter the elements
      */
     public static function make(
         string $name,
@@ -36,7 +34,6 @@ class Rule
     /**
      * Set a callback to be executed after the rule is crawled.
      *
-     * @param Closure $callback
      * @return $this
      */
     public function after(Closure $callback): self

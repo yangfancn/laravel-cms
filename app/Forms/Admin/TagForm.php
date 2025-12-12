@@ -2,10 +2,10 @@
 
 namespace App\Forms\Admin;
 
+use App\Models\Tag;
 use App\Services\Form\Elements\Input;
 use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
-use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Inertia\Response;
 

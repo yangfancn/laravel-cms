@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Button class for DataTable actions.
- * @package App\Services\DataTable
  */
 class Button
 {
@@ -38,11 +37,8 @@ class Button
 
     /**
      * Button constructor.
-     * @param null|string $label 
-     * @param null|string $icon 
-     * @param null|string $route 
-     * @param null|string $routeParamName 
-     * @return void 
+     *
+     * @return void
      */
     public function __construct(
         public ?string $label = '',
@@ -53,8 +49,8 @@ class Button
 
     /**
      * Set the button label.
-     * @param string $size 16px 2rem xs md
-     * @return \App\Services\DataTable\Button 
+     *
+     * @param  string  $size  16px 2rem xs md
      */
     public function size(string $size): self
     {
@@ -65,8 +61,6 @@ class Button
 
     /**
      * Set the HTTP method for the button action.
-     * @param string $method 
-     * @return \App\Services\DataTable\Button 
      */
     public function method(string $method): self
     {
@@ -77,8 +71,6 @@ class Button
 
     /**
      * Set the button outline style.
-     * @param bool $outline 
-     * @return \App\Services\DataTable\Button
      */
     public function outline(bool $outline = true): self
     {
@@ -89,8 +81,6 @@ class Button
 
     /**
      * Set the button rounded style.
-     * @param bool $rounded
-     * @return \App\Services\DataTable\Button
      */
     public function rounded(bool $rounded = true): self
     {
@@ -101,8 +91,6 @@ class Button
 
     /**
      * Set the button round style.
-     * @param bool $round 
-     * @return \App\Services\DataTable\Button 
      */
     public function round(bool $round = true): self
     {
@@ -113,8 +101,6 @@ class Button
 
     /**
      * Set the button flat style.
-     * @param bool $flat 
-     * @return \App\Services\DataTable\Button 
      */
     public function flat(bool $flat = true): self
     {
@@ -126,8 +112,8 @@ class Button
     /**
      * Set the button unElevated style.
      * This style is typically used for buttons that do not have a shadow or elevation effect.
-     * @param bool $unElevated
-     * @return \App\Services\DataTable\Button 
+     *
+     * @param  bool  $unElevated
      */
     public function unElevated(): self
     {
@@ -139,8 +125,6 @@ class Button
     /**
      * Set the button square style.
      * This style is no border radius
-     * @param bool $square 
-     * @return \App\Services\DataTable\Button 
      */
     public function square(bool $square = true): self
     {
@@ -151,8 +135,6 @@ class Button
 
     /**
      * Set the button glossy style.
-     * @param bool $glossy 
-     * @return \App\Services\DataTable\Button 
      */
     public function glossy(bool $glossy = true): self
     {
@@ -164,8 +146,6 @@ class Button
     /**
      * Set the button confirmation.
      * This method allows you to set a confirmation message that will be displayed when the button is
-     * @param null|string $message 
-     * @return \App\Services\DataTable\Button 
      */
     public function withConfirm(?string $message = null): self
     {
@@ -177,8 +157,8 @@ class Button
 
     /**
      * set the button color.
-     * @param string $color 'primary''teal''teal-10'
-     * @return \App\Services\DataTable\Button 
+     *
+     * @param  string  $color  'primary''teal''teal-10'
      */
     public function color(string $color): self
     {
@@ -189,7 +169,6 @@ class Button
 
     /**
      * Create a collection of button properties.
-     * @return \Illuminate\Support\Collection 
      */
     public function make(): Collection
     {

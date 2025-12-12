@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class CategoryRequest extends FormRequest
 {
     use MetaRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -31,7 +32,7 @@ class CategoryRequest extends FormRequest
             'show' => 'required|boolean',
             'type' => 'required|in:0,1',
             'rank' => 'integer',
-            ...$this->meta()
+            ...$this->meta(),
         ];
     }
 }

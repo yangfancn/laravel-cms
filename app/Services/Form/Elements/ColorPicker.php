@@ -9,7 +9,6 @@ use App\Services\Form\Enums\ColorView;
 
 /**
  * ColorPicker class represents a color picker form element.
- * @package App\Services\Form\Elements
  */
 class ColorPicker extends Element
 {
@@ -29,8 +28,6 @@ class ColorPicker extends Element
 
     /**
      * Set the default view for the color picker.
-     * @param \App\Services\Form\Enums\ColorView $colorView 
-     * @return \App\Services\Form\Elements\ColorPicker 
      */
     public function defaultView(ColorView $colorView): self
     {
@@ -41,8 +38,8 @@ class ColorPicker extends Element
 
     /**
      * Set the color palette for the color picker.
-     * @param array $arr example: ['#ff0000', '#00ff00', '#0000ff']
-     * @return \App\Services\Form\Elements\ColorPicker 
+     *
+     * @param  array  $arr  example: ['#ff0000', '#00ff00', '#0000ff']
      */
     public function palette(array $arr): self
     {
@@ -53,8 +50,6 @@ class ColorPicker extends Element
 
     /**
      * Set whether to hide the header of the color picker.
-     * @param bool $noHeader 
-     * @return \App\Services\Form\Elements\ColorPicker 
      */
     public function noHeader(bool $noHeader = true): self
     {
@@ -65,8 +60,6 @@ class ColorPicker extends Element
 
     /**
      * Set whether to hide the header tabs of the color picker.
-     * @param bool $noHeaderTabs 
-     * @return \App\Services\Form\Elements\ColorPicker 
      */
     public function noHeaderTabs(bool $noHeaderTabs = true): self
     {
@@ -77,8 +70,6 @@ class ColorPicker extends Element
 
     /**
      * Set whether to hide the footer of the color picker.
-     * @param bool $noFooter 
-     * @return \App\Services\Form\Elements\ColorPicker 
      */
     public function noFooter(bool $noFooter = true): self
     {

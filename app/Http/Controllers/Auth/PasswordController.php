@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Facades\InertiaMessage;
-use App\Services\Form\Elements\Input;
-use App\Services\Form\Form;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Form\Elements\Input;
+use App\Services\Form\Form;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

@@ -10,6 +10,6 @@ class InertiaMessageServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(InertiaMessage::class, fn(Application $app) => new InertiaMessage);
+        $this->app->singleton(InertiaMessage::class, fn (Application $app) => new InertiaMessage);
     }
 }

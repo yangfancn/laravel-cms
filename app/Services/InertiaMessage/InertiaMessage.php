@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * InertiaMessage class for managing Inertia notifications.
- * @package App\Services\InertiaMessage
  */
 class InertiaMessage
 {

@@ -26,7 +26,7 @@ class SiteRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            ...$this->meta()
+            ...$this->meta(),
         ];
     }
 }

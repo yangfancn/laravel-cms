@@ -9,7 +9,6 @@ use App\Services\Form\Elements\Traits\LeftLabel;
 
 /**
  * Toggle class represents a toggle switch form element.
- * @package App\Services\Form\Elements
  */
 class Toggle extends Element
 {
@@ -25,8 +24,6 @@ class Toggle extends Element
 
     /**
      * customer icon
-     * @param string $icon 
-     * @return \App\Services\Form\Elements\Toggle 
      */
     public function icon(string $icon): self
     {
@@ -37,8 +34,6 @@ class Toggle extends Element
 
     /**
      * Set the color of the icon.
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Toggle 
      */
     public function iconColor(string $color): self
     {

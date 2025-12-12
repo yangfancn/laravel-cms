@@ -4,7 +4,6 @@ namespace App\Services\DataTable;
 
 /**
  * StatusButton class represents a button in a data states.
- * @package App\Services\DataTable
  */
 class StatusButton extends Button
 {
@@ -16,14 +15,8 @@ class StatusButton extends Button
 
     /**
      * Constructor for StatusButton.
-     * @param string $positiveLabel 
-     * @param string $positiveIcon 
-     * @param string $negativeLabel 
-     * @param string $negativeIcon 
-     * @param string $statusFiled 
-     * @param null|string $route 
-     * @param null|string $routeParamName 
-     * @return void 
+     *
+     * @return void
      */
     public function __construct(
         public string $positiveLabel,
@@ -37,8 +30,6 @@ class StatusButton extends Button
 
     /**
      * Set the color for the positive status button.
-     * @param string $color 
-     * @return \App\Services\DataTable\StatusButton 
      */
     public function positiveColor(string $color): self
     {
@@ -49,8 +40,6 @@ class StatusButton extends Button
 
     /**
      * Set the color for the negative status button.
-     * @param string $color 
-     * @return \App\Services\DataTable\StatusButton 
      */
     public function negativeColor(string $color): self
     {

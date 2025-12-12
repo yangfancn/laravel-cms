@@ -2,16 +2,15 @@
 
 namespace App\Services\Form;
 
-use App\Services\Form\Elements\Element;
 use App\Models\Traits\Metable;
 use App\Models\Traits\Taggable;
+use App\Services\Form\Elements\Element;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Inertia\Response;
 
 /**
  * Build Form
- * @package App\Services\Form
  */
 class Form
 {
@@ -24,9 +23,7 @@ class Form
     protected bool $disablePrecognitive = false;
 
     /**
-     * @param string $action
-     * @param 'PUT'|'POST' $method
-     * @param null|\Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array $data
+     * @param  'PUT'|'POST'  $method
      * @return void
      */
     public function __construct(
@@ -62,7 +59,6 @@ class Form
 
     /**
      * gerenrate from data props
-     * @return array
      */
     public function create(): array
     {
@@ -73,32 +69,30 @@ class Form
                 return $element->getProperties();
             }) : collect(),
             'data' => $this->data,
-            'precognitive' => ! $this->disablePrecognitive
+            'precognitive' => ! $this->disablePrecognitive,
         ];
     }
 
     /**
      * disable precognition(禁用表单预测验证)
-     * @return Form
      */
     public function disablePrecognitive(): self
     {
         $this->disablePrecognitive = true;
+
         return $this;
     }
 
     /**
      * render from view
-     * @param string $title
-     * @param string $page
-     * @return \Inertia\Response
+     *
      * @throws \RuntimeException
      */
     public function render(?string $title, string $page = 'DefaultForm'): Response
     {
         return inertia($page, [
             'form' => $this->create(),
-            'title' => $title
+            'title' => $title,
         ]);
     }
 }

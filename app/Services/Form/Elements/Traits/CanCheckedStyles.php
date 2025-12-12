@@ -4,7 +4,6 @@ namespace App\Services\Form\Elements\Traits;
 
 /**
  * Trait CanCheckedStyles
- * @package App\Services\Form\Elements\Traits
  */
 trait CanCheckedStyles
 {
@@ -14,8 +13,10 @@ trait CanCheckedStyles
 
     /**
      * Set the size of the icon.
+     *
      * @param  string  $iconSize  example: 12px or 1rem or xs/md/lg
      * @return \App\Services\Form\Elements\Traits\CanCheckedStyles
+     *
      * @example
      * ```php
      * $checkbox->size('12px'); // Set icon size to 12 pixels
@@ -34,8 +35,9 @@ trait CanCheckedStyles
 
     /**
      * Set the color of the icon.
-     * @param string $color example: 'red', 'blue', 'green', or any valid CSS color value
-     * @return \App\Services\Form\Elements\Traits\CanCheckedStyles 
+     *
+     * @param  string  $color  example: 'red', 'blue', 'green', or any valid CSS color value
+     * @return \App\Services\Form\Elements\Traits\CanCheckedStyles
      */
     public function color(string $color): self
     {

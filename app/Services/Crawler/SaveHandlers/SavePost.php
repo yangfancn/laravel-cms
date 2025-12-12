@@ -2,11 +2,11 @@
 
 namespace App\Services\Crawler\SaveHandlers;
 
-use App\Services\Crawler\FilterHandlers\FilterPost;
-use App\Services\Crawler\ImageDownload;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Services\Crawler\FilterHandlers\FilterPost;
 use App\Services\Crawler\ImageConfig;
+use App\Services\Crawler\ImageDownload;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
@@ -21,13 +21,13 @@ class SavePost extends SaveAbstract
 
     public function save(array $data, string $url, array $requestOptions = []): bool|Model
     {
-        if (!isset($data['title']) || (new FilterPost())->filter(['link' => $url])) {
+        if (! isset($data['title']) || (new FilterPost)->filter(['link' => $url])) {
             return false;
         }
 
         $downloadHandler = new ImageDownload(new ImageConfig(requestOptions: $requestOptions));
 
-        //thumb
+        // thumb
         if (array_key_exists('thumb', $data) && $data['thumb']) {
             $data['thumb'] = $downloadHandler->download($data['thumb'])->public_path;
         }
@@ -36,7 +36,7 @@ class SavePost extends SaveAbstract
 
         $data['original_url'] = $data['link'];
 
-        $post = new Post();
+        $post = new Post;
         $post->fill($data);
 
         if (isset($data['created_at']) && $data['created_at']) {
@@ -47,6 +47,7 @@ class SavePost extends SaveAbstract
             $post->saveOrFail();
         } catch (Throwable $exception) {
             dump($exception->getMessage());
+
             return false;
         }
 
@@ -57,9 +58,10 @@ class SavePost extends SaveAbstract
                 return ['name' => $name];
             }, $diff));
             $insert_ids = Tag::whereIn('name', $diff)->pluck('id')->all();
-            $tag_ids =  array_merge($exists->pluck('id')->all(), $insert_ids);
+            $tag_ids = array_merge($exists->pluck('id')->all(), $insert_ids);
             $post->tags()->sync($tag_ids);
         }
+
         return true;
     }
 }

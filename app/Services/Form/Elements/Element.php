@@ -8,7 +8,6 @@ use App\Services\Form\Elements\Traits\GetProperties;
  * Element class represents a base form element with common properties and methods.
  * It can be extended by specific form elements like TextInput, Checkbox, etc.
  * All the element basis on Quasar framework.
- * @package App\Services\Form\Elements
  */
 class Element
 {
@@ -28,9 +27,10 @@ class Element
 
     /**
      * Constructor for the Element class.
-     * @param string $name form element name
-     * @param string|bool $label form element label, can be a string or boolean (true for default label)
-     * @return void 
+     *
+     * @param  string  $name  form element name
+     * @param  string|bool  $label  form element label, can be a string or boolean (true for default label)
+     * @return void
      */
     public function __construct(public string $name, public string|bool $label) {}
 
@@ -42,7 +42,6 @@ class Element
     /**
      * Disable the form element.
      * This method sets the disable property to true, indicating that the element should be disabled.
-     * @return \App\Services\Form\Elements\Element 
      */
     public function disable(): self
     {
@@ -54,8 +53,6 @@ class Element
     /**
      * Set the number of columns for the form element.
      * This method allows you to specify how many columns the element should span in a flex layout
-     * @param int $cols 
-     * @return \App\Services\Form\Elements\Element 
      */
     public function cols(int $cols): self
     {
@@ -67,8 +64,6 @@ class Element
     /**
      * Set whether the form element should have autofocus.
      * This method allows you to specify if the element should automatically receive focus when the page loads, one page can have only one element with autofocus.
-     * @param bool $auto 
-     * @return \App\Services\Form\Elements\Element 
      */
     public function autofocus(bool $auto = true): self
     {
@@ -79,8 +74,6 @@ class Element
 
     /**
      * Set the model value for the form element.
-     * @param mixed|null $defaultValue 
-     * @return \App\Services\Form\Elements\Element 
      */
     public function defaultValue(mixed $defaultValue = null): self
     {

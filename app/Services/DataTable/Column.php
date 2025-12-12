@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
  * It defines properties such as name, label, alignment, and whether the column is sortable.
  * The class provides a method to create a collection of column properties.
  * Subclasses should define the $type property to specify the type of column (e.g., 'text', 'image', 'link').
- * @package App\Services\DataTable
  */
 abstract class Column
 {

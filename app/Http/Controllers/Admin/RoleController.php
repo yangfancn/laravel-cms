@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Facades\InertiaMessage;
 use App\Forms\Admin\RoleForm;
-use App\Services\DataTable\Button;
-use App\Services\DataTable\DataTable;
-use App\Services\DataTable\TextColumn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RoleRequest;
 use App\Models\Role;
+use App\Services\DataTable\Button;
+use App\Services\DataTable\DataTable;
+use App\Services\DataTable\TextColumn;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;

@@ -10,7 +10,6 @@ use App\Services\Form\Elements\Traits\Styles;
 /**
  * Input class represents a form input element.
  * It provides methods to configure the input type, autocomplete, mask, and other properties.
- * @package App\Services\Form\Elements
  */
 class Input extends Element
 {
@@ -40,7 +39,6 @@ class Input extends Element
 
     /**
      * Set the input type to email.
-     * @return \App\Services\Form\Elements\Input 
      */
     public function email(): self
     {
@@ -51,7 +49,6 @@ class Input extends Element
 
     /**
      * Set the input type to number.
-     * @return \App\Services\Form\Elements\Input 
      */
     public function number(): self
     {
@@ -62,7 +59,6 @@ class Input extends Element
 
     /**
      * Set the input type to password.
-     * @return \App\Services\Form\Elements\Input 
      */
     public function password(): self
     {
@@ -74,7 +70,6 @@ class Input extends Element
 
     /**
      * Set the input type to textarea.
-     * @return \App\Services\Form\Elements\Input 
      */
     public function textarea(): self
     {
@@ -91,8 +86,6 @@ class Input extends Element
 
     /**
      * allow auto completion of the input field.
-     * @param string|true $auto 
-     * @return \App\Services\Form\Elements\Input 
      */
     public function autocomplete(string|true $auto = true): self
     {
@@ -103,8 +96,8 @@ class Input extends Element
 
     /**
      * set input mast
-     * @param string $mask example: '####-##-##', 'SNNN-SSSS', 'AaaXxx'
-     * @return \App\Services\Form\Elements\Input 
+     *
+     * @param  string  $mask  example: '####-##-##', 'SNNN-SSSS', 'AaaXxx'
      */
     public function mask(string $mask): self
     {
@@ -115,8 +108,6 @@ class Input extends Element
 
     /**
      * Set whether to fill the mask automatically.
-     * @param bool $fill 
-     * @return \App\Services\Form\Elements\Input 
      */
     public function fillMask(bool $fill = true): self
     {

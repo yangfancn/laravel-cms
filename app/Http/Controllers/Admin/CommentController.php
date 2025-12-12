@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Services\DataTable\Button;
 use App\Services\DataTable\DataTable;
 use App\Services\DataTable\StatusButton;
 use App\Services\DataTable\TextColumn;
-use App\Http\Controllers\Controller;
-use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;

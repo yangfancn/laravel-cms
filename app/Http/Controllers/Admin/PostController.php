@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Facades\InertiaMessage;
 use App\Forms\Admin\PostForm;
-use App\Services\DataTable\Button;
-use App\Services\DataTable\DataTable;
-use App\Services\DataTable\TextColumn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PostRequest;
 use App\Models\Post;
+use App\Services\DataTable\Button;
+use App\Services\DataTable\DataTable;
+use App\Services\DataTable\TextColumn;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Response;
 
 class PostController extends Controller
 {

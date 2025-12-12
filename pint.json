@@ -1,0 +1,8 @@
+{
+    "preset": "laravel",
+    "exclude": ["vendor", "node_modules", "storage", "bootstrap/cache"],
+    "rules": {
+        "no_trailing_whitespace_in_string": true
+    },
+    "processes": 4
+}

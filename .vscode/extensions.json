@@ -6,6 +6,7 @@
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
         "Vue.volar",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "open-southeners.laravel-pint"
     ]
 }

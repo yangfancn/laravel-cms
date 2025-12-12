@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 /**
  * Block class represents a block of form elements that can be repeated.
  * use for json filed or other array data
- * @package App\Services\Form
  */
 class Block
 {
@@ -28,10 +27,11 @@ class Block
 
     /**
      * Constructor for the Block class.
-     * @param null|string $name filed name
-     * @param null|string $title block title(card title)
-     * @return void 
-     * 
+     *
+     * @param  null|string  $name  filed name
+     * @param  null|string  $title  block title(card title)
+     * @return void
+     *
      * example:
      * ```php
      * $block = new Block('seo_meta', 'SEO Meta Tags');
@@ -54,10 +54,6 @@ class Block
 
     /**
      * Enable multiple blocks.
-     * @param null|int $min 
-     * @param null|int $max 
-     * @param bool $reorder 
-     * @return \App\Services\Form\Block 
      */
     public function repeater(?int $min = null, ?int $max = null, bool $reorder = false): self
     {
@@ -72,8 +68,8 @@ class Block
 
     /**
      * Get the properties of the block.
-     * @return \Illuminate\Support\Collection 
-     * @throws \InvalidArgumentException 
+     *
+     * @throws \InvalidArgumentException
      */
     public function getProperties(): Collection
     {

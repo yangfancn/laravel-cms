@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Facades\InertiaMessage;
 use App\Forms\Admin\PermissionForm;
-use App\Services\DataTable\Button;
-use App\Services\DataTable\DataTable;
-use App\Services\DataTable\TextColumn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PermissionRequest;
 use App\Models\Permission;
+use App\Services\DataTable\Button;
+use App\Services\DataTable\DataTable;
+use App\Services\DataTable\TextColumn;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 
@@ -56,7 +56,9 @@ class PermissionController extends Controller
 
     public function store(PermissionRequest $request, Permission $permission): RedirectResponse
     {
-        $permission->fill($request->all($permission->getFillable()))->save();
+        $permission->fill($request->all($permission->getFillable()));
+        $permission->guard_name = 'web';
+        $permission->save();
 
         if ($admin_menu = $request->post('admin_menu')) {
             $permission->adminMenu()->create($admin_menu);

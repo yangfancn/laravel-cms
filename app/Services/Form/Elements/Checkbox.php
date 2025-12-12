@@ -10,7 +10,6 @@ use App\Services\Form\Elements\Traits\Options;
 
 /**
  * Checkbox class represents a checkbox form element.
- * @package App\Services\Form\Elements
  */
 class Checkbox extends Element
 {

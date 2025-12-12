@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 /**
  * DatetimePicker class represents a datetime picker form element.
  * It allows users to select both date and time, or a range of dates.
- * @package App\Services\Form\Elements
  */
 class DatetimePicker extends Element
 {
@@ -38,8 +37,6 @@ class DatetimePicker extends Element
 
     /**
      * its allow to select a range of dates. checked value is an array with keys 'from' and 'to'.
-     * @param bool $range 
-     * @return \App\Services\Form\Elements\DatetimePicker 
      */
     public function range(bool $range = true): self
     {

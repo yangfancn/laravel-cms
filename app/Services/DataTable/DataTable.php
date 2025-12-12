@@ -19,7 +19,6 @@ use Laravel\Scout\Searchable;
 /**
  * DataTable class provides a way to build and render data tables with various features like pagination, searching, and sorting.
  * It allows adding columns, row actions, and select options, and can handle both Eloquent models and collections.
- * @package App\Services\DataTable
  */
 class DataTable
 {

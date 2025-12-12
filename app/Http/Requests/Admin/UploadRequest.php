@@ -32,10 +32,10 @@ class UploadRequest extends FormRequest
     {
         return [
             'file.mimes' => __('messages.disallowFileMimes', [
-                'mimes' => config('upload.mimes', 'jpg,jpeg,png,webp,gif,pdf')
+                'mimes' => config('upload.mimes', 'jpg,jpeg,png,webp,gif,pdf'),
             ]),
             'file.max' => __('messages.exceedsAllowSize', [
-                'size' => config('upload.max_kb', 2048) . 'kb'
+                'size' => config('upload.max_kb', 2048).'kb',
             ]),
         ];
     }
@@ -47,10 +47,9 @@ class UploadRequest extends FormRequest
         if ($file && $file->getError() === UPLOAD_ERR_INI_SIZE) {
             throw ValidationException::withMessages([
                 'file' => __('messages.exceedsAllowSize', [
-                    'size' => ini_get('upload_max_filesize')
+                    'size' => ini_get('upload_max_filesize'),
                 ]),
             ]);
         }
     }
 }
-

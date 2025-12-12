@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Facades\InertiaMessage;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\SessionRequest;
 use App\Services\Form\Elements\Input;
 use App\Services\Form\Elements\Toggle;
 use App\Services\Form\Form;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\SessionRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;

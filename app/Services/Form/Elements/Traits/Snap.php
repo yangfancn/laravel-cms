@@ -6,8 +6,6 @@ namespace App\Services\Form\Elements\Traits;
  * Trait Snap
  * This trait provides methods to configure a slider with snapping behavior.
  * It allows for customization of the slider's appearance and behavior, such as step size, min/max values, colors, and more.
- *
- * @package App\Services\Form\Elements\Traits
  */
 trait Snap
 {
@@ -49,11 +47,10 @@ trait Snap
 
     protected string $thumbColor;
 
-    
     /**
      * Set whether the slider should snap to the nearest step.
-     * @param bool $snap 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function snap(bool $snap = true): self
     {
@@ -64,8 +61,8 @@ trait Snap
 
     /**
      * Set whether the slider should reverse its direction.
-     * @param bool $reverse 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function reverse(bool $reverse = true): self
     {
@@ -76,8 +73,8 @@ trait Snap
 
     /**
      * Set whether the slider should be displayed vertically.
-     * @param bool $vertical 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function vertical(bool $vertical = true): self
     {
@@ -88,8 +85,8 @@ trait Snap
 
     /**
      * Set whether the label should always be visible.
-     * @param bool $always 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function labelAlways(bool $always = true): self
     {
@@ -100,8 +97,8 @@ trait Snap
 
     /**
      * Set the step size for the slider.
-     * @param float|int $step 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function step(float|int $step = 1): self
     {
@@ -112,8 +109,8 @@ trait Snap
 
     /**
      * Set the minimum value for the slider.
-     * @param float|int $min 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function min(float|int $min = 0): self
     {
@@ -124,8 +121,8 @@ trait Snap
 
     /**
      * Set the maximum value for the slider.
-     * @param float|int $max 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function max(float|int $max): self
     {
@@ -136,8 +133,8 @@ trait Snap
 
     /**
      * Set the inner minimum value for the slider.
-     * @param float|int $innerMin 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function innerMin(float|int $innerMin): self
     {
@@ -148,8 +145,8 @@ trait Snap
 
     /**
      * Set the inner maximum value for the slider.
-     * @param float|int $innerMax 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function innerMax(float|int $innerMax): self
     {
@@ -160,8 +157,8 @@ trait Snap
 
     /**
      * Set the color of the slider.
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function color(string $color): self
     {
@@ -172,8 +169,8 @@ trait Snap
 
     /**
      * Set the track color of the slider.
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function trackColor(string $color): self
     {
@@ -184,8 +181,8 @@ trait Snap
 
     /**
      * Set the inner track color of the slider.
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function innerTrackColor(string $color): self
     {
@@ -196,7 +193,7 @@ trait Snap
 
     /**
      * Set the selection color of the slider.
-     * @param string $color
+     *
      * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function selectionColor(string $color): self
@@ -208,8 +205,8 @@ trait Snap
 
     /**
      * Set the label color of the slider.
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function labelColor(string $color): self
     {
@@ -220,8 +217,8 @@ trait Snap
 
     /**
      * Set the text color of the label
-     * @param string $color 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function labelTextColor(string $color): self
     {
@@ -232,8 +229,8 @@ trait Snap
 
     /**
      * Set the side of the label.
-     * @param bool $side 
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function switchLabelSide(bool $side = true): self
     {
@@ -244,8 +241,9 @@ trait Snap
 
     /**
      * Set the size of the thumb.
-     * @param string $size example: '12px', '1rem'
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @param  string  $size  example: '12px', '1rem'
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function thumbSize(string $size): self
     {
@@ -256,8 +254,9 @@ trait Snap
 
     /**
      * Set the color of the thumb.
-     * @param string $color example: 'primary', 'teal', or any valid CSS color value
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @param  string  $color  example: 'primary', 'teal', or any valid CSS color value
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function thumbColor(string $color): self
     {
@@ -268,8 +267,9 @@ trait Snap
 
     /**
      * Set the size of the track.
-     * @param string $size example: '16px', '2rem'
-     * @return \App\Services\Form\Elements\Traits\Snap 
+     *
+     * @param  string  $size  example: '16px', '2rem'
+     * @return \App\Services\Form\Elements\Traits\Snap
      */
     public function trackSize(string $size): self
     {

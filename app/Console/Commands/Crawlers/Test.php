@@ -38,7 +38,7 @@ class Test extends Command
             ->add(Rule::make('title', 'h1'))
             ->add(Rule::make('content', '.post-content', 'html', ['h1', '-.info', '-.border-t-3']));
 
-        $crawler->setBaseUri("https://www.php-blog.cn")
+        $crawler->setBaseUri('https://www.php-blog.cn')
             ->setConcurrency(3)
             ->crawlerList(['/html', '/linux', '/php'], '.border.p-5 .border-b-1', $listRules)
             ->filterList(new FilterPost)

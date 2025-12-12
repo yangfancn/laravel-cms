@@ -12,8 +12,8 @@ trait LeftLabel
 
     /**
      * Set whether the label should be positioned on the left side of the form element.
-     * @param bool $leftLabel 
-     * @return \App\Services\Form\Elements\Traits\LeftLabel 
+     *
+     * @return \App\Services\Form\Elements\Traits\LeftLabel
      */
     public function leftLabel(bool $leftLabel = true): self
     {

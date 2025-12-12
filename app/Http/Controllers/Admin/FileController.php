@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Admin\UploadRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
@@ -15,7 +15,7 @@ class FileController extends Controller
 
         $disk = config('upload.disk', 'public');
         $baseDir = trim(config('upload.dir', 'uploads'), '/');
-        $dir = $baseDir . '/' . date('Ymd');
+        $dir = $baseDir.'/'.date('Ymd');
 
         $path = $file->storePublicly($dir, $disk);
 

@@ -10,7 +10,6 @@ use App\Services\Form\Elements\Traits\Options;
 
 /**
  * Radio class represents a radio button form element.
- * @package App\Services\Form\Elements
  */
 class Radio extends Element
 {

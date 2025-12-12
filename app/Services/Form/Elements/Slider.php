@@ -6,7 +6,6 @@ use App\Services\Form\Elements\Traits\Snap;
 
 /**
  * Slider class represents a slider form element.
- * @package App\Services\Form\Elements
  */
 class Slider extends Element
 {
@@ -18,10 +17,8 @@ class Slider extends Element
 
     /**
      * Constructor for the Slider class.
-     * @param string $name 
-     * @param string $label 
-     * @param bool $showLabel 
-     * @return void 
+     *
+     * @return void
      */
     public function __construct(string $name, string $label, bool $showLabel = true)
     {

@@ -4,7 +4,6 @@ namespace App\Services\Form\Elements;
 
 /**
  * Uploader class represents a file uploader form element.
- * @package App\Services\Form\Elements
  */
 class Uploader extends Element
 {
@@ -26,8 +25,6 @@ class Uploader extends Element
 
     /**
      * Constructor for the Uploader class.
-     * @param bool $disable 
-     * @return \App\Services\Form\Elements\Uploader 
      */
     public function disable(bool $disable = true): self
     {
@@ -38,8 +35,6 @@ class Uploader extends Element
 
     /**
      * Set the maximum number of files that can be uploaded.
-     * @param int $maxFiles 
-     * @return \App\Services\Form\Elements\Uploader 
      */
     public function maxFiles(int $maxFiles = 1): self
     {
@@ -51,7 +46,6 @@ class Uploader extends Element
 
     /**
      * Allow resrot the uploaded files.
-     * @return \App\Services\Form\Elements\Uploader 
      */
     public function allowReorder(): self
     {
@@ -62,8 +56,8 @@ class Uploader extends Element
 
     /**
      * Set the accepted file types for upload.
-     * @param string $accept example: 'image/*', '.pdf, .docx', etc.
-     * @return \App\Services\Form\Elements\Uploader 
+     *
+     * @param  string  $accept  example: 'image/*', '.pdf, .docx', etc.
      */
     public function accept(string $accept): self
     {
@@ -74,8 +68,8 @@ class Uploader extends Element
 
     /**
      * cropper image before upload.
-     * @param float|int|null $aspectRatio example: 1.0 for square, 16/9 for widescreen
-     * @return \App\Services\Form\Elements\Uploader 
+     *
+     * @param  float|int|null  $aspectRatio  example: 1.0 for square, 16/9 for widescreen
      */
     public function cropper(float|int|null $aspectRatio = null): self
     {

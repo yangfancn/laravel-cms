@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware\Admin;
 
-use App\Services\InertiaMessage\InertiaMessage;
 use App\Models\AdminMenu;
+use App\Services\InertiaMessage\InertiaMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;

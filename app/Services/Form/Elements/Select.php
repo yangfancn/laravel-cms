@@ -13,7 +13,6 @@ use App\Services\Form\Elements\Traits\UseInput;
 /**
  * Select class represents a select dropdown form element.
  * It supports features like multiple selection, clearable options, affixes, and xhr loading of
- * @package App\Services\Form\Elements
  */
 class Select extends Element
 {
@@ -39,8 +38,8 @@ class Select extends Element
 
     /**
      * Set the options for the select element.
-     * @param array $options example: ['value', 'value'] or [label => value ,...] or ['group1' => [label => value,...], ...]
-     * @return \App\Services\Form\Elements\Select
+     *
+     * @param  array  $options  example: ['value', 'value'] or [label => value ,...] or ['group1' => [label => value,...], ...]
      */
     public function options(array $options): self
     {
@@ -52,8 +51,6 @@ class Select extends Element
 
     /**
      * Set max selected options length.
-     * @param int $length
-     * @return \App\Services\Form\Elements\Select
      */
     public function maxLength(int $length): self
     {
@@ -62,11 +59,9 @@ class Select extends Element
         return $this;
     }
 
-   /**
-    * Set xhr request url
-    * @param string $url
-    * @return \App\Services\Form\Elements\Select
-    */
+    /**
+     * Set xhr request url
+     */
     public function xhrOptionsUrl(string $url): self
     {
         $this->xhrOptionsUrl = $url;
@@ -76,9 +71,9 @@ class Select extends Element
 
     /**
      * Set the icon for the dropdown.
-     * @param string $icon example: 'arrow_drop_down', 'expand_more' or any other mdi-
-     * icon name
-     * @return \App\Services\Form\Elements\Select
+     *
+     * @param  string  $icon  example: 'arrow_drop_down', 'expand_more' or any other mdi-
+     *                        icon name
      */
     public function dropdownIcon(string $icon): self
     {
@@ -89,8 +84,6 @@ class Select extends Element
 
     /**
      * Allow creating new options via an XHR request.
-     * @param string $url
-     * @return \App\Services\Form\Elements\Select
      */
     public function allowCreate(?string $url = null): self
     {
@@ -104,8 +97,6 @@ class Select extends Element
 
     /**
      * Generate options array from the provided options.
-     * @param array $options
-     * @return array
      */
     public static function makeOptions(array $options): array
     {

@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Crawler\ImageConfig;
-use App\Services\Crawler\ImageDownload;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,7 +24,8 @@ class Test extends Command
     /**
      * Execute the console command.
      */
-    public function handle() {
+    public function handle()
+    {
         dd(Storage::disk('local'));
     }
 }

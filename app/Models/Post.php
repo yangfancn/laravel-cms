@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Post extends Model
 {
-    use Commentable, HasFactory, Metable, Taggable, Votable, Countable;
+    use Commentable, Countable, HasFactory, Metable, Taggable, Votable;
 
     protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'thumb', 'content', 'original_url'];
 

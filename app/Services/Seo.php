@@ -10,7 +10,6 @@ use Ramsey\Uuid\Exception\InvalidArgumentException;
 
 /**
  * Seo class for managing SEO metadata.
- * @package App\Services
  */
 class Seo
 {
@@ -28,9 +27,8 @@ class Seo
     /**
      * Set seo data by model.
      * Model mush use App\Models\Traits\Metable trait.
-     * @param null|\Illuminate\Database\Eloquent\Model $model 
-     * @return \App\Services\Seo 
-     * @throws \Ramsey\Uuid\Exception\InvalidArgumentException 
+     *
+     * @throws \Ramsey\Uuid\Exception\InvalidArgumentException
      */
     public function model(?Model $model = null): self
     {
@@ -50,12 +48,6 @@ class Seo
 
     /**
      * Set SEO data manually.
-     * @param string $title 
-     * @param null|string $keywords 
-     * @param null|string $description 
-     * @param null|string $url 
-     * @param null|string $image 
-     * @return \App\Services\Seo 
      */
     public function seo(
         string $title,
@@ -71,7 +63,6 @@ class Seo
 
     /**
      * Seo title without site name.
-     * @return \App\Services\Seo 
      */
     public function withoutSiteName(): self
     {
@@ -82,7 +73,6 @@ class Seo
 
     /**
      * Set noindex meta.
-     * @return \App\Services\Seo 
      */
     public function noIndex(): self
     {
@@ -96,8 +86,8 @@ class Seo
 
     /**
      * Generate SEO meta tags.
-     * @return string 
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException 
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function generate(): string
     {

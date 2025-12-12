@@ -6,7 +6,6 @@ use App\Services\Form\Elements\Traits\Snap;
 
 /**
  * Range class represents a range slider form element.
- * @package App\Services\Form\Elements
  */
 class Range extends Element
 {
@@ -32,10 +31,8 @@ class Range extends Element
 
     /**
      * Constructor for the Range class.
-     * @param string $name 
-     * @param string $label 
-     * @param bool $showLabel 
-     * @return void 
+     *
+     * @return void
      */
     public function __construct(string $name, string $label, bool $showLabel = true)
     {
@@ -45,8 +42,8 @@ class Range extends Element
 
     /**
      * Set the color for the left label.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function leftLabelColor(string $color): self
     {
@@ -57,8 +54,8 @@ class Range extends Element
 
     /**
      * Set the text color for the left label.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function leftLabelTextColor(string $color): self
     {
@@ -69,8 +66,8 @@ class Range extends Element
 
     /**
      * Set the color for the right label.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function rightLabelColor(string $color): self
     {
@@ -81,8 +78,8 @@ class Range extends Element
 
     /**
      * Set the text color for the right label.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function rightLabelTextColor(string $color): self
     {
@@ -93,8 +90,8 @@ class Range extends Element
 
     /**
      * Set the color for the left thumb.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function leftThumbColor(string $color): self
     {
@@ -105,8 +102,8 @@ class Range extends Element
 
     /**
      * Set the color for the right thumb.
-     * @param string $color example: 'red', '#ff0000'
-     * @return \App\Services\Form\Elements\Range 
+     *
+     * @param  string  $color  example: 'red', '#ff0000'
      */
     public function rightThumbColor(string $color): self
     {

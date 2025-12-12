@@ -22,12 +22,11 @@ class RuleCollection implements IteratorAggregate
 
     /**
      * Add an item to the collection.
-     *
-     * @param Rule $item
      */
     public function add(Rule $item): self
     {
         $this->list[] = $item;
+
         return $this;
     }
 

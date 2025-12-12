@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class PostRequest extends FormRequest
 {
     use MetaRequestTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -32,7 +33,7 @@ class PostRequest extends FormRequest
             'summary' => 'nullable|max:255',
             'created_at' => 'nullable|date',
             'content' => 'required|string',
-            ...$this->meta()
+            ...$this->meta(),
         ];
     }
 }

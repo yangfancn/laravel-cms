@@ -8,8 +8,6 @@ use App\Services\Form\Enums\Variant;
  * Trait Styles
  * This trait provides styling options for form elements, allowing customization of colors, rounded corners,
  * and various visual styles.
- *
- * @package App\Services\Form\Elements\Traits
  */
 trait Styles
 {
@@ -51,8 +49,9 @@ trait Styles
 
     /**
      * Set the label text color of the form element.
-     * @param string $color example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @param  string  $color  example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function labelColor(string $color): self
     {
@@ -63,8 +62,9 @@ trait Styles
 
     /**
      * Set the background color of the form element.
-     * @param string $color example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @param  string  $color  example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function bgColor(string $color): self
     {
@@ -75,8 +75,9 @@ trait Styles
 
     /**
      * Set the color of the form element.
-     * @param string $color example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @param  string  $color  example: 'primay', 'teal' ,'#033', 'rgba(255, 0, 0, 0.5)'
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function color(string $color): self
     {
@@ -87,8 +88,8 @@ trait Styles
 
     /**
      * Set the rounded corners of the form element.
-     * @param bool $round 
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function rounded(bool $round = true): self
     {
@@ -99,8 +100,8 @@ trait Styles
 
     /**
      * Set the square corners of the form element.
-     * @param bool $square 
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function square(bool $square = true): self
     {
@@ -111,8 +112,8 @@ trait Styles
 
     /**
      * Set the center affix alignment of the form element.
-     * @param bool $align 
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function centerAffix(bool $align): self
     {
@@ -123,8 +124,8 @@ trait Styles
 
     /**
      * Set the standard style of the form element.
-     * @param \App\Services\Form\Enums\Variant $variant 
-     * @return \App\Services\Form\Elements\Traits\Styles 
+     *
+     * @return \App\Services\Form\Elements\Traits\Styles
      */
     public function variant(Variant $variant): self
     {

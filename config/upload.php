@@ -13,4 +13,3 @@ return [
     // Allowed extensions for mimes rule (comma-separated)
     'mimes' => env('UPLOAD_MIMES', 'jpg,jpeg,png,webp,gif,pdf'),
 ];
-

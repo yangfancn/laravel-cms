@@ -1,26 +1,26 @@
 <?php
 
 use App\Facades\InertiaMessage;
-use App\Services\InertiaMessage\Enums\Position;
 use App\Http\Middleware\Admin\HandleInertiaRequests;
 use App\Http\Middleware\Admin\ViteBuildDir;
 use App\Http\Middleware\EnsurePrecognitionApplies;
 use App\Http\Middleware\FilterEmptyFields;
 use App\Http\Middleware\Home\CommonData;
 use App\Http\Middleware\Home\TrackVisitor;
+use App\Services\InertiaMessage\Enums\Position;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use Illuminate\Http\Exceptions\PostTooLargeException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -82,6 +82,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $msg = __('messages.exceedsAllowSize', [
                 'size' => ini_get('upload_max_filesize'),
             ]);
+
             // 普通表单场景
             return back()
                 ->withErrors(['file' => $msg])

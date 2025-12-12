@@ -16,6 +16,24 @@
                 "clear": true,
                 "close": false
             }
+        },
+        {
+            "label": "Format PHP (Pint)",
+            "type": "shell",
+            "command": "php",
+            "args": ["vendor/bin/pint"],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": false
+            }
         }
         // {
         //     "label": "eslint watch workspace",

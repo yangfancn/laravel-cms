@@ -10,7 +10,7 @@ class Permission extends PermissionAlias
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'guard_name'];
+    protected $fillable = ['name'];
 
     public function adminMenu(): HasOne
     {

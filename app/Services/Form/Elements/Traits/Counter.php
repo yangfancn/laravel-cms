@@ -6,8 +6,6 @@ namespace App\Services\Form\Elements\Traits;
  * Trait Counter
  * This trait provides functionality to add a counter to form elements.
  * It allows input elements to display a character count
- *
- * @package App\Services\Form\Elements\Traits
  */
 trait Counter
 {
@@ -18,8 +16,8 @@ trait Counter
 
     /**
      * Set whether the form element should display a counter.
-     * @param bool $counter 
-     * @return \App\Services\Form\Elements\Traits\Counter 
+     *
+     * @return \App\Services\Form\Elements\Traits\Counter
      */
     public function counter(bool $counter = true): self
     {

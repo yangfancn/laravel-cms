@@ -8,14 +8,11 @@ use Illuminate\Support\Collection;
  * Trait GetProperties
  * This trait provides functionality to retrieve the properties of a class.
  * It allows accessing public and protected properties of the class.
- *
- * @package App\Services\Form\Elements\Traits
  */
 trait GetProperties
 {
     /**
      * Get the public or protected properties of the class.
-     * @return \Illuminate\Support\Collection 
      */
     public function getProperties(): Collection
     {

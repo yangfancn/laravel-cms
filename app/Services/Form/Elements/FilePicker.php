@@ -11,7 +11,6 @@ use App\Services\Form\Elements\Traits\UseChips;
 
 /**
  * FilePicker class represents a file picker form element.
- * @package App\Services\Form\Elements
  */
 class FilePicker extends Element
 {
@@ -21,8 +20,6 @@ class FilePicker extends Element
 
     /**
      * Set the prepend icon for the file picker.
-     * @param string $icon 
-     * @return \App\Services\Form\Elements\FilePicker 
      */
     public function prependIcon(string $icon = 'cloud_upload'): self
     {

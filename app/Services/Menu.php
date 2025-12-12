@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Menu class for managing hierarchical channel structures.
- * @package App\Services
  */
 class Menu
 {
