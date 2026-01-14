@@ -48,7 +48,7 @@ const props = defineProps<selectOptions>()
 
 const loading = ref<boolean>(false)
 const nextPage = ref(2)
-const optionsRef = ref<Option[]>(props.options)
+const optionsRef = ref<Option[]>([...props.options])
 const search = ref<string>("")
 const oldSearch = ref<string>("")
 const $q = useQuasar()
@@ -61,11 +61,16 @@ const xhrLoadOptions = async (clear = false) => {
   }
 
   const mv: any = props.modelValue as unknown
-  const required: string | number | null =
-    (typeof mv === "string" || typeof mv === "number") && !optionsRef.value.some((item) => item.value === mv)
-      ? mv
+  const required: (number | string)[] | null =
+    nextPage.value === 1
+      ? Array.isArray(mv)
+        ? mv
+        : mv && typeof mv === "object"
+          ? Object.values(mv)
+          : mv == null
+            ? []
+            : [mv]
       : null
-
   await axios
     .request<{
       options: {

@@ -94,10 +94,10 @@ class Crawler
         $this->removeUnlessAttributes = $removeUnlessAttributes === false
             ? false
             : (
-                is_array($removeUnlessAttributes)
-                ? array_merge($this->removeUnlessAttributes, $removeUnlessAttributes)
-                : $this->removeUnlessAttributes
-            );
+            is_array($removeUnlessAttributes)
+            ? array_merge($this->removeUnlessAttributes, $removeUnlessAttributes)
+            : $this->removeUnlessAttributes
+        );
     }
 
     public function __get(string $name): mixed
@@ -186,7 +186,7 @@ class Crawler
      *
      * @param  string  $html  The HTML content to query.
      * @param  RuleCollection  $rules  The rules to apply for querying the HTML.
-     * @param  string|null  $rangeSelector  Optional CSS selector to limit the scope of the query.
+     * @param  string|null  $rangeSelector  Optional CSS/Xpath selector to limit the scope of the query.
      * @return array The queried data as an array.
      */
     public function query(string $html, RuleCollection $rules, ?string $rangeSelector = null): array
@@ -194,7 +194,13 @@ class Crawler
         $domCrawler = new DomCrawler($html);
 
         if ($rangeSelector) {
-            return $domCrawler->filter($rangeSelector)->each(fn (DomCrawler $node) => $this->queryData($node, $rules));
+            if (str_starts_with($rangeSelector, 'xpath:')) {
+                $filter = $domCrawler->filterXPath(trim(substr($rangeSelector, 6)));
+            } else {
+                $filter = $domCrawler->filter($rangeSelector);
+            }
+
+            return $filter->each(fn (DomCrawler $node) => $this->queryData($node, $rules));
         } else {
             return $this->queryData($domCrawler, $rules);
         }
@@ -235,10 +241,10 @@ class Crawler
             $data[$rule->name] = match ($rule->attribute) {
                 'text' => $node->text(),
                 'html' => (function (DomCrawler $ele) {
-                    $this->removeUnlessAttributes && $this->removeAttrsUnless($ele);
+                        $this->removeUnlessAttributes && $this->removeAttrsUnless($ele);
 
-                    return html_entity_decode($this->compressHtml ? self::compressHtml($ele->html()) : $ele->html());
-                })($node),
+                        return html_entity_decode($this->compressHtml ? self::compressHtml($ele->html()) : $ele->html());
+                    })($node),
                 default => $node->attr($rule->attribute),
             };
 
@@ -410,7 +416,7 @@ class Crawler
         RuleCollection $rules,
         SaveAbstract|Closure $saveHandler,
         ?string $rangeSelector = null,
-        ?array $appendData = null,
+        null|Closure|array $appendData = null,
         ?Closure $closure = null
     ): void {
         $this->list = array_values($this->list);
@@ -428,7 +434,11 @@ class Crawler
             $data = array_merge($listData, $this->query($html, $rules, $rangeSelector));
 
             if ($appendData) {
-                $data = array_merge($data, $appendData);
+                if (is_array($appendData)) {
+                    $data = array_merge($data, $appendData);
+                } else {
+                    $data = array_merge($data, $appendData($data));
+                }
             }
 
             if ($closure) {
@@ -436,7 +446,7 @@ class Crawler
             }
 
             if ($saveHandler instanceof SaveAbstract) {
-                $saveHandler->save($data, $listData['link']);
+                $saveHandler->save($data, $listData['link'], $this->requestOptions);
             } else {
                 $saveHandler($data);
             }

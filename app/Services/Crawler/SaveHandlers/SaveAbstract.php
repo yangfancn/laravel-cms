@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class SaveAbstract
 {
-    abstract public function save(array $data, string $url): bool|Model;
+    abstract public function save(array $data, string $url, array $requestOptions): bool|Model;
 }

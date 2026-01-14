@@ -2,6 +2,7 @@
 
 namespace App\Services\Form;
 
+use App\Models\Traits\Categorizable;
 use App\Models\Traits\Metable;
 use App\Models\Traits\Taggable;
 use App\Services\Form\Elements\Element;
@@ -44,11 +45,8 @@ class Form
                 $this->data->load('meta');
             }
             // auto load tags relation
-            if (
-                in_array(Taggable::class, class_uses(get_class($data)))
-                && ! $this->data->relationLoaded('tags')
-            ) {
-                $this->data['tags'] = $this->data->tags()->pluck('id')->toArray();
+            if (in_array(Taggable::class, class_uses(get_class($data)))) {
+                $this->data->setRawAttributes($this->data->getAttributes() + ['tags' => $this->data->tags()->pluck('id')->toArray()], true);
             }
         }
 

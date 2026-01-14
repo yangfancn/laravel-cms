@@ -26,16 +26,27 @@
         >
         </q-btn>
         <template v-for="(item, index) in options.selectOptions" :key="`${item.label}_${index}`">
-          <q-select
+          <!-- <q-select
             :options="item.options"
             :label="item.name"
             style="min-width: 10rem"
             v-model="item.modelValue"
             emit-value
-            map-options
             clearable
             dense
             outlined
+          /> -->
+          <i-select
+            :label="item.name"
+            :options="item.options"
+            :xhr-options-url="item.xhrOptionsUrl"
+            :modelValue="item.modelValue"
+            @update:model-value="(val: Option) => (item.modelValue = val.value)"
+            dense
+            outlined
+            use-input
+            map-options
+            :style="{ paddingBottom: 0, minWidth: '10rem' }"
           />
         </template>
 
@@ -63,7 +74,13 @@
         <q-td :align="props.col.align">
           <!--    Image      -->
           <template v-if="props.col.type === 'image'">
-            <img :src="parseCellValue(props) as string" alt="" :width="props.col.width" :height="props.col.height" />
+            <img
+              :src="parseCellValue(props) as string"
+              alt=""
+              :width="props.col.width"
+              :height="props.col.height"
+              :style="{ borderRadius: props.col.radius }"
+            />
           </template>
           <!--    Link      -->
           <template v-else-if="props.col.type === 'link'">
@@ -111,10 +128,11 @@
 import Layout from "./Layout.vue"
 import { Link, router } from "@inertiajs/vue3"
 import { computed, ref, watch } from "vue"
-import { type QBtnProps, type QSelectProps, QSelect, useQuasar } from "quasar"
+import { type QBtnProps, type QSelectProps, useQuasar } from "quasar"
 import Button from "./Components/Table/Button.vue"
 import { safeRoute } from "../helper"
 import { trans } from "laravel-vue-i18n"
+import ISelect from "../Pages/Components/Form/Fields/Select.vue"
 
 interface Option {
   label: string | number

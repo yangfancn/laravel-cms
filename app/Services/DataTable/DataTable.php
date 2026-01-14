@@ -72,9 +72,11 @@ class DataTable
         return $this;
     }
 
-    public function addSelectByRelation(string $relation, string $labelColum = 'name'): self
-    {
-
+    public function addSelectByRelation(
+        string $relation,
+        string $labelColum = 'name',
+        ?string $xhrOptionsUrl = null
+    ): self {
         try {
             $relationModel = $this->model->getRelation($relation)->getModel();
         } catch (RelationNotFoundException) {
@@ -83,7 +85,9 @@ class DataTable
 
         $primaryKey = $relationModel->getKeyName();
 
-        $options = $relationModel->select([$primaryKey.' as value', $labelColum.' as label'])->get()->toArray();
+        $options = $xhrOptionsUrl
+            ? []
+            : $relationModel->select([$primaryKey.' as value', $labelColum.' as label'])->get()->toArray();
 
         $selected = $this->request->integer($relation) ?: null;
 
@@ -95,6 +99,7 @@ class DataTable
             'name' => $relation,
             'options' => $options,
             'modelValue' => $selected,
+            'xhrOptionsUrl' => $xhrOptionsUrl,
         ];
 
         return $this;

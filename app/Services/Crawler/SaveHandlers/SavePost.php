@@ -4,10 +4,12 @@ namespace App\Services\Crawler\SaveHandlers;
 
 use App\Models\Post;
 use App\Models\Tag;
+use App\Services\Crawler\AiGenerate;
 use App\Services\Crawler\FilterHandlers\FilterPost;
 use App\Services\Crawler\ImageConfig;
 use App\Services\Crawler\ImageDownload;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class SavePost extends SaveAbstract
@@ -21,7 +23,13 @@ class SavePost extends SaveAbstract
 
     public function save(array $data, string $url, array $requestOptions = []): bool|Model
     {
-        if (! isset($data['title']) || (new FilterPost)->filter(['link' => $url])) {
+        if (
+            ! isset($data['title'])
+            || ! isset($data['thumb'])
+            || ! $data['thumb']
+            || ! $data['content']
+            || (new FilterPost)->filter(['link' => $url])
+        ) {
             return false;
         }
 
@@ -29,7 +37,10 @@ class SavePost extends SaveAbstract
 
         // thumb
         if (array_key_exists('thumb', $data) && $data['thumb']) {
-            $data['thumb'] = $downloadHandler->download($data['thumb'])->public_path;
+            $downloadRes = $downloadHandler->download($data['thumb']);
+            if (! $data['thumb'] = $downloadRes->public_path) {
+                Log::error('Download Image Failed: '.$downloadRes->error);
+            }
         }
 
         $data['content'] = $downloadHandler->downloadFromHtml($data['content'], attr: $this->imgAttr);
@@ -43,13 +54,22 @@ class SavePost extends SaveAbstract
             $post->created_at = $data['created_at'];
         }
 
+        if (env('AI_REVISE_POST')) {
+            $post = new AiGenerate($post)->generate();
+            if (! $post) {
+                return false;
+            }
+        }
+
         try {
             $post->saveOrFail();
         } catch (Throwable $exception) {
-            dump($exception->getMessage());
+            Log::error('Save Post Failed: '.$exception->getMessage());
 
             return false;
         }
+
+        $post->categories()->sync($data['category_id']);
 
         if (isset($data['tags'])) {
             $exists = Tag::whereIn('name', $data['tags'])->get();

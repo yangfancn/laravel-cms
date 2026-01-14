@@ -2,7 +2,7 @@
   <q-form @submit.prevent="submitForm">
     <q-linear-progress v-if="form.progress" :value="form.progress.percentage"></q-linear-progress>
     <div class="content">
-      <div class="row q-gutter-y-sm">
+      <div class="row q-gutter-y-sm q-col-gutter-x-md">
         <div v-for="(item, key) in fields" :class="'col-' + item.cols" :key="`${item.field}-${key}`">
           <Field
             :field="item.field"
@@ -13,9 +13,11 @@
           ></Field>
         </div>
         <slot name="submit">
-          <!-- prevent scroll after press enter -->
-          <button type="submit" :disabled="form.processing" hidden></button>
-          <q-btn @click="submitForm" :disable="form.processing">Submit</q-btn>
+          <div class="col-12">
+            <!-- prevent scroll after press enter -->
+            <button type="submit" :disabled="form.processing" hidden></button>
+            <q-btn @click="submitForm" :disable="form.processing">Submit</q-btn>
+          </div>
         </slot>
       </div>
     </div>
@@ -67,7 +69,8 @@ function submitForm() {
       return
     }
   }
-
+  // console.log(form.data())
+  // return
   form.submit({
     // onFinish: () => form.reset("password"),
     onError: async (errors: FormErrors) => {

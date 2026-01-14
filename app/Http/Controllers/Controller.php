@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Facades\InertiaMessage;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 abstract class Controller extends BaseController
 {
@@ -41,24 +43,28 @@ abstract class Controller extends BaseController
      */
     public function selectOptionsLoad(Model $model, string $labelField = 'name', string $valueField = 'id'): JsonResponse
     {
-        $original = clone $model;
         $request = request();
         $page = $request->integer('page');
         $pageSize = $request->integer('pageSize');
+
         if ($pageSize > 50) {
             $pageSize = 50;
         }
         $fields = ["$labelField as label", "$valueField as value"];
 
-        if ($search = $request->string('search')) {
-            $model = $model->where($labelField, 'like', "%$search%");
-        }
-        if ($require_id = $request->get('require')) {
-            $model = $model->orWhereIn($valueField, is_array($require_id) ? $require_id : [$require_id]);
-        }
-        $data = $model->offset(($page - 1) * $pageSize)
+        $data = $model
+            ->when($search = $request->string('search'), fn($builder) => $builder->where($labelField, 'like', "%$search%"))
+            ->offset(($page - 1) * $pageSize)
             ->limit($pageSize)
             ->get($fields);
+
+        if ($require = $request->get('require')) {
+            $data = $model
+            ->newQuery()
+            ->whereIn($valueField, is_array($require) ? $require : [$require])
+            ->get($fields)
+            ->concat($data);
+        }
 
         return new JsonResponse([
             'options' => $data->all(),

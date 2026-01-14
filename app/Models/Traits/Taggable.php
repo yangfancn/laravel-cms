@@ -16,7 +16,7 @@ trait Taggable
 
     public function setTagsAttribute(?array $tags): void
     {
-        $this->tagsPayload = $tags;
+        $this->tagsPayload = array_map(fn (int|string $item) => is_int($item) ? $item : Tag::firstOrCreate(['name' => $item]), $tags);
     }
 
     public function tags(): MorphToMany

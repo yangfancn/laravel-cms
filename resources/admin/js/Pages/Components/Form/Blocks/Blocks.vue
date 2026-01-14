@@ -28,6 +28,8 @@
           :fields="fields"
           :reorder="reorder"
           @delete="deleteBlock(Number(key))"
+          @update:modelValue="(val) => updateItem(Number(key), val)"
+          :error-message="getError(`${expandName}.${key}`)"
         ></Block>
       </VueDraggable>
     </q-card-section>
@@ -127,5 +129,11 @@ const sortedUpdate = () => {
 
 const indexChange = (evt: SortableEvent) => {
   sortError(props.expandName, evt.newIndex!, evt.oldIndex!)
+}
+
+const updateItem = (index: number, value: Record<string, unknown>) => {
+  const copy = [...(reactiveData.value || [])]
+  copy[index] = value
+  reactiveData.value = copy
 }
 </script>

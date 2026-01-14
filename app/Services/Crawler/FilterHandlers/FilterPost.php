@@ -8,6 +8,7 @@ class FilterPost extends FilterAbstract
 {
     public function filter(array $data): bool
     {
-        return ! $data['link'] || DB::table('posts')->where('original_url', $data['link'])->exists();
+        return ! $data['link']
+            || DB::table('posts')->where('original_url', $data['link'])->exists();
     }
 }

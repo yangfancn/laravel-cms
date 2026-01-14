@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Site;
 use App\Models\Traits\Metable;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,8 @@ class Seo
 
     public function __construct()
     {
-        $this->site = View::shared('site', fn () => Site::first());
+        $this->site = View::shared('site') ?? Site::first();
+        View::share('active_category', null);
     }
 
     /**
@@ -71,6 +73,13 @@ class Seo
         return $this;
     }
 
+    public function activeCategory(string|Category $category): self
+    {
+        View::share('active_category', is_string($category) ? $category : $category->directory);
+
+        return $this;
+    }
+
     /**
      * Set noindex meta.
      */
@@ -91,10 +100,12 @@ class Seo
      */
     public function generate(): string
     {
-        return view('home::seo', [
+        View::share([
             'seo' => $this->data,
             'with_site_name' => $this->with_site_name,
             'site' => $this->site,
-        ])->render();
+        ]);
+
+        return view('home::seo')->render();
     }
 }

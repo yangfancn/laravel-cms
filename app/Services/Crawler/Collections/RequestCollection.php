@@ -14,9 +14,11 @@ class RequestCollection
     /**
      * Add an item to the collection.
      */
-    public function add(Request $item): void
+    public function add(Request $item): self
     {
         $this->list[] = $item;
+
+        return $this;
     }
 
     /**
