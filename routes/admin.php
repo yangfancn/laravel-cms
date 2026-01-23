@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -37,6 +38,7 @@ Route::resources([
 Route::delete('comments', [CommentController::class, 'batchDestroy'])->name('comments.batchDestroy');
 Route::put('comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
 Route::resource('comments', CommentController::class)->except(['show', 'create', 'store']);
+Route::resource('activity_log', ActivityLogController::class)->only(['index']);
 
 // sites 只能对第一条数据更新,不能新增/删除
 // Route::get('/site', [SiteController::class, 'edit'])->name('sites.edit');

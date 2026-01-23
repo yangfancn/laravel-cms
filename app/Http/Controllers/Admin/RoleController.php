@@ -67,10 +67,11 @@ class RoleController extends Controller
 
     public function edit(Role $role): Response
     {
-        $data = $role->setVisible(['name'])->toArray();
-        $data['permissions'] = $role->permissions->pluck('id')->values()->all();
-
-        return RoleForm::render(route('admin.roles.update', $role), 'Edite Role', 'PUT', $data);
+        return RoleForm::render(
+            route('admin.roles.update', $role),
+            'Edite Role',
+            'PUT',
+            $role);
     }
 
     public function update(RoleRequest $request, Role $role): RedirectResponse

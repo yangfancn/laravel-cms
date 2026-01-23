@@ -14,7 +14,12 @@ use App\Services\Form\Elements\Traits\UseChips;
  */
 class FilePicker extends Element
 {
-    use Clearable, HasAffixes, Multiple, Styles, UploadFiles, UseChips;
+    use Clearable;
+    use HasAffixes;
+    use Multiple;
+    use Styles;
+    use UploadFiles;
+    use UseChips;
 
     protected string $field = 'filePicker';
 

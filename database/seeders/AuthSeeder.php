@@ -197,10 +197,20 @@ class AuthSeeder extends Seeder
                     'name' => 'vote',
                     'guard_name' => 'web',
                 ],
+                [
+                    'name' => 'activity_log viewAny',
+                    'guard_name' => 'web',
+                    'admin_menu' => [
+                        'label' => 'activity_log',
+                        'route' => 'admin.activity_log.index',
+                        'icon' => 'view_timeline',
+                        'icon_color' => '#179688',
+                    ],
+                ]
             ];
 
             foreach ($permissions as $permission) {
-                $this->createPermission($permission);
+                self::createPermission($permission);
             }
 
             $commentRole = Role::create([
@@ -217,7 +227,7 @@ class AuthSeeder extends Seeder
         });
     }
 
-    protected function createPermission(array $data, ?AdminMenu $parent = null): void
+    public static function createPermission(array $data, ?AdminMenu $parent = null): void
     {
         $save_data = $data;
 
@@ -237,7 +247,7 @@ class AuthSeeder extends Seeder
 
         if (array_key_exists('children', $data) && $data['children']) {
             foreach ($data['children'] as $item) {
-                $this->createPermission($item, $menu ?? null);
+                self::createPermission($item, $menu ?? null);
             }
         }
     }

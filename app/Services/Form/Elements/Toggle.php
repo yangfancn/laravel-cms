@@ -12,7 +12,10 @@ use App\Services\Form\Elements\Traits\LeftLabel;
  */
 class Toggle extends Element
 {
-    use CanCheckedStyles, CheckedIcon, KeepColor, LeftLabel;
+    use CanCheckedStyles;
+    use CheckedIcon;
+    use KeepColor;
+    use LeftLabel;
 
     protected string $field = 'toggle';
 

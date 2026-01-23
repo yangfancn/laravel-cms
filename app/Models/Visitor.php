@@ -7,6 +7,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
 
 class Visitor extends Model
@@ -57,6 +58,11 @@ class Visitor extends Model
             ->orderByDesc('total_visits');
     }
 
+    public function visitable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public static function booted(): void
     {
         static::saving(function (Visitor $visitor) {
@@ -66,7 +72,6 @@ class Visitor extends Model
         });
 
         static::created(function (Visitor $visitor) {
-
             if (
                 $visitor->visitable_type
                 && $visitor->visitable_id

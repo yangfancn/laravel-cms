@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->text('content');
-            $table->json('images')->nullable();
             $table->morphs('commentable');
             $table->boolean('is_approved')->default(false);
             $table->softDeletes();
@@ -24,9 +23,6 @@ return new class extends Migration
 
             // index
             $table->index([\Illuminate\Support\Facades\DB::raw('content(191)')], 'content_prefix_index');
-            $table->index(['commentable_id', 'commentable_type']);
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

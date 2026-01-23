@@ -2,30 +2,29 @@
 
 namespace App\Forms\Admin;
 
+use App\Forms\Admin\Traits\HydrateMetaTrait;
 use App\Forms\Admin\Traits\MetaFormTrait;
-use App\Models\Site;
 use App\Services\Form\Elements\Input;
 use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Inertia\Response;
 
 class SiteForm extends FormBuilder
 {
-    use MetaFormTrait;
+    use MetaFormTrait, HydrateMetaTrait;
 
-    public static function render(
-        string $action,
-        ?string $title = null,
-        string $method = 'POST',
-        array|Model|Site|null $data = null
-    ): Response {
-        $form = new Form($action, $method, $data);
-
+    protected static function schema(Form $form): void
+    {
         $form
             ->add(Input::make('name', 'Name'))
             ->add(self::metaBlock());
+    }
 
-        return $form->render($title);
+    protected static function hydrate(null|Model $data): array
+    {
+        return [
+            ...$data->toArray(),
+            ...self::hydrateMeta($data)
+        ];
     }
 }

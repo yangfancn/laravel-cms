@@ -3,32 +3,33 @@
 namespace App\Forms\Admin;
 
 use App\Models\Role;
+use App\Models\User;
 use App\Services\Form\Elements\Input;
 use App\Services\Form\Elements\Select;
 use App\Services\Form\Elements\Uploader;
 use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Inertia\Response;
 
 class UserForm extends FormBuilder
 {
-    public static function render(
-        string $action,
-        ?string $title = null,
-        string $method = 'POST',
-        array|Model|null $data = null
-    ): Response {
-        $form = new Form($action, $method, $data);
-
+    protected static function schema(Form $form): void
+    {
         $roles = Role::pluck('id', 'name')->toArray();
         $form
             ->add(Input::make('email', 'Email')->email()->autofocus())
             ->add(Input::make('name', 'Name'))
-            ->add(Uploader::make('photo', 'Photo')->cropper(1))
+            ->add(Uploader::make('avatar', 'Avatar')->cropper(1))
             ->add(Input::make('password', 'Password')->password())
             ->add(Select::make('roles', 'Roles')->options($roles)->useChips()->multiple());
+    }
 
-        return $form->render($title);
+    protected static function hydrate(Model|User $model): array
+    {
+        return [
+            ...$model->only(['email', 'name']),
+            'roles' => $model->roles()->pluck('id')->all(),
+            'avatar' => $model->getFirstMedia('avatar')?->getUrl(),
+        ];
     }
 }

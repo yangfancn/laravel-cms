@@ -7,10 +7,33 @@ use Inertia\Response;
 
 abstract class FormBuilder
 {
-    abstract public static function render(
+    final public static function render(
         string $action,
         ?string $title = null,
         string $method = 'POST',
         null|Model|array $data = null
-    ): Response;
+    ): Response {
+        $form = new Form($action, $method, static::resolveData($data));
+
+        static::schema($form);
+
+        return $form->render($title);
+    }
+
+    protected static function resolveData(null|Model|array $data = null): array
+    {
+
+        if ($data instanceof Model) {
+            return static::hydrate($data);
+        }
+
+        return $data ?? [];
+    }
+
+    protected static function hydrate(Model $model): array
+    {
+        return $model->toArray();
+    }
+
+    abstract protected static function schema(Form $form): void;
 }

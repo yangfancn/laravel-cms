@@ -37,7 +37,7 @@ export default defineConfig({
         }
       }
     }),
-    svgLoader(),
+    ...(isAdmin ? [svgLoader()] : []),
     quasar({}),
     tailwindcss(),
     ...(isAnalyze ? [visualizer()] : []),

@@ -3,7 +3,6 @@
 namespace App\Forms\Admin;
 
 use App\Models\AdminMenu;
-use App\Models\Permission;
 use App\Services\Form\Block;
 use App\Services\Form\Elements\ColorPicker;
 use App\Services\Form\Elements\Input;
@@ -11,18 +10,11 @@ use App\Services\Form\Elements\Select;
 use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Inertia\Response;
 
 class PermissionForm extends FormBuilder
 {
-    public static function render(
-        string $action,
-        ?string $title = null,
-        string $method = 'POST',
-        Model|Permission|array|null $data = null
-    ): Response {
-        $form = new Form($action, $method, $data);
-
+    protected static function schema(Form $form): void
+    {
         $parents = AdminMenu::pluck('id', 'label')->toArray();
 
         $form->add(Input::make('name', 'Name'))
@@ -40,7 +32,13 @@ class PermissionForm extends FormBuilder
                     ->add(ColorPicker::make('icon_color', 'MDI icon color'))
                     ->add(Select::make('parent_id', 'Parent')->options($parents)->clearable())
             );
+    }
 
-        return $form->render($title);
+    protected static function resolveData(null|Model|array $data = null): array
+    {
+        return [
+            ...$data->toArray(),
+            'admin_menu' => $data->adminMenu?->toArray()
+        ];
     }
 }

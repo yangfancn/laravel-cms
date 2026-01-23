@@ -11,14 +11,27 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Query\Builder;
 use Kalnoy\Nestedset\NodeTrait;
 use Kalnoy\Nestedset\QueryBuilder;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Comment extends Model
 {
-    use HasFactory, NodeTrait, Votable;
+    use HasFactory;
+    use LogsActivity;
+    use NodeTrait;
+    use Votable;
 
     protected $fillable = ['user_id', 'content', 'images', 'commentable_id', 'commentable_type', 'is_approved'];
 
     protected $appends = ['approved'];
+
+    protected static $recordEvents = ['deleted'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable();
+    }
 
     public function scopeIsApproved(Builder|QueryBuilder $builder): void
     {

@@ -13,7 +13,9 @@ use Illuminate\Support\Collection;
  */
 class DatetimePicker extends Element
 {
-    use HasAffixes, Styles, UseInput;
+    use HasAffixes;
+    use Styles;
+    use UseInput;
 
     protected string $field = 'datetime';
 

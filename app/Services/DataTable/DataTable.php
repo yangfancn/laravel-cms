@@ -92,7 +92,7 @@ class DataTable
         $selected = $this->request->integer($relation) ?: null;
 
         if ($selected) {
-            $this->model = $this->model->whereHas($relation, fn (Builder $query) => $query->where($relationModel->getKeyName(), $selected));
+            $this->model = $this->model->whereHas($relation, fn (Builder $query) => $query->where($relationModel->getTable().'.'.$relationModel->getKeyName(), $selected));
         }
 
         $this->selectOptions[] = [

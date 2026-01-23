@@ -8,7 +8,8 @@
   "files.exclude": {
     "**/.git/**": true,
     "**/node_modules/**": true,
-    "**/vendor/**": true
+    "**/vendor/**": true,
+    "public/build/**": true
   },
 
   // === Formatting ===
@@ -36,40 +37,5 @@
     ["class\\s*=\\s*\"([^\"]*)", 1],
     ["class:\\s*'([^']*)", 1],
     ["@class\\(([^)]*)\\)", 1]
-  ],
-
-  // === Language default formatters ===
-  "[css,scss,sass]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[blade]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[php]": {
-    "editor.defaultFormatter": "open-southeners.laravel-pint",
-    "editor.formatOnSave": true
-  },
-
-  // === Laravel Pint ===
-  "laravel-pint.enable": true,
-
-  "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-
-  // === Emmet ===
-  "emmet.includeLanguages": { "blade": "html" },
-  "auto-rename-tag.activationOnLanguage": ["html", "vue", "blade", "xml"]
+  ]
 }

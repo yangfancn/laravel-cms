@@ -12,6 +12,7 @@ use App\Services\DataTable\DataTable;
 use App\Services\DataTable\TextColumn;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class PostController extends Controller
@@ -28,7 +29,7 @@ class PostController extends Controller
         }
 
         $table = new DataTable(
-            $post->with(['user:id,name', 'category:id,name']),
+            $post->with(['user:id,name']),
             'Posts List',
             'title'
         );
@@ -36,7 +37,6 @@ class PostController extends Controller
         $table
             ->addColumn(new TextColumn('id', 'ID', sortable: true))
             ->addColumn(new TextColumn('title', 'Title'))
-            ->addColumn(new TextColumn('category.name', 'Category'))
             ->addColumn(new TextColumn('user.name', 'User'))
             ->addColumn(new TextColumn('created_at', 'Create Time', sortable: true))
             ->createAction('admin.posts.create')
@@ -45,7 +45,7 @@ class PostController extends Controller
                 (new Button('', 'mdi-pencil', 'admin.posts.edit', 'id'))
                     ->flat()
             )
-            ->addSelectByRelation('category')
+            ->addSelectByRelation('categories')
             ->addRowAction(
                 (new Button('', 'mdi-delete', 'admin.posts.destroy', 'id'))
                     ->color('negative')
@@ -64,7 +64,11 @@ class PostController extends Controller
 
     public function store(PostRequest $request, Post $post): RedirectResponse
     {
-        $post->fill($request->all($post->getFillable()))->save();
+        DB::transaction(function () use ($request, $post) {
+            $post->fill($request->all($post->getFillable()))->save();
+            $post->syncUploadedMedia($request->string('thumb')->value(), 'thumb');
+            $post->moveImagesToMedia('content');
+        });
 
         InertiaMessage::success(__('messages.createPostSuccess'));
 
@@ -83,7 +87,11 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post): RedirectResponse
     {
-        $post->fill($request->all($post->getFillable()))->save();
+        DB::transaction(function () use ($request, $post) {
+            $post->fill($request->all($post->getFillable()))->save();
+            $post->syncUploadedMedia($request->string('thumb')->value(), 'thumb');
+            $post->moveImagesToMedia('content');
+        });
 
         InertiaMessage::success(__('messages.updatePostSuccess'));
 

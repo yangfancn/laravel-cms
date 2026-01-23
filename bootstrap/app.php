@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Spatie\ResponseCache\Middlewares\CacheResponse;
+use Spatie\ResponseCache\Middlewares\DoNotCacheResponse;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -50,6 +52,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'rolesOrPermissions' => RoleOrPermissionMiddleware::class,
+            'cacheResponse' => CacheResponse::class,
+            'doNotCacheResponse' => DoNotCacheResponse::class,
         ]);
 
         // admin middlewares
@@ -67,6 +71,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\Home\HandleInertiaRequests::class,
             TrackVisitor::class,
             \App\Http\Middleware\Home\ViteBuildDir::class,
+            CommonData::class,
+        ]);
+
+        $middleware->priority([
+            CacheResponse::class,
             CommonData::class,
         ]);
 
@@ -94,7 +103,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $status = $response->getStatusCode();
 
             if (app()->isProduction() && in_array($status, [400, 401, 403, 404, 500])) {
-                $message = __('errors.'.$status) ?: '';
+                $message = __("errors.$status") ?: '';
 
                 if ($request->hasHeader('X-inertia')) {
                     InertiaMessage::error($message, position: Position::CENTER);

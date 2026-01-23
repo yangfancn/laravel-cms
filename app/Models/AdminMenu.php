@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class AdminMenu extends Model
 {
-    use HasFactory, NodeTrait;
+    use HasFactory;
+    use LogsActivity;
+    use NodeTrait;
 
     protected $fillable = ['label', 'route', 'route_params', 'icon', 'icon_color'];
 
@@ -20,6 +24,12 @@ class AdminMenu extends Model
     protected $casts = [
         'route_params' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable();
+    }
 
     public function permission(): BelongsTo
     {

@@ -94,10 +94,10 @@ class Crawler
         $this->removeUnlessAttributes = $removeUnlessAttributes === false
             ? false
             : (
-            is_array($removeUnlessAttributes)
-            ? array_merge($this->removeUnlessAttributes, $removeUnlessAttributes)
-            : $this->removeUnlessAttributes
-        );
+                is_array($removeUnlessAttributes)
+                ? array_merge($this->removeUnlessAttributes, $removeUnlessAttributes)
+                : $this->removeUnlessAttributes
+            );
     }
 
     public function __get(string $name): mixed
@@ -241,10 +241,10 @@ class Crawler
             $data[$rule->name] = match ($rule->attribute) {
                 'text' => $node->text(),
                 'html' => (function (DomCrawler $ele) {
-                        $this->removeUnlessAttributes && $this->removeAttrsUnless($ele);
+                    $this->removeUnlessAttributes && $this->removeAttrsUnless($ele);
 
-                        return html_entity_decode($this->compressHtml ? self::compressHtml($ele->html()) : $ele->html());
-                    })($node),
+                    return html_entity_decode($this->compressHtml ? self::compressHtml($ele->html()) : $ele->html());
+                })($node),
                 default => $node->attr($rule->attribute),
             };
 

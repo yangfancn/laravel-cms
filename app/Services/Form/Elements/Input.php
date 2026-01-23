@@ -13,7 +13,10 @@ use App\Services\Form\Elements\Traits\Styles;
  */
 class Input extends Element
 {
-    use Clearable, Counter, HasAffixes, Styles;
+    use Clearable;
+    use Counter;
+    use HasAffixes;
+    use Styles;
 
     protected string $field = 'input';
 

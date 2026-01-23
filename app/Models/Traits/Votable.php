@@ -65,7 +65,7 @@ trait Votable
 
     public function hasBeenVotedBy(?User $user = null): bool
     {
-        $user = $user ?? \Auth::user();
+        $user ??= \Auth::user();
 
         return ($this->relationLoaded('votes') ? $this->votes : $this->votes())->where('user_id', $user->id)->exists();
     }

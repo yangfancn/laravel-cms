@@ -1,6 +1,7 @@
 import.meta.glob(["../images/**"])
 import axios, { AxiosError, type AxiosRequestConfig } from "axios"
 import { themeChange } from "theme-change"
+import LazyLoad from "vanilla-lazyload"
 
 axios.defaults.timeout = 10000
 axios.interceptors.response.use(
@@ -9,6 +10,9 @@ axios.interceptors.response.use(
     return response
   },
   (error: AxiosError<{ message?: string }>) => {
+    if (error.status === 401) {
+      window.location.href = "/login"
+    }
     const errMsgInRes = error.response?.data?.message ?? null
     if (errMsgInRes) {
       //@todo global notify
@@ -68,8 +72,12 @@ const shiftPool = (config: AxiosRequestConfig) => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  //theme change
   themeChange(false)
-
+  //pictures lazyload
+  new LazyLoad({
+    class_loading: "lazy-loading"
+  })
   //copy mobile menu
   document.querySelector(".menu.mobile")!.innerHTML = document.querySelector(".menu.desktop")!.innerHTML
 })

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\AuthSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class Test extends Command
 {
@@ -26,6 +26,6 @@ class Test extends Command
      */
     public function handle()
     {
-        dd(Storage::disk('local'));
+
     }
 }

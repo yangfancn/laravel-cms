@@ -17,4 +17,5 @@ return [
     'site' => 'SEO Settings',
     'comments' => 'Comments',
     'tags' => 'Tags',
+    'activity_log' => 'Activity Log'
 ];

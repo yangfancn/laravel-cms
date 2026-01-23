@@ -13,8 +13,14 @@ class IndexController extends Controller
     {
         Seo::model();
 
-        $posts = Post::orderBy('created_at', 'desc')->limit(20)->get();
+        $trending = Post::trending(7, 9, ['categories.slug']);
 
-        return view('home::index', compact('posts'));
+        $latest = Post::query()
+            ->with(['slug', 'media'])
+            ->latest('created_at')
+            ->limit(26)
+            ->get(['id', 'title', 'summary', 'created_at']);
+
+        return view('home::index', compact('latest', 'trending'));
     }
 }

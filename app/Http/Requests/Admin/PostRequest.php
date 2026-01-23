@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use App\Http\Requests\Traits\MetaRequestTrait;
 use App\Rules\FileExist;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
 {
@@ -27,12 +28,18 @@ class PostRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:3|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
             'user_id' => 'required|exists:users,id',
             'thumb' => ['nullable', new FileExist],
             'summary' => 'nullable|max:255',
             'created_at' => 'nullable|date',
             'content' => 'required|string',
+            'slug' => [
+                'nullable',
+                Rule::unique('slugs', 'name')
+                    ->ignore($this->route('post')?->slug?->id),
+            ],
             ...$this->meta(),
         ];
     }

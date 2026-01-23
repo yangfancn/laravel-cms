@@ -13,7 +13,11 @@ use App\Services\Form\Elements\Traits\Options;
  */
 class Radio extends Element
 {
-    use CanCheckedStyles, CheckedIcon, KeepColor, LeftLabel, Options;
+    use CanCheckedStyles;
+    use CheckedIcon;
+    use KeepColor;
+    use LeftLabel;
+    use Options;
 
     protected string $field = 'radio';
 }

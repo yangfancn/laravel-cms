@@ -23,9 +23,8 @@ class TagRequest extends FormRequest
             ],
             'slug' => [
                 'nullable',
-                'between:1,191',
-                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
-                Rule::unique('tags')->ignore($this->route('tag')),
+                Rule::unique('slugs', 'name')
+                    ->ignore($this->route('tag')?->slug?->id),
             ],
         ];
     }

@@ -13,15 +13,11 @@ class FileController extends Controller
     {
         $file = $request->file('file');
 
-        $disk = config('upload.disk', 'public');
-        $baseDir = trim(config('upload.dir', 'uploads'), '/');
-        $dir = $baseDir.'/'.date('Ymd');
-
-        $path = $file->storePublicly($dir, $disk);
+        $path = $file->storePublicly('/', 'temp');
 
         return response()->json([
             'message' => __('messages.fileUploadSuccess'),
-            'url' => Storage::disk($disk)->url($path),
+            'url' => Storage::disk('temp')->url($path),
             'path' => $path,
         ]);
     }

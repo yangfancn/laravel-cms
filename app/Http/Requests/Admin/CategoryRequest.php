@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Requests\Traits\MetaRequestTrait;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class CategoryRequest extends FormRequest
 {
@@ -28,9 +30,8 @@ class CategoryRequest extends FormRequest
             'name' => 'required|string',
             'parent_id' => 'nullable|integer|exists:categories,id',
             'directory' => 'required|string',
-            'route' => 'nullable|regex:/[a-zA-Z]+(\.[a-zA-Z]+)?/',
             'show' => 'required|boolean',
-            'type' => 'required|in:0,1',
+            'type' => ['required', new Enum(CategoryType::class)],
             'rank' => 'integer',
             ...$this->meta(),
         ];

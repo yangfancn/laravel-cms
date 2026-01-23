@@ -13,7 +13,8 @@ class PostListItem extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public Post $post
+        public Post $post,
+        public ?string $style = null
     ) {}
 
     /**

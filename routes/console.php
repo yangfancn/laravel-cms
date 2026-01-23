@@ -6,3 +6,5 @@ Schedule::command('auth:clear-resets')->hourly();
 Schedule::command('geoip:update')->monthly();
 // 清理数据库中超时的批处理任务
 Schedule::command('queue:prune-batches --hours=48')->daily();
+// 清理临时上传的文件
+Schedule::command('app:cleanup-temp-disk')->daily();

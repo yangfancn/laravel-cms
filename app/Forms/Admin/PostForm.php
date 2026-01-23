@@ -2,7 +2,12 @@
 
 namespace App\Forms\Admin;
 
+use App\Enums\CategoryType;
+use App\Forms\Admin\Traits\HydrateMetaTrait;
+use App\Forms\Admin\Traits\HydrateSlugTrait;
+use App\Forms\Admin\Traits\HydrateTagTrait;
 use App\Forms\Admin\Traits\MetaFormTrait;
+use App\Forms\Admin\Traits\SlugFormTrait;
 use App\Forms\Admin\Traits\TagFormTrait;
 use App\Models\Category;
 use App\Models\Post;
@@ -15,22 +20,24 @@ use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Response;
 
 class PostForm extends FormBuilder
 {
-    use MetaFormTrait, TagFormTrait;
+    use HydrateMetaTrait, MetaFormTrait;
+    use HydrateSlugTrait, SlugFormTrait;
+    use HydrateTagTrait, TagFormTrait;
 
-    public static function render(
-        string $action,
-        ?string $title = null,
-        string $method = 'POST',
-        Model|Post|array|null $data = null
-    ): Response {
-        $form = new Form($action, $method, $data);
-        $categories = Category::where('type', 1)->pluck('id', 'name')->all();
+    protected static function schema(Form $form): void
+    {
+        $categories = Category::where('type', CategoryType::Posts->value)->pluck('id', 'name')->all();
+
         $form->add(Input::make('title', 'Title'))
-            ->add(Select::make('category_id', 'Category')->options($categories));
+            ->add(
+                Select::make('categories', 'Category')
+                    ->options($categories)
+                    ->multiple()
+                    ->useChips()
+            );
 
         if (! Auth::user()->hasPermissionTo('posts own resource')) {
             $form->add(
@@ -40,13 +47,24 @@ class PostForm extends FormBuilder
             );
         }
 
-        $form->add(Uploader::make('thumb', 'Thumb')->cropper(4 / 3))
+        $form->add(self::slugInput())
+            ->add(Uploader::make('thumb', 'Thumb')->cropper(4 / 3))
             ->add(Input::make('summary', 'Summary')->textarea())
             ->add(self::tagSelect())
             ->add(DatetimePicker::make('created_at', 'Publish Time'))
             ->add(Editor::make('content', 'Content')->counter()->minHeight('20rem'))
             ->add(self::metaBlock());
+    }
 
-        return $form->render($title);
+    protected static function hydrate(Model|Post $model): array
+    {
+        return [
+            ...$model->toArray(),
+            ...static::hydrateTag($model),
+            ...static::hydrateMeta($model),
+            ...static::hydrateSlug($model),
+            'thumb' => $model->getFirstMedia('thumb')?->getUrl(), //多文件用 ->getMedia('filedname')->map->getUrl()
+            'categories' => $model->categories()->pluck('categories.id')->all(),
+        ];
     }
 }

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import "tailwindcss";
 
 @plugin "daisyui" {
@@ -11,8 +12,44 @@
 @source "../views";
 @source "../../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/";
 
+:root {
+  --default-transition-duration: 300ms;
+  --hero-blue: rgba(59, 130, 246, 0.16);
+  --hero-amber: rgba(249, 115, 22, 0.18);
+  --hero-green: rgba(16, 185, 129, 0.18);
+}
+
+[data-theme="dark"] {
+  --hero-blue: rgba(96, 165, 250, 0.2);
+  --hero-amber: rgba(251, 146, 60, 0.2);
+  --hero-green: rgba(52, 211, 153, 0.2);
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.font-display {
+  font-family: "Newsreader", serif;
+  font-optical-sizing: auto;
+}
+
 .container {
-  max-width: 1024px;
+  max-width: 1240px;
+
+  @media (max-width: 1240px) {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+}
+
+.desktop.menu li > a {
+  @apply font-semibold;
+}
+
+.desktop.menu li > a:hover {
+  @apply text-primary/80 bg-transparent shadow-none;
 }
 
 .drawer-side > .menu {
@@ -35,4 +72,34 @@
 
 .hover\:pl-4 {
   transition: padding-left 0.2s ease-in-out;
+}
+
+.hero-pattern {
+  background-image:
+    radial-gradient(circle at 12% 20%, var(--hero-blue), transparent 45%),
+    radial-gradient(circle at 85% 10%, var(--hero-amber), transparent 40%),
+    radial-gradient(circle at 80% 80%, var(--hero-green), transparent 45%);
+  pointer-events: none;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-up {
+  animation: fade-up 700ms ease-out both;
+  animation-delay: var(--delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up {
+    animation: none;
+  }
 }

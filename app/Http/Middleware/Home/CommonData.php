@@ -19,7 +19,7 @@ class CommonData
     public function handle(Request $request, Closure $next): Response
     {
         View::share('site', Site::first());
-        View::share('nav', Category::get()->toTree());
+        View::share('nav', Category::with('slug')->get()->toTree());
 
         return $next($request);
     }

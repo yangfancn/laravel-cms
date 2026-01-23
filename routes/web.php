@@ -5,12 +5,16 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Home\CategoryController;
 use App\Http\Controllers\Home\IndexController;
 use App\Http\Controllers\Home\PostController;
+use App\Http\Controllers\Home\SitemapController;
+use App\Http\Controllers\Home\SlugController;
 use App\Http\Middleware\Admin\ViteBuildDir;
-use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\UserController as AuthUserController;
 
 // sessions
 Route::middleware(ViteBuildDir::class)->group(function () {
+    Route::get('sign-up', [AuthUserController::class, 'create'])->name('sign-up');
+    Route::post('sign-up', [AuthUserController::class, 'store'])->name('sign-up')->middleware('throttle:sign-up');
     Route::get('login', [SessionController::class, 'create'])->name('login');
     Route::post('login', [SessionController::class, 'store'])->name('login');
     Route::delete('logout', [SessionController::class, 'destroy'])->name('logout');
@@ -28,16 +32,13 @@ Route::middleware(ViteBuildDir::class)->group(function () {
     });
 });
 
-Route::get('/', [IndexController::class, 'index'])->name('home');
+Route::get('/', [IndexController::class, 'index'])
+    ->name('home')
+    ->middleware('cacheResponse:300');
 
-Route::get('/search', [PostController::class, 'index']);
+Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 
-Route::get('{category:full_path}', [CategoryController::class, 'show'])
-    ->where('category', '([a-zA-Z0-9-]+)*[a-zA-Z0-9-]+')
-    ->name('categories.show');
-
-Route::get('/post/{post}', fn (Post $post) => redirect($post->uri, 301));
-
-Route::get('/{post:slug}.html', [PostController::class, 'show'])
-    ->where(['slug' => '[a-zA-Z]+[0-9]?[a-zA-Z]+'])
-    ->name('posts.show');
+Route::get('{slug:name}', SlugController::class)
+    ->where('slug', '[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]+)*')
+    ->name('slug')
+    ->middleware('cacheResponse:600');

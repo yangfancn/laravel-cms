@@ -5,4 +5,5 @@ return [
     App\Providers\InertiaMessageServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
     Torann\GeoIP\GeoIPServiceProvider::class,
+    App\Providers\SlugServiceProvider::class,
 ];

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('metas', function (Blueprint $table) {
             $table->id();
-            $table->morphs('metable');
+            $table->unsignedBigInteger('metable_id');
+            $table->string('metable_type');
             $table->string('title', 255)->nullable();
             $table->string('keywords', 255)->nullable();
             $table->string('description', 255)->nullable();

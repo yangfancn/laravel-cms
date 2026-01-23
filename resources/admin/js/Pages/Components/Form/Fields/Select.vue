@@ -61,16 +61,14 @@ const xhrLoadOptions = async (clear = false) => {
   }
 
   const mv: any = props.modelValue as unknown
-  const required: (number | string)[] | null =
-    nextPage.value === 1
-      ? Array.isArray(mv)
-        ? mv
-        : mv && typeof mv === "object"
-          ? Object.values(mv)
-          : mv == null
-            ? []
-            : [mv]
-      : null
+  const requiredValues: (number | string)[] = Array.isArray(mv)
+    ? mv
+    : mv && typeof mv === "object"
+      ? Object.values(mv)
+      : mv == null
+        ? []
+        : [mv]
+
   await axios
     .request<{
       options: {
@@ -83,7 +81,7 @@ const xhrLoadOptions = async (clear = false) => {
       params: {
         page: nextPage.value,
         pageSize: 15,
-        require: required,
+        require: nextPage.value === 1 && search.value.trim() === "" ? requiredValues : null,
         search: search.value
       }
     })

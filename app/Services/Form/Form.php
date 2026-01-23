@@ -2,8 +2,8 @@
 
 namespace App\Services\Form;
 
-use App\Models\Traits\Categorizable;
 use App\Models\Traits\Metable;
+use App\Models\Traits\Sluggable;
 use App\Models\Traits\Taggable;
 use App\Services\Form\Elements\Element;
 use Illuminate\Database\Eloquent\Model;
@@ -30,29 +30,8 @@ class Form
     public function __construct(
         public string $action,
         public string $method = 'POST',
-        public null|Model|Collection|array $data = null
+        public array $data = []
     ) {
-        if (! $this->data) {
-            $this->data = collect();
-        }
-
-        if ($data instanceof Model) {
-            // auto load meta relation
-            if (
-                in_array(Metable::class, class_uses(get_class($data)))
-                && ! $this->data->relationLoaded('meta')
-            ) {
-                $this->data->load('meta');
-            }
-            // auto load tags relation
-            if (in_array(Taggable::class, class_uses(get_class($data)))) {
-                $this->data->setRawAttributes($this->data->getAttributes() + ['tags' => $this->data->tags()->pluck('id')->toArray()], true);
-            }
-        }
-
-        if ($data instanceof Model || $this->data instanceof Collection) {
-            $this->data = $this->data->toArray();
-        }
     }
 
     /**

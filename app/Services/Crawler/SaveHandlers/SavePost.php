@@ -3,47 +3,36 @@
 namespace App\Services\Crawler\SaveHandlers;
 
 use App\Models\Post;
-use App\Models\Tag;
 use App\Services\Crawler\AiGenerate;
 use App\Services\Crawler\FilterHandlers\FilterPost;
-use App\Services\Crawler\ImageConfig;
-use App\Services\Crawler\ImageDownload;
+use App\Services\Crawler\MediaDownloader;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\DomCrawler\Crawler;
 use Throwable;
 
 class SavePost extends SaveAbstract
 {
-    public string $imgAttr;
+    /**
+     * @var string[]
+     */
+    protected array $imgSrcAttrs = [];
 
-    public function __construct($imgAttr = 'src')
+    public function __construct(string $imgAttr = 'src')
     {
-        $this->imgAttr = $imgAttr;
+        $this->imgSrcAttrs = explode('|', $imgAttr);
     }
 
     public function save(array $data, string $url, array $requestOptions = []): bool|Model
     {
         if (
             ! isset($data['title'])
-            || ! isset($data['thumb'])
-            || ! $data['thumb']
             || ! $data['content']
             || (new FilterPost)->filter(['link' => $url])
         ) {
             return false;
         }
-
-        $downloadHandler = new ImageDownload(new ImageConfig(requestOptions: $requestOptions));
-
-        // thumb
-        if (array_key_exists('thumb', $data) && $data['thumb']) {
-            $downloadRes = $downloadHandler->download($data['thumb']);
-            if (! $data['thumb'] = $downloadRes->public_path) {
-                Log::error('Download Image Failed: '.$downloadRes->error);
-            }
-        }
-
-        $data['content'] = $downloadHandler->downloadFromHtml($data['content'], attr: $this->imgAttr);
 
         $data['original_url'] = $data['link'];
 
@@ -69,19 +58,48 @@ class SavePost extends SaveAbstract
             return false;
         }
 
+        // media
+        MediaDownloader::setRequestOptions($requestOptions);
+
+        if (isset($data['thumb']) && $data['thumb']) {
+            $post->addMediaFromUrl($data['thumb'])
+                ->toMediaCollection('thumb');
+        }
+
+        $post->moveImagesToMedia('content');
+
         $post->categories()->sync($data['category_id']);
 
         if (isset($data['tags'])) {
-            $exists = Tag::whereIn('name', $data['tags'])->get();
-            $diff = array_diff($data['tags'], $exists->pluck('name')->all());
-            Tag::insertOrIgnore(array_map(function ($name) {
-                return ['name' => $name];
-            }, $diff));
-            $insert_ids = Tag::whereIn('name', $diff)->pluck('id')->all();
-            $tag_ids = array_merge($exists->pluck('id')->all(), $insert_ids);
-            $post->tags()->sync($tag_ids);
+            $post->syncTagsByName($data['tags']);
         }
 
         return true;
+    }
+
+    private function extractImageUrl(Crawler $node, array $attributes): ?string
+    {
+        foreach ($attributes as $attr) {
+            $source = $node->attr($attr);
+            if ($source && ! str_starts_with($source, 'data:image')) {
+                return $source;
+            }
+        }
+
+        return null;
+    }
+
+    private function updateImageNode(Crawler $node, Media $media): void
+    {
+        $imgNode = $node->getNode(0);
+        if ($imgNode instanceof \DOMElement) {
+            $imgNode->setAttribute('src', $media->getPath());
+            $imgNode->setAttribute('data-media', $media->id);
+            foreach ($this->imgSrcAttrs as $attr) {
+                if ($attr !== 'src') {
+                    $imgNode->removeAttribute($attr);
+                }
+            }
+        }
     }
 }

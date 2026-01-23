@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('admin_menus', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('permission_id')->unique();
+            $table->foreignId('permission_id')->constrained('permissions')->cascadeOnDelete();
             $table->string('label');
             $table->string('route')->nullable();
             $table->json('route_params')->nullable();
             $table->string('icon', 50)->nullable();
             $table->string('icon_color', 20)->nullable();
             $table->nestedSet();
-
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
         });
     }
 

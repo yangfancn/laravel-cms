@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\VisitorLogged;
 use App\Jobs\ProcessVisitorLog;
+use App\Models\Slug;
 use Illuminate\Database\Eloquent\Model;
 
 class LogVisitor
@@ -26,6 +27,10 @@ class LogVisitor
 
         if (! $model instanceof Model) {
             $model = null;
+        }
+
+        if ($model instanceof Slug) {
+            $model = $model->sluggable;
         }
 
         ProcessVisitorLog::dispatch(

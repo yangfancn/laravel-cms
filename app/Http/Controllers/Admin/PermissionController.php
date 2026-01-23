@@ -75,7 +75,7 @@ class PermissionController extends Controller
             route('admin.permissions.update', $permission),
             'Create Permission',
             'PUT',
-            $permission->load('adminMenu')
+            $permission
         );
     }
 

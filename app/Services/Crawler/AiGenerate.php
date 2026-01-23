@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class AiGenerate
 {
-    private string $prompt = <<<'PROMPT'
+    private string $contextPrompt = <<<'PROMPT'
 请基于以下原文内容，生成一篇新的英文新闻稿，要求：
 
 【核心写作要求】
@@ -79,7 +79,7 @@ PROMPT;
                     'messages' => [
                         [
                             'role' => 'user',
-                            'content' => $this->prompt.$this->post->content,
+                            'content' => $this->contextPrompt.$this->post->content,
                         ],
                     ],
                     'temperature' => 0.9,
@@ -101,6 +101,8 @@ PROMPT;
             $this->post->summary = $arr['summary'];
             $this->post->content = $arr['content'];
             $this->post->tags = $arr['tags'];
+
+            //generate thumb
 
             return $this->post;
         }

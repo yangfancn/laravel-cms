@@ -16,7 +16,13 @@ use App\Services\Form\Elements\Traits\UseInput;
  */
 class Select extends Element
 {
-    use Clearable, Counter, HasAffixes, Multiple, Styles, UseChips, UseInput;
+    use Clearable;
+    use Counter;
+    use HasAffixes;
+    use Multiple;
+    use Styles;
+    use UseChips;
+    use UseInput;
 
     protected string $field = 'select';
 

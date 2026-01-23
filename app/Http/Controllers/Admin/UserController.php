@@ -16,6 +16,8 @@ use App\Services\DataTable\TextColumn;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class UserController extends Controller
@@ -40,7 +42,7 @@ class UserController extends Controller
 
     public function index(Request $request, User $user): Response
     {
-        if (\Auth::user()->hasPermissionTo('users own resource')) {
+        if (Auth::user()->hasPermissionTo('users own resource')) {
             $user = $user->where('id', \Auth::id());
         }
 
@@ -80,8 +82,11 @@ class UserController extends Controller
 
     public function store(UserRequest $request, User $user): RedirectResponse
     {
-        $user->fill($request->all($user->getFillable()))->save();
-        $user->roles()->sync($request->post('roles'));
+        DB::transaction(function () use ($user, $request) {
+            $user->fill($request->all($user->getFillable()))->save();
+            $user->roles()->sync($request->post('roles'));
+            $user->syncUploadedMedia($request->string('avatar')->value(), 'avatar');
+        });
 
         InertiaMessage::success(__('messages.createUserSuccess'));
 
@@ -90,21 +95,21 @@ class UserController extends Controller
 
     public function edit(User $user): Response
     {
-        $data = $user->setVisible(['name', 'email', 'photo'])->toArray();
-        $data['roles'] = $user->roles->pluck('id')->values()->all();
-
         return UserForm::render(
             route('admin.users.update', $user),
             'Edit User',
             'PUT',
-            $data
+            $user
         );
     }
 
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->fill($request->only($user->getFillable()))->save();
-        $user->roles()->sync($request->post('roles'));
+        DB::transaction(function () use ($request, $user) {
+            $user->fill($request->only($user->getFillable()))->save();
+            $user->roles()->sync($request->post('roles'));
+            $user->syncUploadedMedia($request->string('avatar')->value(), 'avatar');
+        });
 
         InertiaMessage::success(__('messages.updateUserSuccess'));
 

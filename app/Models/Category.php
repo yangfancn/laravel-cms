@@ -3,17 +3,31 @@
 namespace App\Models;
 
 use App\Models\Traits\Metable;
+use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Kalnoy\Nestedset\NodeTrait;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Category extends Model
 {
-    use HasFactory, Metable, NodeTrait;
+    use HasFactory;
+    use LogsActivity;
+    use Metable;
+    use NodeTrait;
+    use Sluggable;
 
-    protected $fillable = ['name', 'directory', 'full_path', 'parent_id', 'route', 'show', 'type', 'rank'];
+    protected $fillable = ['name', 'directory', 'parent_id', 'show', 'type', 'rank'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable();
+    }
 
     public function flatName(): Attribute
     {
@@ -38,36 +52,19 @@ class Category extends Model
 
                 return $indent.($isLast ? '└── ' : '├── ').$attributes['name'];
             }
-
         );
     }
 
-    public function posts(): HasMany
+    public function posts(): MorphToMany
     {
-        return $this->hasMany(Post::class);
-    }
-
-    public function uri(): Attribute
-    {
-        return new Attribute(
-            get: function ($value, $attributes) {
-                if ($attributes['route']) {
-                    return route($attributes['route'], ['search' => request()->get('search')]);
-                }
-
-                return route('categories.show', [
-                    'category' => $attributes['full_path'],
-                    'search' => request()->get('search'),
-                ]);
-            }
-        );
+        return $this->morphedByMany(Post::class, 'categorizable')->withTimestamps();
     }
 
     public static function booted(): void
     {
         static::saving(function (Category $category) {
             if ($category->isDirty(['directory', 'parent_id'])) {
-                $category->full_path = $category->ancestors()->get()->reduce(fn ($a, Category $category) => $a.$category->directory.'/').$category->directory;
+                $category->slug = $category->ancestors()->get()->reduce(fn ($a, Category $category) => $a.$category->directory.'/').$category->directory;
             }
         });
     }

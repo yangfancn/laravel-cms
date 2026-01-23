@@ -11,17 +11,33 @@ trait Taggable
 
     public function initializeTaggable(): void
     {
-        $this->mergeFillable(['tags']);
+        if (! empty($this->fillable)) {
+            $this->mergeFillable(['tags']);
+        }
     }
 
     public function setTagsAttribute(?array $tags): void
     {
-        $this->tagsPayload = array_map(fn (int|string $item) => is_int($item) ? $item : Tag::firstOrCreate(['name' => $item]), $tags);
+        $this->tagsPayload = $tags ? array_map(fn (int|string $item) => is_int($item) ? $item : Tag::firstOrCreate(['name' => $item]), $tags) : $tags;
     }
 
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
+     * sync tags by tagName
+     *
+     * @param  string[]  $tags
+     */
+    public function syncTagsByName(array $tags): static
+    {
+        $this
+            ->tags()
+            ->sync(collect(Tag::findOrCreate($tags))->pluck('id')->all());
+
+        return $this;
     }
 
     protected static function bootTaggable(): void

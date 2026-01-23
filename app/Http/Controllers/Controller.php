@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Facades\InertiaMessage;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\DB;
 
 abstract class Controller extends BaseController
 {
@@ -50,24 +48,27 @@ abstract class Controller extends BaseController
         if ($pageSize > 50) {
             $pageSize = 50;
         }
-        $fields = ["$labelField as label", "$valueField as value"];
+        $fields = ['id', "$labelField as label", "$valueField as value"];
 
         $data = $model
-            ->when($search = $request->string('search'), fn($builder) => $builder->where($labelField, 'like', "%$search%"))
+            ->when($search = $request->string('search'), fn ($builder) => $builder->where($labelField, 'like', "%$search%"))
             ->offset(($page - 1) * $pageSize)
             ->limit($pageSize)
             ->get($fields);
 
-        if ($require = $request->get('require')) {
+        $require = \is_array($require = $request->get('require')) ? $require : [$require];
+        $require = array_diff($require, $data->pluck('id')->all());
+
+        if ($require) {
             $data = $model
-            ->newQuery()
-            ->whereIn($valueField, is_array($require) ? $require : [$require])
-            ->get($fields)
-            ->concat($data);
+                ->newQuery()
+                ->whereIn($valueField, $require)
+                ->get($fields)
+                ->concat($data);
         }
 
         return new JsonResponse([
-            'options' => $data->all(),
+            'options' => $data->setVisible(['label', 'value'])->all(),
         ]);
     }
 }

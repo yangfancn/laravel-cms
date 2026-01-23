@@ -17,7 +17,7 @@ class FileExist implements ValidationRule
         if (
             $value
             && ! (str_starts_with($value, '//') || str_starts_with($value, 'http'))
-            && ! \Storage::disk('public')->exists(ltrim($value, '/storage'))
+            && ! file_exists(app()->publicPath().$value)
         ) {
             $fail('file :attribute not exist.');
         }

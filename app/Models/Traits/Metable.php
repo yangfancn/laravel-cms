@@ -13,7 +13,9 @@ trait Metable
 
     public function initializeMetable(): void
     {
-        $this->mergeFillable(['meta']);
+        if (! empty($this->fillable)) {
+            $this->mergeFillable(['meta']);
+        }
     }
 
     public function setMetaAttribute(array $meta): void

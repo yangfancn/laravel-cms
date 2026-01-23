@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('visitable_id')->nullable();
-            $table->string('visitable_type')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->nullableMorphs('visitable');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('path', 255);
             $table->string('os')->nullable();
             $table->string('browser')->nullable();
@@ -25,11 +24,8 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->timestamps();
 
-            $table->index(['visitable_type', 'visitable_id']);
             $table->index(['visitable_type', 'created_at']);
             $table->index(['created_at', 'ip']);
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('slugs', function (Blueprint $table) {
             $table->id();
-            $table->string('path')->unique();
-            $table->string('hash')->unique();
+            $table->unsignedBigInteger('sluggable_id');
+            $table->string('sluggable_type');
+            $table->string('name')->unique();
             $table->timestamps();
+
+            $table->unique(['sluggable_id', 'sluggable_type']);
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('slugs');
     }
 };

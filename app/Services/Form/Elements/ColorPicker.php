@@ -12,7 +12,9 @@ use App\Services\Form\Enums\ColorView;
  */
 class ColorPicker extends Element
 {
-    use HasAffixes, Styles, UseInput;
+    use HasAffixes;
+    use Styles;
+    use UseInput;
 
     protected string $field = 'color';
 

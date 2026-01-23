@@ -2,27 +2,28 @@
 
 namespace App\Forms\Admin;
 
-use App\Models\Tag;
+use App\Forms\Admin\Traits\HydrateSlugTrait;
+use App\Forms\Admin\Traits\SlugFormTrait;
 use App\Services\Form\Elements\Input;
 use App\Services\Form\Form;
 use App\Services\Form\FormBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Inertia\Response;
 
 class TagForm extends FormBuilder
 {
-    public static function render(
-        string $action,
-        ?string $title = null,
-        string $method = 'POST',
-        array|Model|Tag|null $data = null
-    ): Response {
-        $form = new Form($action, $method, $data);
-
+    use SlugFormTrait, HydrateSlugTrait;
+    protected static function schema(Form $form): void
+    {
         $form
             ->add(Input::make('name', 'Name'))
-            ->add(Input::make('slug', 'Slug'));
+            ->add(self::slugInput());
+    }
 
-        return $form->render($title);
+    protected static function hydrate(null|Model $model): array
+    {
+        return [
+            ...$model->toArray(),
+            ...static::hydrateSlug($model),
+        ];
     }
 }

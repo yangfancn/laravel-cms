@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->morphs('votable');
-            $table->boolean('vote');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('votable_type');
+            $table->unsignedBigInteger('votable_id');
+            $table->boolean('aggre');
             $table->timestamps();
 
             $table->unique(['user_id', 'votable_type', 'votable_id']);
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

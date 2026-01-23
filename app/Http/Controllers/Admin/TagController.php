@@ -23,10 +23,10 @@ class TagController extends Controller
 
     public function index(Tag $tag): Response
     {
-        $table = new DataTable($tag, 'Tag List', 'name');
+        $table = new DataTable($tag->with('slug'), 'Tag List', 'name');
         $table->addColumn(new TextColumn('id', 'ID', sortable: true))
             ->addColumn(new TextColumn('name', 'Name'))
-            ->addColumn(new TextColumn('slug', 'SLUG'))
+            ->addColumn(new TextColumn('slug.name', 'SLUG'))
             ->addColumn(new TextColumn('created_at', 'Create Time', sortable: true))
             ->createAction('admin.tags.create')
             ->addRowAction(

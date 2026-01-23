@@ -1,7 +1,0 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - core-js-pure
-  - esbuild
-  - vue-demi
-publicHoistPattern:
-  - "@inertiajs/core"
