@@ -6,7 +6,6 @@ use App\Facades\Seo;
 use App\Http\Renderers\Contracts\SlugRenderer;
 use App\Models\Post;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
 
 class PostRenderer implements SlugRenderer
 {
@@ -16,7 +15,7 @@ class PostRenderer implements SlugRenderer
     }
 
     /**
-     * @param Post $target
+     * @param  Post  $target
      * @return void
      */
     public function renderer(object $post): Response

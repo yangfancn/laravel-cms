@@ -20,11 +20,11 @@ class RoleForm extends FormBuilder
             ->add(Select::make('permissions', 'Permissions')->options($permissions)->multiple()->useChips());
     }
 
-    protected static function hydrate(null|Model $data): array
+    protected static function hydrate(?Model $data): array
     {
         return [
             ...$data->setVisible(['name'])->toArray(),
-            'permissions' => $data->permissions()->pluck('id')->all()
+            'permissions' => $data->permissions()->pluck('id')->all(),
         ];
     }
 }

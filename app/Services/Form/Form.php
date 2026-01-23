@@ -2,11 +2,7 @@
 
 namespace App\Services\Form;
 
-use App\Models\Traits\Metable;
-use App\Models\Traits\Sluggable;
-use App\Models\Traits\Taggable;
 use App\Services\Form\Elements\Element;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Inertia\Response;
 
@@ -31,8 +27,7 @@ class Form
         public string $action,
         public string $method = 'POST',
         public array $data = []
-    ) {
-    }
+    ) {}
 
     /**
      * gerenrate from data props

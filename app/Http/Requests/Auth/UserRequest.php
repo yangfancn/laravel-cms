@@ -14,14 +14,14 @@ class UserRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:25',
-                Rule::unique('users')->ignore($this->route('user'))
+                Rule::unique('users')->ignore($this->route('user')),
             ],
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($this->route('user'))
+                Rule::unique('users')->ignore($this->route('user')),
             ],
-            'password' => 'required|min:8|max:16'
+            'password' => 'required|min:8|max:16',
         ];
     }
 }

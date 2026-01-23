@@ -2,14 +2,12 @@
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\Home\CategoryController;
+use App\Http\Controllers\Auth\UserController as AuthUserController;
 use App\Http\Controllers\Home\IndexController;
-use App\Http\Controllers\Home\PostController;
 use App\Http\Controllers\Home\SitemapController;
 use App\Http\Controllers\Home\SlugController;
 use App\Http\Middleware\Admin\ViteBuildDir;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\UserController as AuthUserController;
 
 // sessions
 Route::middleware(ViteBuildDir::class)->group(function () {

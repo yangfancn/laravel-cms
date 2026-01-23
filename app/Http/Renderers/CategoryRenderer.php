@@ -3,26 +3,24 @@
 namespace App\Http\Renderers;
 
 use App\Facades\Seo;
+use App\Http\Renderers\Contracts\CategorySubRenderer;
 use App\Http\Renderers\Contracts\SlugRenderer;
 use App\Http\Renderers\Exceptions\RendererNotFoundException;
 use App\Models\Category;
-use \Illuminate\Http\Response;
-use App\Http\Renderers\Contracts\CategorySubRenderer;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Response;
 
 class CategoryRenderer implements SlugRenderer
 {
     /** @param iterable<CategorySubRenderer> $renderers */
-    public function __construct(private iterable $renderers)
-    {
-    }
+    public function __construct(private iterable $renderers) {}
+
     public function supprots(object $target): bool
     {
         return $target instanceof Category;
     }
 
     /**
-     * @param Category $target
+     * @param  Category  $target
      * @return void
      */
     public function renderer(object $target): Response
@@ -36,6 +34,6 @@ class CategoryRenderer implements SlugRenderer
             }
         }
 
-        throw new RendererNotFoundException();
+        throw new RendererNotFoundException;
     }
 }

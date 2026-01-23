@@ -8,7 +8,7 @@ class RendererNotFoundException extends RuntimeException
 {
     public function __construct()
     {
-        $message = "No renderer defined for this request . Please register a renderer in SlugServiceProvider.";
+        $message = 'No renderer defined for this request . Please register a renderer in SlugServiceProvider.';
 
         parent::__construct($message, 500);
     }

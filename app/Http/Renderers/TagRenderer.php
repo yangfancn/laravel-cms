@@ -9,15 +9,13 @@ use Illuminate\Http\Response;
 
 class TagRenderer implements SlugRenderer
 {
-
-
     public function supprots(object $target): bool
     {
         return $target instanceof Tag;
     }
 
     /**
-     * @param Tag $tag
+     * @param  Tag  $tag
      * @return void
      */
     public function renderer(object $tag): Response

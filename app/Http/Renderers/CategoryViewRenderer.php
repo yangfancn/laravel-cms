@@ -5,8 +5,6 @@ namespace App\Http\Renderers;
 use App\Enums\CategoryType;
 use App\Http\Renderers\Contracts\CategorySubRenderer;
 use App\Models\Category;
-use App\Models\Post;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Response;
 
 class CategoryViewRenderer implements CategorySubRenderer

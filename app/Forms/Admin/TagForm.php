@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TagForm extends FormBuilder
 {
-    use SlugFormTrait, HydrateSlugTrait;
+    use HydrateSlugTrait, SlugFormTrait;
+
     protected static function schema(Form $form): void
     {
         $form
@@ -19,7 +20,7 @@ class TagForm extends FormBuilder
             ->add(self::slugInput());
     }
 
-    protected static function hydrate(null|Model $model): array
+    protected static function hydrate(?Model $model): array
     {
         return [
             ...$model->toArray(),

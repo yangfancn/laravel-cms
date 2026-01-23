@@ -17,5 +17,5 @@ return [
     'site' => 'SEO',
     'comments' => '评论管理',
     'tags' => 'Tag标签管理',
-    'activity_log' => '操作日志'
+    'activity_log' => '操作日志',
 ];

@@ -206,7 +206,7 @@ class AuthSeeder extends Seeder
                         'icon' => 'view_timeline',
                         'icon_color' => '#179688',
                     ],
-                ]
+                ],
             ];
 
             foreach ($permissions as $permission) {

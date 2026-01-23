@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
-use App\Models\User;
 use App\Services\DataTable\DataTable;
 use App\Services\DataTable\TextColumn;
-use Illuminate\Http\Request;
 use Inertia\Response;
 
 class ActivityLogController extends Controller

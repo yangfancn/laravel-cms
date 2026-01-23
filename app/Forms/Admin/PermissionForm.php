@@ -38,7 +38,7 @@ class PermissionForm extends FormBuilder
     {
         return [
             ...$data->toArray(),
-            'admin_menu' => $data->adminMenu?->toArray()
+            'admin_menu' => $data->adminMenu?->toArray(),
         ];
     }
 }

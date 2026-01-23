@@ -5,11 +5,11 @@ namespace App\Providers;
 use App\Http\Renderers\CategoryPostsRenderer;
 use App\Http\Renderers\CategoryRenderer;
 use App\Http\Renderers\CategoryViewRenderer;
+use App\Http\Renderers\Contracts\CategorySubRenderer;
+use App\Http\Renderers\Contracts\SlugRenderer;
 use App\Http\Renderers\PostRenderer;
 use App\Http\Renderers\SlugRenderManager;
 use App\Http\Renderers\TagRenderer;
-use App\Http\Renderers\Contracts\SlugRenderer;
-use App\Http\Renderers\Contracts\CategorySubRenderer;
 use Illuminate\Support\ServiceProvider;
 
 class SlugServiceProvider extends ServiceProvider
@@ -28,7 +28,7 @@ class SlugServiceProvider extends ServiceProvider
         $this->app->tag([
             CategoryRenderer::class,
             PostRenderer::class,
-            TagRenderer::class
+            TagRenderer::class,
         ], SlugRenderer::class);
 
         $this->app->singleton(SlugRenderManager::class, fn ($app) => new SlugRenderManager(

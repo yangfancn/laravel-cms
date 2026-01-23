@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Database\Seeders\AuthSeeder;
 use Illuminate\Console\Command;
 
 class Test extends Command
@@ -24,8 +23,5 @@ class Test extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
-
-    }
+    public function handle() {}
 }

@@ -63,7 +63,7 @@ class PostForm extends FormBuilder
             ...static::hydrateTag($model),
             ...static::hydrateMeta($model),
             ...static::hydrateSlug($model),
-            'thumb' => $model->getFirstMedia('thumb')?->getUrl(), //多文件用 ->getMedia('filedname')->map->getUrl()
+            'thumb' => $model->getFirstMedia('thumb')?->getUrl(), // 多文件用 ->getMedia('filedname')->map->getUrl()
             'categories' => $model->categories()->pluck('categories.id')->all(),
         ];
     }

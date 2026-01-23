@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SiteForm extends FormBuilder
 {
-    use MetaFormTrait, HydrateMetaTrait;
+    use HydrateMetaTrait, MetaFormTrait;
 
     protected static function schema(Form $form): void
     {
@@ -20,11 +20,11 @@ class SiteForm extends FormBuilder
             ->add(self::metaBlock());
     }
 
-    protected static function hydrate(null|Model $data): array
+    protected static function hydrate(?Model $data): array
     {
         return [
             ...$data->toArray(),
-            ...self::hydrateMeta($data)
+            ...self::hydrateMeta($data),
         ];
     }
 }

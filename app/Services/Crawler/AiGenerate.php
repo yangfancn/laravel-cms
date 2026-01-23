@@ -102,7 +102,7 @@ PROMPT;
             $this->post->content = $arr['content'];
             $this->post->tags = $arr['tags'];
 
-            //generate thumb
+            // generate thumb
 
             return $this->post;
         }
