@@ -45,32 +45,110 @@
 
 ## 📚 目录
 
-- **[环境准备](#环境准备)**
-- **[后台管理](#后台管理)**
+- [项目结构](#项目结构)
+- [环境准备](#环境准备)
+- [后台管理](#后台管理)
   - [项目初始化及运行](#项目初始化及运行)
   - [后台管理入口](#后台管理入口)
   - [权限管理系统](#权限管理系统)
   - [自定义表单系统](#自定义表单系统)
   - [添加资源的标准步骤](#添加资源的标准步骤)
-- **[前端渲染](#前端渲染)**
+- [前端渲染](#前端渲染)
   - [Slug renderer 机制](#slug-renderer-机制)
   - [如何添加资源对应的 renderer](#如何添加资源对应的-renderer)
   - [SEO 管理服务](#seo-管理服务)
-- **[项目结构](#项目结构)**
-- **[开发指南](#开发指南)**
-- **[部署说明](#部署说明)**
+- [开发指南](#开发指南)
+- [部署说明](#部署说明)
 
---
+---
 
-## 后台
+## 项目结构
+
+```
+LaravelApp/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/          # 控制器
+│   │   ├── Renderers/           # 前端渲染器
+│   │   └── Requests/            # 表单请求验证
+│   ├── Models/                  # 数据模型
+│   ├── Services/                # 业务服务
+│   │   ├── Form/               # 表单构建系统
+│   │   └── Seo.php             # SEO 服务
+│   ├── Forms/                   # 表单定义
+│   ├── Providers/               # 服务提供者
+│   └── Enums/                   # 枚举类
+├── database/
+│   ├── migrations/              # 数据库迁移
+│   ├── seeders/                # 数据填充
+│   └── factories/              # 模型工厂
+├── resources/
+│   ├── admin/                   # 后台管理资源
+│   │   ├── views/              # Blade 布局文件
+│   │   ├── js/
+│   │   │   ├── Pages/          # Inertia.js 页面组件
+│   │   │   │   ├── Auth/      # 认证相关页面
+│   │   │   │   ├── Dashboard/ # 仪表板页面
+│   │   │   │   ├── Users/     # 用户管理页面
+│   │   │   │   ├── Session/   # 会话管理页面
+│   │   │   │   └── Errors/    # 错误页面
+│   │   │   ├── Components/     # Vue 组件
+│   │   │   └── Layouts/        # 布局组件
+│   │   └── images/             # 图片资源
+│   ├── home/                    # 前端展示资源
+│   │   ├── views/              # Blade 模板文件
+│   │   │   ├── components/    # 组件模板
+│   │   │   ├── posts/         # 文章页面
+│   │   │   ├── categories/    # 分类页面
+│   │   │   └── tags/          # 标签页面
+│   │   ├── js/
+│   │   │   └── Plugins/       # 前端插件
+│   │   │       ├── Comments/  # 评论组件
+│   │   │       └── Vote/      # 投票组件
+│   │   ├── css/               # 样式文件
+│   │   └── images/            # 图片资源
+│   └── common/                  # 共享资源
+│       ├── js/                # 公共 JavaScript
+│       └── css/               # 公共样式
+├── routes/
+│   ├── web.php                 # 前端路由
+│   └── admin.php               # 后台路由
+└── storage/
+    └── app/uploads/            # 上传文件目录
+```
+
+### Inertia.js 页面架构
+
+后台管理页面使用 Inertia.js + Vue 3 构建单页应用：
+
+- **Pages 目录**：`resources/admin/js/Pages/` 包含所有页面组件
+- **路由到页面映射**：Laravel 路由自动映射到对应的 Vue 页面
+- **组件化开发**：每个功能模块都有独立的页面组件
+- **共享数据**：通过 Inertia 中间件共享用户数据、权限等信息
+
+### 前端渲染架构
+
+前端使用传统的 Blade 模板 + Vue 组件混合架构：
+
+- **Blade 布局**：`resources/home/views/` 处理页面结构和 SEO
+- **Vue 插件**：`resources/home/js/Plugins/` 提供交互功能
+- **组件化**：可复用的 Vue 组件用于评论、投票等功能
+
+---
+
+## 环境准备
+
+### 环境要求
+- PHP 8.5+
+- Composer
+- Node.js 18+
+- NPM 或 Yarn
+
+---
+
+## 后台管理
 
 - **项目初始化及运行**
-
-	### 环境要求
-	- PHP 8.5+
-	- Composer
-	- Node.js 18+
-	- NPM 或 Yarn
 
 	### 安装步骤
 
@@ -622,74 +700,55 @@
 
 ---
 
-## 项目结构
+## 开发指南
 
-```
-LaravelApp/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/          # 控制器
-│   │   ├── Renderers/           # 前端渲染器
-│   │   └── Requests/            # 表单请求验证
-│   ├── Models/                  # 数据模型
-│   ├── Services/                # 业务服务
-│   │   ├── Form/               # 表单构建系统
-│   │   └── Seo.php             # SEO 服务
-│   ├── Forms/                   # 表单定义
-│   ├── Providers/               # 服务提供者
-│   └── Enums/                   # 枚举类
-├── database/
-│   ├── migrations/              # 数据库迁移
-│   ├── seeders/                # 数据填充
-│   └── factories/              # 模型工厂
-├── resources/
-│   ├── admin/                   # 后台管理资源
-│   │   ├── views/              # Blade 布局文件
-│   │   ├── js/
-│   │   │   ├── Pages/          # Inertia.js 页面组件
-│   │   │   │   ├── Auth/      # 认证相关页面
-│   │   │   │   ├── Dashboard/ # 仪表板页面
-│   │   │   │   ├── Users/     # 用户管理页面
-│   │   │   │   ├── Session/   # 会话管理页面
-│   │   │   │   └── Errors/    # 错误页面
-│   │   │   ├── Components/     # Vue 组件
-│   │   │   └── Layouts/        # 布局组件
-│   │   └── images/             # 图片资源
-│   ├── home/                    # 前端展示资源
-│   │   ├── views/              # Blade 模板文件
-│   │   │   ├── components/    # 组件模板
-│   │   │   ├── posts/         # 文章页面
-│   │   │   ├── categories/    # 分类页面
-│   │   │   └── tags/          # 标签页面
-│   │   ├── js/
-│   │   │   └── Plugins/       # 前端插件
-│   │   │       ├── Comments/  # 评论组件
-│   │   │       └── Vote/      # 投票组件
-│   │   ├── css/               # 样式文件
-│   │   └── images/            # 图片资源
-│   └── common/                  # 共享资源
-│       ├── js/                # 公共 JavaScript
-│       └── css/               # 公共样式
-├── routes/
-│   ├── web.php                 # 前端路由
-│   └── admin.php               # 后台路由
-└── storage/
-    └── app/uploads/            # 上传文件目录
+### 代码规范
+- 使用 Laravel Pint 进行代码格式化：`./vendor/bin/pint`
+- 遵循 PSR-12 编码标准
+- 前端使用 ESLint 和 Prettier
+
+### 测试
+```bash
+# 运行所有测试
+php artisan test
+
+# 运行特定测试
+php artisan test --filter Feature/UserTest
 ```
 
-### Inertia.js 页面架构
+### 调试
+- 启用 DebugBar：`APP_DEBUG=true`
+- 查询日志：`DB::enableQueryLog()`
+- 日志查看：`tail -f storage/logs/laravel.log`
 
-后台管理页面使用 Inertia.js + Vue 3 构建单页应用：
+---
 
-- **Pages 目录**：`resources/admin/js/Pages/` 包含所有页面组件
-- **路由到页面映射**：Laravel 路由自动映射到对应的 Vue 页面
-- **组件化开发**：每个功能模块都有独立的页面组件
-- **共享数据**：通过 Inertia 中间件共享用户数据、权限等信息
+## 部署说明
 
-### 前端渲染架构
+### 生产环境配置
+1. **环境变量**
+   ```bash
+   APP_ENV=production
+   APP_DEBUG=false
+   ```
 
-前端使用传统的 Blade 模板 + Vue 组件混合架构：
+2. **优化**
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   php artisan optimize
+   ```
 
-- **Blade 布局**：`resources/home/views/` 处理页面结构和 SEO
-- **Vue 插件**：`resources/home/js/Plugins/` 提供交互功能
-- **组件化**：可复用的 Vue 组件用于评论、投票等功能
+3. **文件权限**
+   ```bash
+   chmod -R 755 storage bootstrap/cache
+   chown -R www-data:www-data storage bootstrap/cache
+   ```
+
+### Docker 部署
+项目支持 Docker 部署，可创建 `docker-compose.yml` 配置文件。
+
+---
+
+*最后更新：2026年1月*
