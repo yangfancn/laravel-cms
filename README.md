@@ -1,23 +1,64 @@
-# 项目概览（草稿）
+# 🚀 Laravel 全栈应用
 
-本文档为项目的快速使用指南与开发者说明的草稿版，分为“后台（Admin）”与“前端（Frontend）”两部分。你可在此基础上补全细节与截图。
+[![Laravel](https://img.shields.io/badge/Laravel-12.x-red?style=flat-square&logo=laravel)](https://laravel.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green?style=flat-square&logo=vue.js)](https://vuejs.org)
+[![PHP](https://img.shields.io/badge/PHP-8.5+-purple?style=flat-square&logo=php)](https://php.net)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
-**注意**：以下文件路径可参考项目源码以获取更详细实现： [routes/admin.php](routes/admin.php), [routes/web.php](routes/web.php), [app/Providers/SlugServiceProvider.php](app/Providers/SlugServiceProvider.php), [app/Http/Renderers](app/Http/Renderers), [app/Services/Seo.php](app/Services/Seo.php), [app/Services/Form](app/Services/Form).
+这是一个基于 Laravel 12 构建的全栈 Web 应用，包含完整的后台管理系统和基于 Slug 的前端渲染系统。项目集成了现代化的前端技术栈，包括 Vue 3、Quasar UI、Tailwind CSS 等先进工具。
 
---
+## 🚀 技术栈
 
-**目录**
+### 后端技术
+- **Laravel 12** - PHP 框架
+- **PHP 8.5+** - 编程语言
+- **SQLite** - 默认数据库（支持 MySQL/PostgreSQL）
+- **Spatie Laravel Permission** - 权限管理
+- **Spatie Laravel MediaLibrary** - 文件管理
+- **Laravel Activitylog** - 操作日志
+- **Inertia.js** - 全栈 SPA 框架
 
-- 后台
-	- 项目初始化及运行
-	- 后端登录地址
-	- 权限管理简介
-	- 表单（Form）概览
-	- 添加资源的标准步骤
-- 前端
-	- Slug renderer 机制说明
-	- 如何添加资源对应的 renderer
-	- `App\Services\Seo` 简介
+### 前端技术
+- **Vue 3** - JavaScript 框架
+- **Quasar** - UI 组件库
+- **Tailwind CSS** - CSS 框架
+- **CKEditor 5** - 富文本编辑器
+- **Vite** - 构建工具
+- **TypeScript** - 类型支持
+
+## 📋 功能特性
+
+### 后台管理
+- 🔐 完整的权限管理系统
+- 📝 自定义表单构建器
+- 📊 数据表格组件
+- 📁 文件上传与管理
+- 🎨 富文本编辑器
+- 📱 响应式界面
+
+### 前端渲染
+- 🌐 基于 Slug 的路由系统
+- 🎭 灵活的渲染器机制
+- 🔍 SEO 优化管理
+- 📱 移动端适配
+- ⚡ 页面缓存
+
+## 📚 目录
+
+- **[环境准备](#环境准备)**
+- **[后台管理](#后台管理)**
+  - [项目初始化及运行](#项目初始化及运行)
+  - [后台管理入口](#后台管理入口)
+  - [权限管理系统](#权限管理系统)
+  - [自定义表单系统](#自定义表单系统)
+  - [添加资源的标准步骤](#添加资源的标准步骤)
+- **[前端渲染](#前端渲染)**
+  - [Slug renderer 机制](#slug-renderer-机制)
+  - [如何添加资源对应的 renderer](#如何添加资源对应的-renderer)
+  - [SEO 管理服务](#seo-管理服务)
+- **[项目结构](#项目结构)**
+- **[开发指南](#开发指南)**
+- **[部署说明](#部署说明)**
 
 --
 
@@ -25,38 +66,154 @@
 
 - **项目初始化及运行**
 
-	- 安装依赖（按项目需要）
+	### 环境要求
+	- PHP 8.5+
+	- Composer
+	- Node.js 18+
+	- NPM 或 Yarn
 
+	### 安装步骤
+
+	1. **克隆项目**
+		```bash
+		git clone <repository-url>
+		cd LaravelApp
+		```
+
+	2. **配置环境**
+		```bash
+		cp .env.example .env
+		php artisan key:generate
+		```
+
+	3. **安装依赖**
 		```bash
 		composer install
 		npm install # or pnpm install
 		```
 
-	- 运行数据库迁移并填充示例数据：
-
+	4. **数据库设置**
 		```bash
+		# 创建 SQLite 数据库文件
+		touch database/database.sqlite
+
+		# 运行迁移和填充数据
 		php artisan migrate --seed
 		```
 
-	- 本地启动（或使用你现有的部署方式）：
+	5. **构建前端资源**
+		```bash
+		# 开发环境（监听文件变化）
+		npm run dev
 
+		# 生产环境构建
+		npm run home:build
+		npm run admin:build
+		```
+
+	6. **启动服务**
 		```bash
 		php artisan serve
 		```
 
-- **后端登录地址**
+	### 开发命令
+	```bash
+	# 格式化代码
+	npm run format
 
-	- 默认为`/manager`, 可以在 [routes/admin.php](routes/admin.php) 中修改
+	# 代码检查
+	npm run lint:check
 
-- **权限管理（简介）**
+	# 构建分析
+	npm run home:analyze
+	npm run admin:analyze
+	```
 
-	管理地址 `/manager/permissions`, 初始化项目位于 [database/seeders/AuthSeeder.php](database/seeders/AuthSeeder.php)，需要在后台左侧菜单显示的需要填写表单的Admin Menu
+- **后台管理入口**
 
-- **表单（Form）概览**
+	### 登录地址
+	- 默认访问地址：`/manager`
+	- 可在 [routes/admin.php](routes/admin.php) 中修改路由前缀
 
-	- 相关代码位于 `App\Services\Form`
+	### 默认账户
+	- 管理员账户在数据库种子中创建
+	- 可通过 `AuthSeeder.php` 查看默认登录信息
 
-	常用元素示例（示范如何在 `FormBuilder::schema()` 中使用）：
+- **权限管理系统**
+
+	### 权限配置
+	- **管理地址**：`/manager/permissions`
+	- **数据种子**：[database/seeders/AuthSeeder.php](database/seeders/AuthSeeder.php)
+	- **菜单显示**：需要配置 `admin_menu` 表中的相关记录
+
+	### 权限特性
+	- 基于角色的访问控制（RBAC）
+	- 细粒度的权限管理
+	- 菜单权限控制
+	- 资源级别权限
+
+	### 快速权限设置
+	1. 在后台访问 `/manager/permissions`
+	2. 创建新权限或编辑现有权限
+	3. 在角色管理中分配权限
+	4. 在菜单管理中配置显示
+
+- **自定义表单系统**
+
+	### 架构概览
+	- **核心位置**：`App\Services\Form`
+	- **表单目录**：`App\Forms`
+	- **基类**：`App\Services\Form\FormBuilder`
+
+	### 表单特性
+	- 🎨 丰富的表单组件库
+	- 🔧 链式调用 API
+	- 📱 响应式布局
+	- ✅ 内置验证支持
+	- 🎭 支持关联模型
+        - `scheme()` 表单构建, 示例：
+            ```php
+            use MetaFormTrait;
+
+            protected static function schema(Form $form): void
+            {
+                $categories = Category::whereNotIn('id', array_filter([$form->data['id'] ?? null]))
+                    ->pluck('id', 'name')
+                    ->all();
+
+                $form->add(Input::make('name', 'Name'))
+                    ->add(Select::make('parent_id', 'Parent')->options($categories))
+                    ->add(Input::make('directory', 'Path'))
+                    ->add(Toggle::make('show', 'Show In Nav')->defaultValue(true))
+                    ->add(
+                        Select::make('type', 'Type')
+                            ->options(CategoryType::options())
+                            ->defaultValue(CategoryType::View->value)
+                    )
+                    ->add(Input::make('rank', 'Rank')->number()->defaultValue(0))
+                    ->add(self::metaBlock());
+            }
+
+            ```
+
+        - `hydrate()` 可选，表单数据填充，常用于关联模型的数据补充，默认 `$this->data` `$this->data->toArray()`, 示例：
+            ```php
+            protected static function hydrate(Model|Category $model): array
+            {
+                return [
+                    ...$model->toArray(),
+                    ...$model->meta->toArray(),
+                ];
+            }
+
+             ```
+    - traits
+        - `MetaFormTrait`: `meta` 关联模型的表单生成器
+        - `HydateMetaTrait`: `meta` 关联模型的数据填充
+        - `SlugFormTrait`: `slug` 关联模型的表单生成器
+        - `HydrateSlugTrait`: `slug` 关联模型的数据填充
+        - `TagFormTrait`: `tag` 关联模型的表单生成器
+        - `HydrateTagTrait`: `tag` 关联模型的数据填充
 
 	- 基本用法参考 [app/Forms/Admin/PostForm.php](app/Forms/Admin/PostForm.php)
 
@@ -110,7 +267,7 @@
     - **Select** 下拉选择 [app/Services/Form/Elements/Select.php](app/Services/Form/Elements/Select.php)
 
         - `options(array $options)` 设置选项，支持分组和键值对格式
-        - `maxLength(int $length)` 多选时最大可选数量限制
+        - `maxLength(int $length)` 多选时(->multiple())最大可选数量限制
         - `xhrOptionsUrl(string $url)` 异步加载选项的远程 URL（远程搜索）
         - `allowCreate(?string $url = null)` 允许通过输入创建新选项，可传创建接口 URL
         - `dropdownIcon(string $icon)` 设置下拉箭头图标
@@ -381,7 +538,7 @@
 		 ```bash
 		 php artisan make:model Post -m
 		 php artisan make:controller Admin/PostController --resource
-		 php artisan make:request StorePostRequest
+		 php artisan make:request Admin/PostRequest
 		 php artisan make:policy PostPolicy --model=Post
 		 ```
 
@@ -404,18 +561,19 @@
 		- `CategoryRenderer`, `PostRenderer`, `TagRenderer`：各模型对应的渲染器实现。
 		- `CategoryRenderer` 内部进一步委托 `CategorySubRenderer`（例如 `CategoryPostsRenderer`, `CategoryViewRenderer`）来按 `Category::type` 选择具体渲染方式。
 
-	- 路由请见 [routes/web.php](routes/web.php)，`{slug}` 路由映射到 `SlugController`（或 `Home\\SlugController`），并通过 `SlugRenderManager` 完成最终视图返回。
+	- 路由请见 [routes/web.php](routes/web.php)，`{slug}` 路由映射到 `SlugController`（或 `Home\SlugController`），并通过 `SlugRenderManager` 完成最终视图返回。
 
 - **如何添加资源对应的 renderer（步骤）**
+    1. Model 需要 use `App\Models\Traits\Sluggable`
 
-	1. 新建渲染器类，实现 `App\\Http\\Renderers\\Contracts\\SlugRenderer`（或 `CategorySubRenderer` 用于分类子渲染器）。示例骨架：
+	2. 新建渲染器类，实现 `App\Http\Renderers\Contracts\SlugRenderer`（或 `CategorySubRenderer` 用于分类子渲染器）。示例骨架：
 
 		 ```php
 		 <?php
-		 namespace App\\Http\\Renderers;
+		 namespace App\Http\Renderers;
 
-		 use App\\Http\\Renderers\\Contracts\\SlugRenderer;
-		 use Illuminate\\Http\\Response;
+		 use App\Http\Renderers\Contracts\SlugRenderer;
+		 use Illuminate\Http\Response;
 
 		 class MyResourceRenderer implements SlugRenderer
 		 {
@@ -431,7 +589,7 @@
 		 }
 		 ```
 
-	2. 在 `app/Providers/SlugServiceProvider.php` 中注册新的渲染器标签（示例已存在）：
+	3. 在 `app/Providers/SlugServiceProvider.php` 中注册新的渲染器标签（示例已存在）：
 
 		 ```php
 		 $this->app->tag([
@@ -442,14 +600,13 @@
 		 ], SlugRenderer::class);
 		 ```
 
-	3. 如为 `Category` 的新类型（`CategoryType`），在 `CategoryRenderer` 的子渲染器集合中注册对应的 `CategorySubRenderer`，并确保其 `supports()` 实现能按 `->type` 正确匹配。
+	4. 如为 `Category` 的新类型（`CategoryType`），在 `CategoryRenderer` 的子渲染器集合中注册对应的 `CategorySubRenderer`，并确保其 `supports()` 实现能按 `->type` 正确匹配。
 
-	4. 在本地环境或 CI 中通过访问对应 slug（或添加单元测试）验证渲染流程。
 
-- **`App\\Services\\Seo` 简介**
+- **`App\Services\Seo` 简介**
 
-	- `App\\Services\\Seo` 为集中化的 SEO 元数据管理器，支持：
-		- 以模型为来源生成 meta（模型需使用 `App\\Models\\Traits\\Metable`）
+	- `App\Services\Seo` 为集中化的 SEO 元数据管理器，支持：
+		- 以模型为来源生成 meta（模型需使用 `App\Models\Traits\Metable`）
 		- 手动设置 title/keywords/description/url/image
 		- 将 SEO 数据共享到视图层，最终通过 `home::seo` 视图片段渲染
 
@@ -457,25 +614,82 @@
 
 		```php
 		// model has meta
-		App\\Facades\\Seo::model($model);
+		App\Facades\Seo::model($model);
 
 		// or custom
-		App\\Facades\\Seo::seo('Title', description: '...');
+		App\Facades\Seo::seo('Title', description: '...');
 		```
 
---
+---
 
-## 附录：建议改进点（供你在完善文档时考虑）
+## 项目结构
 
-- 在 `SlugServiceProvider` 中增加启动时验证（log 已注册的 renderers），便于发现未注册的 renderer。
-- 对找不到 renderer 的情况抛出明确的 500 错误（例如 `RendererNotFoundException`），并在 `SlugController` 中统一捕获，输出友好提示或错误页面。
-- 在 `app/Services/Form` 下为每个表单元素补充示例与属性说明，便于后台页面搭建者直接复用。
+```
+LaravelApp/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/          # 控制器
+│   │   ├── Renderers/           # 前端渲染器
+│   │   └── Requests/            # 表单请求验证
+│   ├── Models/                  # 数据模型
+│   ├── Services/                # 业务服务
+│   │   ├── Form/               # 表单构建系统
+│   │   └── Seo.php             # SEO 服务
+│   ├── Forms/                   # 表单定义
+│   ├── Providers/               # 服务提供者
+│   └── Enums/                   # 枚举类
+├── database/
+│   ├── migrations/              # 数据库迁移
+│   ├── seeders/                # 数据填充
+│   └── factories/              # 模型工厂
+├── resources/
+│   ├── admin/                   # 后台管理资源
+│   │   ├── views/              # Blade 布局文件
+│   │   ├── js/
+│   │   │   ├── Pages/          # Inertia.js 页面组件
+│   │   │   │   ├── Auth/      # 认证相关页面
+│   │   │   │   ├── Dashboard/ # 仪表板页面
+│   │   │   │   ├── Users/     # 用户管理页面
+│   │   │   │   ├── Session/   # 会话管理页面
+│   │   │   │   └── Errors/    # 错误页面
+│   │   │   ├── Components/     # Vue 组件
+│   │   │   └── Layouts/        # 布局组件
+│   │   └── images/             # 图片资源
+│   ├── home/                    # 前端展示资源
+│   │   ├── views/              # Blade 模板文件
+│   │   │   ├── components/    # 组件模板
+│   │   │   ├── posts/         # 文章页面
+│   │   │   ├── categories/    # 分类页面
+│   │   │   └── tags/          # 标签页面
+│   │   ├── js/
+│   │   │   └── Plugins/       # 前端插件
+│   │   │       ├── Comments/  # 评论组件
+│   │   │       └── Vote/      # 投票组件
+│   │   ├── css/               # 样式文件
+│   │   └── images/            # 图片资源
+│   └── common/                  # 共享资源
+│       ├── js/                # 公共 JavaScript
+│       └── css/               # 公共样式
+├── routes/
+│   ├── web.php                 # 前端路由
+│   └── admin.php               # 后台路由
+└── storage/
+    └── app/uploads/            # 上传文件目录
+```
 
---
+### Inertia.js 页面架构
 
-这份 README 是草稿版。我已经把关键文件位置和核心流程写清楚，后续你可以：
+后台管理页面使用 Inertia.js + Vue 3 构建单页应用：
 
-- 补充每个表单组件的参数和示例代码片段；
-- 明确后台登录实际路径并截图；
-- 添加渲染器添加的完整示例（含单元测试或 cURL 请求）；
-- 若需要，我可以把本草稿细化为英文版或添加图表/流程图。
+- **Pages 目录**：`resources/admin/js/Pages/` 包含所有页面组件
+- **路由到页面映射**：Laravel 路由自动映射到对应的 Vue 页面
+- **组件化开发**：每个功能模块都有独立的页面组件
+- **共享数据**：通过 Inertia 中间件共享用户数据、权限等信息
+
+### 前端渲染架构
+
+前端使用传统的 Blade 模板 + Vue 组件混合架构：
+
+- **Blade 布局**：`resources/home/views/` 处理页面结构和 SEO
+- **Vue 插件**：`resources/home/js/Plugins/` 提供交互功能
+- **组件化**：可复用的 Vue 组件用于评论、投票等功能
