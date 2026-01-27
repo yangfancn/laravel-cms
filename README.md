@@ -655,15 +655,15 @@ LaravelApp/
 
 		 class MyResourceRenderer implements SlugRenderer
 		 {
-				 public function supprots(object $target): bool
-				 {
-						 // 判断是否能处理 $target（模型实例或类型）
-				 }
+            public function supprots(object $target): bool
+            {
+                    // 判断是否能处理 $target（模型实例或类型）
+            }
 
-				 public function renderer(object $target): Response
-				 {
-						 // 处理并返回 response()->view(...)
-				 }
+            public function renderer(object $target): Response
+            {
+                    // 处理并返回 response()->view(...)
+            }
 		 }
 		 ```
 
