@@ -52,7 +52,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'rolesOrPermissions' => RoleOrPermissionMiddleware::class,
-            'cacheResponse' => CacheResponse::class,
             'doNotCacheResponse' => DoNotCacheResponse::class,
         ]);
 
@@ -71,14 +70,15 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\Home\HandleInertiaRequests::class,
             TrackVisitor::class,
             \App\Http\Middleware\Home\ViteBuildDir::class,
-            CommonData::class,
-        ]);
-
-        $middleware->priority([
             CacheResponse::class,
             CommonData::class,
         ]);
 
+        // $middleware->priority([
+        //     CacheResponse::class,
+        //     CommonData::class,
+        // ]);
+    
         $middleware->api(append: [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
@@ -115,7 +115,7 @@ return Application::configure(basePath: dirname(__DIR__))
             //            if ($response->getStatusCode() === 419) {
             //                return back()->with(['error' => $message]);
             //            }
-
+    
             return $response;
         });
     })->create();

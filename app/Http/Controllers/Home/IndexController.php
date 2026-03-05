@@ -6,9 +6,11 @@ use App\Facades\Seo;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\View\View;
+use Spatie\ResponseCache\Attributes\FlexibleCache;
 
 class IndexController extends Controller
 {
+    #[FlexibleCache(300, 60, ['index'])]
     public function index(): View
     {
         Seo::model();

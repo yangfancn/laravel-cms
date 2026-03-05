@@ -31,12 +31,10 @@ Route::middleware(ViteBuildDir::class)->group(function () {
 });
 
 Route::get('/', [IndexController::class, 'index'])
-    ->name('home')
-    ->middleware('cacheResponse:300');
+    ->name('home');
 
 Route::get('sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::get('{slug:name}', SlugController::class)
     ->where('slug', '[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]+)*')
-    ->name('slug')
-    ->middleware('cacheResponse:600');
+    ->name('slug');
