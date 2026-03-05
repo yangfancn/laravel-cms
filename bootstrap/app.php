@@ -78,7 +78,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //     CacheResponse::class,
         //     CommonData::class,
         // ]);
-    
+
         $middleware->api(append: [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
@@ -115,7 +115,7 @@ return Application::configure(basePath: dirname(__DIR__))
             //            if ($response->getStatusCode() === 419) {
             //                return back()->with(['error' => $message]);
             //            }
-    
+
             return $response;
         });
     })->create();

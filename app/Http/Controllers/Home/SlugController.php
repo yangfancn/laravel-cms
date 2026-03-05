@@ -12,8 +12,7 @@ class SlugController extends Controller
 {
     public function __construct(
         private readonly SlugRenderManager $renderer
-    ) {
-    }
+    ) {}
 
     #[FlexibleCache(600, 120, ['slug'])]
     public function __invoke(Slug $slug): Response

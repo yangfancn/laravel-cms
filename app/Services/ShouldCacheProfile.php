@@ -2,11 +2,7 @@
 
 namespace App\Services;
 
-use Auth;
-use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Spatie\ResponseCache\CacheProfiles\CacheProfile;
 use Symfony\Component\HttpFoundation\Response;
 
