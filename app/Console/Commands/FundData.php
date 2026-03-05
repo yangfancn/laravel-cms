@@ -99,6 +99,7 @@ class FundData extends Command
         }
 
         $result[4] = $this->colorizePercent($result[4]);
+
         return $result;
     }
 
