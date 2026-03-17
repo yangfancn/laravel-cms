@@ -84,9 +84,9 @@ function submitForm() {
   })
 }
 
-const getItemError = (name: string, strict = true): string | null => {
+const getItemError = (name: string, strict = true): string | undefined => {
   if (strict) {
-    return form.errors[name] ?? null
+    return form.errors[name] ?? undefined
   }
 
   const errors: string[] = []
@@ -106,7 +106,7 @@ const getItemError = (name: string, strict = true): string | null => {
     }
   })
 
-  return errors.length > 0 ? errors.join("; ") : null
+  return errors.length > 0 ? errors.join("; ") : undefined
 }
 
 const clearError = (name: string) => {

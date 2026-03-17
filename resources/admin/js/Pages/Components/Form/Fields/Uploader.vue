@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .q-field--auto-height.q-field--labeled :deep(.q-field__control-container) {
   padding-top: 30px;
 }

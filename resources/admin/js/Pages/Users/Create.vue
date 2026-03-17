@@ -37,7 +37,7 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .sign-up-page {
   display: flex;
   justify-content: center;

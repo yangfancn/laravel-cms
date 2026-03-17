@@ -6,7 +6,7 @@ export type FormErrors = Record<string, string | null>
 export interface FormContext {
   registerField: (name: string, focusOnError: () => void) => void
   unregisterField: (name: string) => void
-  getError: (name: string, strict?: boolean) => string | null
+  getError: (name: string, strict?: boolean) => string | undefined
   clearError: (name: string) => void
   sortError: (prefixName: string, newIndex: number, oldIndex: number) => void
   addAllowSubmitHandler: (fn: () => boolean) => () => void

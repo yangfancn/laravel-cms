@@ -11,6 +11,15 @@
     "**/vendor/**": true,
     "public/build/**": true
   },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/vendor/**": true,
+    "**/storage/framework/cache/**": true,
+    "**/storage/logs/**": true,
+    "**/public/build/**": true
+  },
 
   // === Formatting ===
   "editor.formatOnSave": true,

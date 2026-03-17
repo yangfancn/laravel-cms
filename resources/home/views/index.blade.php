@@ -18,7 +18,6 @@
           Independent reporting across the US, updated hourly.
         </span>
       </div>
-
       <div class="grid gap-8 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]">
         <div class="space-y-8">
           @if ($featured)

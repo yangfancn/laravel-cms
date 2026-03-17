@@ -4,11 +4,4 @@ printWidth: 120
 trailingComma: none
 plugins:
     - prettier-plugin-tailwindcss
-    - "@shufo/prettier-plugin-blade"
-overrides:
-    - files:
-          - "*.blade.php"
-      options:
-          parser: blade
-          tabWidth: 2
-          sortTailwindcssClasses: true
+tailwindStylesheet: "resources/home/css/app.css"

@@ -44,7 +44,7 @@ withDefaults(defineProps<Props>(), {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .row.reverse {
   margin-right: auto;
 }

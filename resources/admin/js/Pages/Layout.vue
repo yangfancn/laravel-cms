@@ -134,7 +134,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .user-avatar {
   a {
     text-decoration: none;

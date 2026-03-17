@@ -122,7 +122,7 @@ registerTheme("dark", chalk)
 registerTheme("light", westEros)
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .grid {
   width: 100%;
   height: var(--pageHeight);

@@ -330,7 +330,7 @@ const parseCellValue = (cell: CellProps): string | string[] => {
 }
 </script>
 
-<style lang="scss">
+<style>
 .q-td button {
   margin-right: 0.5rem;
 
