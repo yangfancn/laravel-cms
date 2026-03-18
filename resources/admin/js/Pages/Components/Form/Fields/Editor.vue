@@ -193,7 +193,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 :deep(.ck.ck-editor) {
   flex: 0 0 100%;
 }

@@ -83,7 +83,7 @@ function fileToBase64(file: File): Promise<string> {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .cropper-box {
   max-width: 100%;
   position: relative;

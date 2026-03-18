@@ -74,7 +74,7 @@ const toggleExpansion = (id: number, expanded: boolean) => {
 }
 </script>
 
-<style>
+<style lang="scss">
 .q-expansion-item {
   --icon-color: #666;
 }

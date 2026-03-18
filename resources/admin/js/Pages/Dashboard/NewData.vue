@@ -20,7 +20,7 @@ defineProps<{
 }>()
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .left-item {
   border-radius: 12px;
   padding: 16px;

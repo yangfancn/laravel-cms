@@ -39,7 +39,7 @@ defineProps<{
 useNotify()
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login-page {
   display: flex;
   justify-content: center;
