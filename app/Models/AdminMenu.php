@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Kalnoy\Nestedset\NodeTrait;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+
+#[Table(timestamps: false)]
+#[Fillable(['label', 'route', 'route_params', 'icon', 'icon_color'])]
+class AdminMenu extends Model
+{
+    use HasFactory;
+    use LogsActivity;
+    use NodeTrait;
+
+    protected $casts = [
+        'route_params' => 'array',
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable();
+    }
+
+    public function permission(): BelongsTo
+    {
+        return $this->belongsTo(Permission::class);
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(AdminMenu::class, 'parent_id');
+    }
+
+    public function params(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($val, array $attributes) => collect(json_decode($attributes['route_params']))->pluck('value', 'name')->all()
+        );
+    }
+}

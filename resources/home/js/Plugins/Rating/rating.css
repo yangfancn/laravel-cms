@@ -1,0 +1,20 @@
+.star-rating {
+  display: flex;
+  flex-flow: row nowrap;
+
+  &.disabled {
+    .star {
+      cursor: default;
+    }
+  }
+
+  .star {
+    margin-right: 4px;
+    cursor: pointer;
+
+    svg {
+      overflow: visible !important;
+      transition: all 0.25s;
+    }
+  }
+}

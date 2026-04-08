@@ -1,0 +1,7 @@
+singleQuote: false
+semi: false
+printWidth: 120
+trailingComma: none
+plugins:
+    - prettier-plugin-tailwindcss
+tailwindStylesheet: "resources/home/css/app.css"

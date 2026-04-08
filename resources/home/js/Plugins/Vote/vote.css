@@ -1,0 +1,27 @@
+@reference "@/home/css/app.css";
+
+.vote-box {
+  .down {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  .up,
+  .down {
+    @apply border-0 btn-soft btn-sm btn-accent;
+
+    &.btn-active {
+      &:hover {
+        background-color: rgba(66, 193, 241, 0.42);
+      }
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 0.125rem;
+      fill: currentColor;
+    }
+  }
+}

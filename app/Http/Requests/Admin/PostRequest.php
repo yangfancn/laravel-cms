@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Requests\Admin;
+
+use App\Http\Requests\Traits\MetaRequestTrait;
+use App\Rules\FileExist;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class PostRequest extends FormRequest
+{
+    use MetaRequestTrait;
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return \Auth::check();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'title' => 'required|string|min:3|max:255',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
+            'user_id' => 'required|exists:users,id',
+            'thumb' => ['nullable', new FileExist],
+            'summary' => 'nullable|max:255',
+            'created_at' => 'nullable|date',
+            'content' => 'required|string',
+            'slug' => [
+                'nullable',
+                Rule::unique('slugs', 'name')
+                    ->ignore($this->route('post')?->slug?->id),
+            ],
+            ...$this->meta(),
+        ];
+    }
+}

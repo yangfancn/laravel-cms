@@ -1,0 +1,50 @@
+{
+  // === Files ===
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.module": "php",
+    "*.blade.php": "blade"
+  },
+  "files.exclude": {
+    "**/.git/**": true,
+    "**/node_modules/**": true,
+    "**/vendor/**": true,
+    "public/build/**": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/vendor/**": true,
+    "**/storage/framework/cache/**": true,
+    "**/storage/logs/**": true,
+    "**/public/build/**": true
+  },
+
+  // === Formatting ===
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "prettier.useEditorConfig": true,
+
+  // === ESLint ===
+  "eslint.run": "onSave",
+  "eslint.lintTask.enable": true,
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+
+  // === Tailwind CSS IntelliSense ===
+  "tailwindCSS.classFunctions": ["tw", "clsx", "tw\\.[a-z-]+"],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "blade": "html",
+    "vue": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class\\s*=\\s*\"([^\"]*)", 1],
+    ["class:\\s*'([^']*)", 1],
+    ["@class\\(([^)]*)\\)", 1]
+  ]
+}
