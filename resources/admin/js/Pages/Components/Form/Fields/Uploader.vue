@@ -58,7 +58,8 @@ interface Props {
   dark?: boolean
 }
 
-const FilePond = VueFilePond(
+const filePondFactory = (VueFilePond as any).default || VueFilePond
+const FilePond = filePondFactory(
   FilePondPluginImagePreview,
   FilePondPluginFileValidateType,
   FIlePondPluginImageExifOrientation
