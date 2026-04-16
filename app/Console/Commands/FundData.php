@@ -29,8 +29,8 @@ class FundData extends Command
      */
     public function handle()
     {
-        $funds = ['fu_017835', 'fu_014767', 'fu_016873', 'sz163208', 'fu_019828', 'fu_000217'];
-        $url = 'https://hq.sinajs.cn/list='.implode(
+        $funds = ['sh000001', 'fu_006502', 'fu_014767', 'fu_016873', 'sz163208', 'fu_000217', 'fu_017835'];
+        $url = 'https://hq.sinajs.cn/list=' . implode(
             ',',
             $funds
         );
@@ -52,22 +52,22 @@ class FundData extends Command
             return CommandAlias::FAILURE;
         }
         $items = $response
-            |> trim(...)
-            |> (fn ($str) => mb_convert_encoding($str, 'UTF-8', 'GBK'))
-            |> (fn ($str) => explode("\n", $str));
+        |> trim(...)
+        |> (fn($str) => mb_convert_encoding($str, 'UTF-8', 'GBK'))
+        |> (fn($str) => explode("\n", $str));
 
         $data = collect($items)->map(function (string $item) {
             return $item
-                |> (fn ($str) => str_replace(['var hq_str_', '="', '";'], ['', ',', ''], $str))
-                |> (fn ($str) => explode(',', $str))
-                |> $this->adapt(...);
+            |> (fn($str) => str_replace(['var hq_str_', '="', '";'], ['', ',', ''], $str))
+            |> (fn($str) => explode(',', $str))
+            |> $this->adapt(...);
         });
 
         // split
-        $rows = $data->flatMap(fn ($row, $i) => $i ? [new TableSeparator, $row] : [$row]);
+        $rows = $data->flatMap(fn($row, $i) => $i ? [new TableSeparator, $row] : [$row]);
 
         $this->table(
-            ['代码', '名称', '昨收', '估值', '涨幅', '更新时间'],
+            ['代码', '名称', '昨收', '净值/估值', '涨幅', '更新时间'],
             $rows,
             'box-double'
         );
@@ -77,6 +77,16 @@ class FundData extends Command
     {
         $code = $data[0];
 
+        if (str_starts_with($code, 'sh')) {
+            $result = [
+                $code,
+                $data[1],
+                $data[2],
+                $data[4],
+                round(($data[4] - $data[2]) * 100 / $data[2], 2),
+                "$data[31] $data[32]",
+            ];
+        }
         if (str_starts_with($code, 'fu_')) {
             $result = [
                 $code,
